@@ -238,9 +238,9 @@ const t = translations[lang as keyof typeof translations] || translations.en;
           <span id="episode-title">{currentPodcast.title}</span>
         </Headline>
         
-        <Paragraph textSize="lg" className="mb-6 text-gray-200 leading-relaxed">
-          {currentPodcast.description}
-        </Paragraph>
+        <div class="prose prose-lg prose-invert prose-slate max-w-none mb-6">
+          <p>{currentPodcast.description}</p>
+        </div>
 
         <!-- Additional episode info -->
         <div class="bg-gradient-to-r from-purple-900/20 to-indigo-900/20 rounded-xl p-4 border border-purple-500/20" role="note">

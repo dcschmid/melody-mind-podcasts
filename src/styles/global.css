@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import 'tw-prose';
 
 /* Dark theme by default */
 :root {
