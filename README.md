@@ -61,10 +61,10 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 
 ## 📦 Installation
 
-### Prerequisites
+### Voraussetzungen
 
-- Node.js 18+
-- Yarn package manager
+- Node.js 22 (oder >= 18.20.8 minimal für Astro)
+- Optional: nvm zur Versionsverwaltung
 
 ### Setup
 
@@ -73,17 +73,17 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 git clone https://github.com/dcschmid/melody-mind-podcasts.git
 cd melody-mind-podcasts
 
-# Install dependencies
-yarn install
+# Abhängigkeiten installieren
+npm install
 
-# Start development server
-yarn dev
+# Entwicklung starten
+npm run dev
 
-# Build for production
-yarn build
+# Produktion bauen
+npm run build
 
-# Preview production build
-yarn preview
+# Vorschau ansehen
+npm run preview
 ```
 
 ## 📁 Project Structure
