@@ -52,11 +52,12 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Astro.js](https://astro.build/) v4.16.19
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) with Typography plugin
-- **TypeScript**: Full type safety
-- **Package Manager**: Yarn
-- **Deployment**: Ready for Vercel, Netlify, or any static hosting
+- **Framework**: [Astro.js](https://astro.build/) v5.x
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) mit Typography & Line-Clamp Plugins
+- **TypeScript**: Vollständige Typisierung
+- **Node Version**: 22 (per `.nvmrc` via `nvm use`)
+- **Package Manager**: npm
+- **Deployment**: Geeignet für Netlify, Vercel oder beliebiges Static Hosting
 
 ## 📦 Installation
 
@@ -137,6 +138,7 @@ melody-mind-podcasts/
 4. **Build and deploy** - new episodes will automatically appear
 
 ### Episode Data Structure
+
 ```json
 {
   "id": "unique-episode-id",
@@ -162,6 +164,7 @@ The site supports automatic language detection and fallbacks:
 ## ♿ Accessibility Features
 
 ### WCAG AAA Compliance
+
 - ✅ **4.5:1** minimum contrast ratio (AAA standard)
 - ✅ **Keyboard navigation** for all interactive elements
 - ✅ **Screen reader support** with comprehensive ARIA labels
@@ -170,6 +173,7 @@ The site supports automatic language detection and fallbacks:
 - ✅ **Reduced motion** support for vestibular disorders
 
 ### Testing Accessibility
+
 ```bash
 # Install accessibility testing tools
 npm install -g @axe-core/cli lighthouse
@@ -181,8 +185,18 @@ lighthouse http://localhost:4321/en/1950s --only-categories=accessibility
 
 ## 🚀 Deployment
 
+### Sitemap & SEO
+
+- Automatische Generierung via `@astrojs/sitemap` mit vollständigen Locale Codes (en-US, de-DE, es-ES, fr-FR, it-IT, pt-PT).
+- Discovery: `robots.txt` Eintrag + `<link rel="sitemap" href="/sitemap-index.xml">` im Layout (`PodcastLayout.astro`).
+- Dynamische Priorisierung & Changefreq über `serialize` in `astro.config.mjs`.
+- Ausgeschlossene Namespaces: `news`, `video`, `image` (nur `xhtml` für Alternate Links aktiv) zur Reduzierung von XML-Größe.
+- XSL Stylesheet für menschenlesbare Darstellung: `public/sitemap.xsl` eingebunden via `xslURL`.
+- Falls externe Bereiche später hinzukommen: `customSitemaps` Option nutzen.
+
 
 ### Customization
+
 - **Colors**: Modify `tailwind.config.mjs` and CSS variables in `global.css`
 - **Fonts**: Update font family in Tailwind config
 - **SEO**: Adjust meta tags in `PodcastLayout.astro`
@@ -205,6 +219,7 @@ lighthouse http://localhost:4321/en/1950s --only-categories=accessibility
 5. Open a Pull Request
 
 ### Development Guidelines
+
 - Follow existing code style and formatting
 - Add TypeScript types for new features
 - Ensure accessibility compliance for UI changes
@@ -225,6 +240,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📧 Support
 
 For questions, issues, or feature requests:
+
 - **GitHub Issues**: [Create an issue](https://github.com/dcschmid/melody-mind-podcasts/issues)
 - **Documentation**: Check this README and inline code comments
 - **Community**: Astro.js Discord for framework-related questions

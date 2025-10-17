@@ -1,8 +1,10 @@
 ---
+import { Image } from 'astro:assets';
 import PodcastLayout from '../../layouts/PodcastLayout.astro';
 import Headline from '../../components/Headline.astro';
 import Paragraph from '../../components/Paragraph.astro';
 import Prose from '../../components/Prose.astro';
+import TranscriptDropdown from '../../components/TranscriptDropdown.astro';
 import type { PodcastData } from '../../types/podcast';
 import { formatDate } from '../../utils/helpers';
 
@@ -91,9 +93,14 @@ const translations = {
     episodeNavigation: 'Episode navigation',
     publishedOn: 'Published on',
     duration: 'Duration',
-    category: 'Category',
     musicHistory: 'Music History',
     exploreMore: 'Explore more episodes in our music journey',
+    transcript: 'Transcript',
+    showTranscript: 'Show Transcript',
+    hideTranscript: 'Hide Transcript',
+    loading: 'Loading transcript...',
+    notAvailable: 'Transcript not available',
+    error: 'Error loading transcript'
   },
   de: {
     backToAll: '← Zurück zu allen Podcasts',
@@ -105,9 +112,14 @@ const translations = {
     episodeNavigation: 'Episode Navigation',
     publishedOn: 'Veröffentlicht am',
     duration: 'Dauer',
-    category: 'Kategorie',
     musicHistory: 'Musikgeschichte',
     exploreMore: 'Entdecke weitere Episoden unserer Musikreise',
+    transcript: 'Transkript',
+    showTranscript: 'Transkript anzeigen',
+    hideTranscript: 'Transkript ausblenden',
+    loading: 'Transkript wird geladen...',
+    notAvailable: 'Transkript nicht verfügbar',
+    error: 'Fehler beim Laden des Transkripts'
   },
   es: {
     backToAll: '← Volver a todos los podcasts',
@@ -119,9 +131,14 @@ const translations = {
     episodeNavigation: 'Navegación de episodios',
     publishedOn: 'Publicado el',
     duration: 'Duración',
-    category: 'Categoría',
     musicHistory: 'Historia Musical',
     exploreMore: 'Explora más episodios en nuestro viaje musical',
+    transcript: 'Transcripción',
+    showTranscript: 'Mostrar transcripción',
+    hideTranscript: 'Ocultar transcripción',
+    loading: 'Cargando transcripción...',
+    notAvailable: 'Transcripción no disponible',
+    error: 'Error al cargar la transcripción'
   },
   fr: {
     backToAll: '← Retour à tous les podcasts',
@@ -133,9 +150,14 @@ const translations = {
     episodeNavigation: 'Navigation des épisodes',
     publishedOn: 'Publié le',
     duration: 'Durée',
-    category: 'Catégorie',
     musicHistory: 'Histoire Musicale',
     exploreMore: 'Explorez plus d\'épisodes dans notre voyage musical',
+    transcript: 'Transcription',
+    showTranscript: 'Afficher la transcription',
+    hideTranscript: 'Masquer la transcription',
+    loading: 'Chargement de la transcription...',
+    notAvailable: 'Transcription non disponible',
+    error: 'Erreur lors du chargement de la transcription'
   },
   it: {
     backToAll: '← Torna a tutti i podcast',
@@ -147,9 +169,14 @@ const translations = {
     episodeNavigation: 'Navigazione episodi',
     publishedOn: 'Pubblicato il',
     duration: 'Durata',
-    category: 'Categoria',
     musicHistory: 'Storia Musicale',
     exploreMore: 'Esplora altri episodi nel nostro viaggio musicale',
+    transcript: 'Trascrizione',
+    showTranscript: 'Mostra trascrizione',
+    hideTranscript: 'Nascondi trascrizione',
+    loading: 'Caricamento trascrizione...',
+    notAvailable: 'Trascrizione non disponibile',
+    error: 'Errore nel caricamento della trascrizione'
   },
   pt: {
     backToAll: '← Voltar a todos os podcasts',
@@ -161,9 +188,14 @@ const translations = {
     episodeNavigation: 'Navegação de episódios',
     publishedOn: 'Publicado em',
     duration: 'Duração',
-    category: 'Categoria',
     musicHistory: 'História Musical',
     exploreMore: 'Explore mais episódios em nossa jornada musical',
+    transcript: 'Transcrição',
+    showTranscript: 'Mostrar transcrição',
+    hideTranscript: 'Ocultar transcrição',
+    loading: 'Carregando transcrição...',
+    notAvailable: 'Transcrição não disponível',
+    error: 'Erro ao carregar transcrição'
   },
 };
 
@@ -198,9 +230,13 @@ const t = translations[lang as keyof typeof translations] || translations.en;
       <!-- Episode image -->
       <div class="relative w-full flex-shrink-0 lg:w-96">
         <div class="group relative aspect-[3/2] w-full overflow-hidden">
-          <img
+          <Image
             src={`/images/${currentPodcast.imageUrl}.jpg`}
             alt={`Cover artwork for ${currentPodcast.title} podcast episode`}
+            width={400}
+            height={267}
+            format="webp"
+            quality={90}
             loading="eager"
             class="absolute inset-0 h-full w-full overflow-hidden rounded-2xl object-cover transition-transform duration-300 group-hover:scale-105"
             decoding="async"
@@ -215,14 +251,6 @@ const t = translations[lang as keyof typeof translations] || translations.en;
           <span class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 text-sm font-bold tracking-wider text-white shadow-lg ring-1 ring-white/10"
                 aria-label={`${t.episode} number ${episodeNumber}`}>
             {t.episode} {episodeNumber}
-          </span>
-          <span class="inline-flex items-center gap-2 rounded-full bg-gray-800 px-3 py-1 text-gray-300">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span aria-label={`${t.category}: ${t.musicHistory}`}>
-              {t.category}: {t.musicHistory}
-            </span>
           </span>
           <time class="inline-flex items-center gap-2 rounded-full bg-gray-800 px-3 py-1 text-gray-300" 
                 datetime={currentPodcast.publishedAt}
@@ -360,6 +388,13 @@ const t = translations[lang as keyof typeof translations] || translations.en;
         </div>
       </section>
     )}
+
+    <!-- Transcript Dropdown -->
+    <TranscriptDropdown 
+      subtitleUrl={currentPodcast.subtitleUrl} 
+      lang={lang as string} 
+      podcastTitle={currentPodcast.title}
+    />
   </section>
 
   <!-- Show notes -->

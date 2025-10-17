@@ -3,6 +3,7 @@ import node from '@astrojs/node';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
+import minifyHtml from 'astro-minify-html-swc';
 
 export default defineConfig({
   site: 'https://podcasts.melody-mind.de',
@@ -12,13 +13,20 @@ export default defineConfig({
       i18n: {
         defaultLocale: 'en',
         locales: {
-          en: 'en',
-          de: 'de', 
-          es: 'es',
-          fr: 'fr',
-          it: 'it',
-          pt: 'pt'
+          en: 'en-US',
+          de: 'de-DE', 
+          es: 'es-ES',
+          fr: 'fr-FR',
+          it: 'it-IT',
+          pt: 'pt-PT'
         }
+      },
+      xslURL: '/sitemap.xsl',
+      namespaces: {
+        news: false,
+        video: false,
+        image: false,
+        xhtml: true
       },
       // SEO optimized sitemap settings
       serialize: (item) => {
@@ -37,6 +45,19 @@ export default defineConfig({
         }
         return item;
       }
+    }),
+    // HTML Minification via SWC for better performance
+    minifyHtml({
+      // Conservative collapse to avoid breaking whitespace-sensitive content in transcripts/show notes
+      collapseWhitespace: 'conservative',
+      // Keep comments in case of structured metadata (set to false if not needed)
+      removeComments: true,
+      // Remove redundant attributes
+      removeRedundantAttributes: true,
+      // Minify inline CSS in style attributes
+      minifyCss: true,
+      // Ensure boolean attributes are minimized (e.g. "disabled")
+      collapseBooleanAttributes: true
     })
   ],
   i18n: {
