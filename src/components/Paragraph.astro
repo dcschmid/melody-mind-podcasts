@@ -1,0 +1,22 @@
+---
+export interface Props {
+  textSize?: 'sm' | 'base' | 'lg' | 'xl';
+  className?: string;
+}
+
+const { textSize = 'base', className = '' } = Astro.props;
+
+const sizeClasses = {
+  sm: 'text-sm',
+  base: 'text-base', 
+  lg: 'text-lg',
+  xl: 'text-xl'
+};
+
+const baseClasses = 'text-gray-300 leading-relaxed';
+const classes = `${baseClasses} ${sizeClasses[textSize]} ${className}`.trim();
+---
+
+<p class={classes}>
+  <slot />
+</p>

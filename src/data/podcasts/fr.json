@@ -1,0 +1,16 @@
+{
+  "podcasts": [
+    {
+      "id": "1950s",
+      "title": "[À_TRADUIRE] The 1950s – The Birth of Rock & Roll",
+      "description": "[À_TRADUIRE] Neon nights, jukebox dreams, and the spark of rock 'n' roll...",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-04-04T10:00:00Z",
+      "showNotesHtml": "[À_TRADUIRE] HTML content from English version",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/1950s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1950s.vtt",
+      "imageUrl": "1950s"
+    }
+  ]
+}
