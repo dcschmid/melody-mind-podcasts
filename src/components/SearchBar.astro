@@ -3,12 +3,12 @@ const { lang, total } = Astro.props as { lang: string; total: number };
 // Simple client-side filtering via Alpine-like minimal custom script (vanilla) for accessibility.
 // We'll output a script that updates aria-live region on results count change.
 const labels = {
-  en: { placeholder: 'Search episodes', label: 'Search episodes', results: 'results', clear: 'Clear search', hint: 'Type to filter episodes. Matches title & description.', empty: 'No matching episodes.' },
-  de: { placeholder: 'Episoden suchen', label: 'Episoden durchsuchen', results: 'Ergebnisse', clear: 'Suche löschen', hint: 'Tippe um Episoden zu filtern. Durchsucht Titel & Beschreibung.', empty: 'Keine passenden Episoden.' },
-  es: { placeholder: 'Buscar episodios', label: 'Buscar episodios', results: 'resultados', clear: 'Borrar búsqueda', hint: 'Escribe para filtrar episodios. Coincide título y descripción.', empty: 'No hay episodios coincidentes.' },
-  fr: { placeholder: 'Rechercher des épisodes', label: 'Rechercher des épisodes', results: 'résultats', clear: 'Effacer la recherche', hint: 'Tapez pour filtrer les épisodes. Correspond titre et description.', empty: 'Aucun épisode correspondant.' },
-  it: { placeholder: 'Cerca episodi', label: 'Cerca episodi', results: 'risultati', clear: 'Cancella ricerca', hint: 'Digita per filtrare gli episodi. Cerca in titolo e descrizione.', empty: 'Nessun episodio corrispondente.' },
-  pt: { placeholder: 'Pesquisar episódios', label: 'Pesquisar episódios', results: 'resultados', clear: 'Limpar pesquisa', hint: 'Digite para filtrar episódios. Busca em título e descrição.', empty: 'Nenhum episódio correspondente.' }
+  en: { placeholder: 'Search episodes', label: 'Search episodes', results: 'results', resultOne:'result', clear: 'Clear search', hint: 'Type to filter episodes. Matches title & description.', empty: 'No matching episodes.', statusTemplate: 'Found: {found} of {total} {word}' },
+  de: { placeholder: 'Episoden suchen', label: 'Episoden durchsuchen', results: 'Ergebnisse', resultOne:'Ergebnis', clear: 'Suche löschen', hint: 'Tippe um Episoden zu filtern. Durchsucht Titel & Beschreibung.', empty: 'Keine passenden Episoden.', statusTemplate: 'Gefunden: {found} von {total} {word}' },
+  es: { placeholder: 'Buscar episodios', label: 'Buscar episodios', results: 'resultados', resultOne:'resultado', clear: 'Borrar búsqueda', hint: 'Escribe para filtrar episodios. Coincide título y descripción.', empty: 'No hay episodios coincidentes.', statusTemplate: 'Encontrados: {found} de {total} {word}' },
+  fr: { placeholder: 'Rechercher des épisodes', label: 'Rechercher des épisodes', results: 'résultats', resultOne:'résultat', clear: 'Effacer la recherche', hint: 'Tapez pour filtrer les épisodes. Correspond titre et description.', empty: 'Aucun épisode correspondant.', statusTemplate: 'Trouvés: {found} sur {total} {word}' },
+  it: { placeholder: 'Cerca episodi', label: 'Cerca episodi', results: 'risultati', resultOne:'risultato', clear: 'Cancella ricerca', hint: 'Digita per filtrare gli episodi. Cerca in titolo e descrizione.', empty: 'Nessun episodio corrispondente.', statusTemplate: 'Trovati: {found} di {total} {word}' },
+  pt: { placeholder: 'Pesquisar episódios', label: 'Pesquisar episódios', results: 'resultados', resultOne:'resultado', clear: 'Limpar pesquisa', hint: 'Digite para filtrar episódios. Busca em título e descrição.', empty: 'Nenhum episódio correspondente.', statusTemplate: 'Encontrados: {found} de {total} {word}' }
 };
 const l = labels[lang as keyof typeof labels] || labels.en;
 ---
@@ -25,7 +25,7 @@ const l = labels[lang as keyof typeof labels] || labels.en;
     </div>
   </div>
   <p id="search-hint" class="mt-2 text-xs text-gray-400" aria-hidden="true">{l.hint}</p>
-  <div aria-live="polite" aria-atomic="true" id="search-status" class="mt-2 text-sm text-purple-300" data-total={total}>{total} {l.results}</div>
+  <div aria-live="polite" aria-atomic="true" id="search-status" class="mt-2 text-sm text-purple-300" data-total={total}>{l.statusTemplate.replace('{found}', String(total)).replace('{total}', String(total)).replace('{word}', total === 1 ? l.resultOne : l.results)}</div>
   <div id="search-empty" class="mt-2 text-sm text-red-300 hidden" role="status">{l.empty}</div>
 </form>
 <script>
@@ -58,9 +58,27 @@ const l = labels[lang as keyof typeof labels] || labels.en;
     const empty = document.getElementById('search-empty');
     if(status){
       const total = status.getAttribute('data-total') || '0';
+      const foundNum = String(count);
+      const template = status.textContent.includes('Found:') || status.textContent.includes('Gefunden:') ? null : null;
+      // We have labels embedded at build time; reconstruct using data attributes + language detection from form label
       const form = status.closest('form');
-      const label = form ? form.getAttribute('aria-label') : '';
-      status.textContent = count + ' / ' + total + ' ' + (label || '');
+      const ariaLabel = form ? form.getAttribute('aria-label') : '';
+      // Map ariaLabel back to l by scanning labels object
+      let active = null;
+      const localLabels = {
+        en:{label:'Search episodes',results:'results',resultOne:'result',statusTemplate:'Found: {found} of {total} {word}'},
+        de:{label:'Episoden durchsuchen',results:'Ergebnisse',resultOne:'Ergebnis',statusTemplate:'Gefunden: {found} von {total} {word}'},
+        es:{label:'Buscar episodios',results:'resultados',resultOne:'resultado',statusTemplate:'Encontrados: {found} de {total} {word}'},
+        fr:{label:'Rechercher des épisodes',results:'résultats',resultOne:'résultat',statusTemplate:'Trouvés: {found} sur {total} {word}'},
+        it:{label:'Cerca episodi',results:'risultati',resultOne:'risultato',statusTemplate:'Trovati: {found} di {total} {word}'},
+        pt:{label:'Pesquisar episódios',results:'resultados',resultOne:'resultado',statusTemplate:'Encontrados: {found} de {total} {word}'}
+      };
+      for(const key of Object.keys(localLabels)){
+        if(localLabels[key].label === ariaLabel){ active = localLabels[key]; break; }
+      }
+      const pack = active || localLabels.en;
+      const word = count === 1 ? pack.resultOne : pack.results;
+      status.textContent = pack.statusTemplate.replace('{found}', foundNum).replace('{total}', total).replace('{word}', word);
     }
     if(empty){ empty.classList.toggle('hidden', count !== 0); }
   }
