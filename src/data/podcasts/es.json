@@ -205,5 +205,90 @@
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-vocal-icons.vtt",
       "imageUrl": "female-vocal-icons"
     }
+    ,
+    {
+      "id": "piano",
+      "title": "Piano – 88 teclas moldeando emoción, memoria e identidad sonora",
+      "description": "Salones, conservatorios, lofts de jazz, estudios pop y playlists muestran cómo el piano convierte 88 teclas en emoción, memoria y atmósfera: orquesta portátil y diario íntimo. Daniel y Annabelle te guían por tacto, timbre y evolución histórica. Dale Play y deja resonar identidad.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-08-22T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/piano.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/piano.vtt",
+      "imageUrl": "piano"
+    },
+    {
+      "id": "orchestral",
+      "title": "Orquesta – Cuerpos sonoros amplificando emoción, memoria y mito",
+      "description": "De cortes barrocas y sinfonías clásicas a expansiones románticas, cine épico y videojuegos: la orquesta respira como organismo colectivo que hace visible emoción, protesta y rito. Daniel y Annabelle te guían por secciones, textura, dinámica y función cultural. Dale Play y escucha comunidad latir.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-08-29T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/orchestral.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/orchestral.vtt",
+      "imageUrl": "orchestral"
+    },
+    {
+      "id": "soundtrack",
+      "title": "Bandas sonoras – Pulsos que moldean emoción, recuerdo y relato",
+      "description": "Dos notas de tiburón, galaxias, cuerdas dolientes y needle drops curados: bandas sonoras narran debajo de la imagen y vuelven memoria, memes y rituales culturales. Daniel y Annabelle te guían por motivo, textura, selección y función emocional. Dale Play y siente historia oculta guiando escenas.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-09-05T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/soundtrack.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/soundtrack.vtt",
+      "imageUrl": "soundtrack"
+    },
+    {
+      "id": "opera",
+      "title": "Ópera – Pasión, espectáculo, mito y drama humano amplificado",
+      "description": "De Monteverdi y Mozart a Verdi, Wagner, Puccini y producciones digitales, la ópera funde música, palabra, vestuario y gesto en confesión amplificada. Daniel y Annabelle te guían por aria, recitativo, montaje y transformación histórica. Dale Play y descubre pasión sin filtro hecha sonido vivo.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-09-12T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/opera.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/opera.vtt",
+      "imageUrl": "opera"
+    },
+    {
+      "id": "classical",
+      "title": "Música clásica – Memoria, fuego, innovación y emoción atemporal",
+      "description": "Bach, Haydn, Mozart y Beethoven forjan formas; Chopin, Wagner y Tchaikovsky expanden emoción; Debussy y Stravinsky reinventan color; hoy playlists reciclan legado. Daniel y Annabelle te guían por estructura, espacio, evolución y vigencia. Dale Play y deja que historia hable al presente.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-09-19T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/classical.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/classical.vtt",
+      "imageUrl": "classical"
+    },
+    {
+      "id": "chamber-music",
+      "title": "Música de cámara – Diálogos íntimos revelando tensión y belleza",
+      "description": "Haydn y Mozart convierten conversación en cuartetos; Beethoven y Schubert abren abismos; Bartók y Messiaen suman modernidad y símbolo. Cámara exhibe cada respiración como negociación sonora. Daniel y Annabelle te guían por interacción, forma y fragilidad. Dale Play y escucha verdad concentrada.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-09-26T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/chamber-music.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/chamber-music.vtt",
+      "imageUrl": "chamber-music"
+    },
+    {
+      "id": "new-age",
+      "title": "New Age – Calma, amplitud, respiración y foco en deriva serena",
+      "description": "Minimalismo, ambient y espiritualidad setentera; Kitaro, Enya y Vangelis expanden atmósfera; wellness y apps ritualizan escucha lenta. New Age convierte textura y silencio en herramienta mental. Daniel y Annabelle te guían por origen, función y estética. Dale Play y exhala paisaje interno.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-10-03T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/new-age.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/new-age.vtt",
+      "imageUrl": "new-age"
+    }
   ]
 }
