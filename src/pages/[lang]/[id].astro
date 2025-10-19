@@ -67,12 +67,19 @@ if (!currentPodcast) {
 
 // Get navigation (previous/next episodes)
 function getNavigation() {
-  const allPodcasts = getPodcastsForLanguage(lang as string);
-  const currentIndex = allPodcasts.findIndex(p => p.id === id);
-  
+  // Navigation soll nur Episoden zeigen, die bereits freigeschaltet (isAvailable=true) sind.
+  // Dadurch verschwinden Links zu zukünftigen / nicht veröffentlichten Episoden (z.B. 1960s, wenn noch false).
+  const availablePodcasts = getPodcastsForLanguage(lang as string).filter(p => p.isAvailable);
+  const currentIndex = availablePodcasts.findIndex(p => p.id === id);
+
+  // Falls aktuelle Episode nicht im gefilterten Array (z.B. Fallback-Szenario), keine Navigation anzeigen.
+  if (currentIndex === -1) {
+    return { prev: null, next: null };
+  }
+
   return {
-    prev: currentIndex > 0 ? allPodcasts[currentIndex - 1] : null,
-    next: currentIndex < allPodcasts.length - 1 ? allPodcasts[currentIndex + 1] : null
+    prev: currentIndex > 0 ? availablePodcasts[currentIndex - 1] : null,
+    next: currentIndex < availablePodcasts.length - 1 ? availablePodcasts[currentIndex + 1] : null
   };
 }
 

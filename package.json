@@ -8,11 +8,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-  "update:audio-metadata": "node scripts/update-audio-metadata.mjs",
-  "validate:podcasts": "node scripts/validate-podcasts.mjs",
-  "check:style": "node scripts/check-style.mjs",
-  "normalize:images": "node scripts/normalize-images.mjs",
-  "convert:png": "node scripts/convert-png-to-jpg.mjs"
+    "update:audio-metadata": "node scripts/update-audio-metadata.mjs",
+    "validate:podcasts": "node scripts/validate-podcasts.mjs",
+    "check:style": "node scripts/check-style.mjs",
+    "normalize:images": "node scripts/normalize-images.mjs",
+    "convert:png": "node scripts/convert-png-to-jpg.mjs"
   },
   "dependencies": {
     "@astrojs/node": "^9.5.0",
