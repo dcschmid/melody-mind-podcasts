@@ -204,5 +204,90 @@
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/female-vocal-icons.vtt",
       "imageUrl": "female-vocal-icons"
     }
+    ,
+    {
+      "id": "piano",
+      "title": "Le piano – 88 touches, intimité, architecture sonore vivante",
+      "description": "Salons, jazz intime, études et sessions streaming montrent comment le piano transforme toucher en émotion architecturée, mémoire et récit. Daniel et Annabelle te guident entre résonance, dynamique et texture. Appuie sur Play et ressens profondeur partagée.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-08-01T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/piano.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/piano.vtt",
+      "imageUrl": "piano"
+    },
+    {
+      "id": "orchestral",
+      "title": "Musique orchestrale – textures vives, respiration collective",
+      "description": "Cordes, bois, cuivres et percussions tissent organisme pour cinéma, rituel, mémoire et émotion expansive. Daniel et Annabelle te guident entre couleurs, dynamiques fines et tension narrative. Appuie sur Play et explore comment cette masse vivante façonne paysage affectif.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-08-08T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/orchestral.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/orchestral.vtt",
+      "imageUrl": "orchestral"
+    },
+    {
+      "id": "soundtrack",
+      "title": "Bandes originales – récit intime et pulsation narrative",
+      "description": "Thèmes récurrents, timbres identitaires, drones et silences calculés transforment image en mémoire immédiate. Daniel et Annabelle te guident parmi motif, orchestration hybride et synchronisation psychologique. Appuie sur Play et découvre comment ces palettes sculptent souvenir collectif.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-08-15T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/soundtrack.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/soundtrack.vtt",
+      "imageUrl": "soundtrack"
+    },
+    {
+      "id": "opera",
+      "title": "Opéra – voix amplifiées, drame symbolique et émotion ritualisée",
+      "description": "Arie suspendue, tension orchestrale, scénographie et mythe vocal transforment conflit humain en expérience multisensorielle. Daniel et Annabelle te guident entre souffle, dramaturgie et évolution scénique. Appuie sur Play et ressens comment ce théâtre sonore encode passion partagée.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-08-22T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/opera.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/opera.vtt",
+      "imageUrl": "opera"
+    },
+    {
+      "id": "classical",
+      "title": "Musique classique – formes, mémoire, innovation et temps vivant",
+      "description": "Suites baroques, symphonies, quatuors, modernisme et playlists actuelles montrent continuum où structure façonne émotion. Daniel et Annabelle te guident entre forme, espace acoustique et réinterprétation digitale. Appuie sur Play et analyse comment ce patrimoine nourrit créativité contemporaine.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-08-29T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/classical.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/classical.vtt",
+      "imageUrl": "classical"
+    },
+    {
+      "id": "chamber-music",
+      "title": "Musique de chambre – dialogues, intimité et tension focalisée",
+      "description": "Trios, quatuors et ensembles réduits exposent respiration collective, détail articulatoire et risque expressif en espace proche. Daniel et Annabelle te guident entre interaction, silences structurants et nuance dynamique. Appuie sur Play et explore comment cette proximité sculpte émotion concentrée.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-09-05T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/chamber-music.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/chamber-music.vtt",
+      "imageUrl": "chamber-music"
+    },
+    {
+      "id": "new-age",
+      "title": "New Age – synthés flottants, horizons lents et souffle apaisant",
+      "description": "Pads éthérés, textures globales, fréquences douces et lenteur créent environnement sonore de respiration et recentrage. Daniel et Annabelle te guident entre ambient historique, bien-être et design méditatif. Appuie sur Play et ressens comment ces paysages facilitent calme partagé.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-09-12T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/new-age.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/new-age.vtt",
+      "imageUrl": "new-age"
+    }
   ]
 }
