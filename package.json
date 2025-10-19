@@ -7,7 +7,12 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+  "update:audio-metadata": "node scripts/update-audio-metadata.mjs",
+  "validate:podcasts": "node scripts/validate-podcasts.mjs",
+  "check:style": "node scripts/check-style.mjs",
+  "normalize:images": "node scripts/normalize-images.mjs",
+  "convert:png": "node scripts/convert-png-to-jpg.mjs"
   },
   "dependencies": {
     "@astrojs/node": "^9.5.0",
@@ -15,6 +20,9 @@
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/typography": "^0.5.19",
     "astro": "^5.14.5",
+    "image-size": "^1.1.1",
+    "music-metadata": "^7.14.0",
+    "sharp": "^0.33.4",
     "tw-prose": "^0.0.10",
     "typescript": "^5.5.0"
   },

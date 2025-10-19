@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Header from '../components/Header.astro';
 
 export interface Props {
   title: string;
@@ -203,34 +204,7 @@ const skipLinkText = skipLinkTranslations[lang as keyof typeof skipLinkTranslati
       {skipLinkText}
     </a>
     
-    <header class="border-b border-slate-700 pb-6 mb-10" role="banner">
-      <nav class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4" role="navigation" aria-label="Main navigation">
-        <div class="flex items-center gap-4">
-          <a href={`/${lang}/`} 
-             class="text-xl sm:text-2xl font-bold text-purple-400 hover:text-purple-300 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900 rounded-md px-2 py-1"
-             aria-label="MelodyMind Podcasts - Go to homepage">
-            🎵 MelodyMind Podcasts
-          </a>
-        </div>
-        
-        <div class="flex items-center gap-2">
-          <label for="language-select" class="text-sm text-slate-300 font-medium">Language:</label>
-          <select 
-            id="language-select"
-            class="bg-slate-800 border-2 border-slate-600 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-colors"
-            onchange="window.location.href = '/' + this.value"
-            aria-label="Select language"
-          >
-            <option value="en" selected={lang === 'en'}>🇺🇸 English</option>
-            <option value="de" selected={lang === 'de'}>🇩🇪 Deutsch</option>
-            <option value="es" selected={lang === 'es'}>🇪🇸 Español</option>
-            <option value="fr" selected={lang === 'fr'}>🇫🇷 Français</option>
-            <option value="it" selected={lang === 'it'}>🇮🇹 Italiano</option>
-            <option value="pt" selected={lang === 'pt'}>🇵🇹 Português</option>
-          </select>
-        </div>
-      </nav>
-    </header>
+    <Header lang={lang} />
     
     <main id="main-content" role="main">
       <slot />

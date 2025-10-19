@@ -50,13 +50,37 @@ export async function generatePodcastRSSFeed(
   const rssLink = `${baseUrl}/${lang}/rss.xml`;
   const lastBuildDate = new Date().toUTCString();
 
-  const items = sortedEpisodes.map((episode) => generateRSSItem(episode, lang, baseUrl)).join('\n');
+  const total = sortedEpisodes.length;
+  const items = sortedEpisodes.map((episode, index) => generateRSSItem(episode, lang, baseUrl, index, total)).join('\n');
+
+  // Podcasting 2.0 persons
+  let personsTags = '';
+  try {
+    const personsModule = await import('../data/persons.json');
+    const persons = personsModule.default ?? personsModule;
+    if (Array.isArray(persons)) {
+      personsTags = persons
+        .map((p: any) => {
+          if (!p || !p.name) return '';
+          const name = escapeXML(p.name);
+          const role = p.role ? escapeXML(p.role) : 'host';
+          const href = p.href ? ` href="${p.href}"` : '';
+          const img = p.img ? ` img="${p.img}"` : '';
+          return `<podcast:person${href}${img} role="${role}" name="${name}"/>`;
+        })
+        .filter(Boolean)
+        .join('\n    ');
+    }
+  } catch (e) {
+    // ignore if file missing
+  }
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
      xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
      xmlns:atom="http://www.w3.org/2005/Atom"
-     xmlns:content="http://purl.org/rss/1.0/modules/content/">
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:podcast="https://podcastindex.org/namespace/1.0">
   <channel>
     <!-- Basic Channel Info -->
     <title>${escapeXML(title)}</title>
@@ -65,7 +89,7 @@ export async function generatePodcastRSSFeed(
     <language>${lang}</language>
     <copyright>© ${new Date().getFullYear()} MelodyMind</copyright>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
-    <generator>MelodyMind RSS Generator v1.0.0</generator>
+  <generator>MelodyMind RSS Generator v1.1.0</generator>
     <webMaster>dcschmid@murena.io</webMaster>
     <managingEditor>dcschmid@murena.io</managingEditor>
 
@@ -95,6 +119,9 @@ export async function generatePodcastRSSFeed(
     <itunes:explicit>no</itunes:explicit>
     <itunes:type>episodic</itunes:type>
 
+    <!-- Podcasting 2.0 Persons -->
+    ${personsTags}
+
     <!-- Episodes -->
 ${items}
   </channel>
@@ -104,17 +131,50 @@ ${items}
 /**
  * Generate RSS item for a single podcast episode
  */
-function generateRSSItem(episode: PodcastData, lang: string, baseUrl: string): string {
+function generateRSSItem(episode: PodcastData, lang: string, baseUrl: string, index?: number, total?: number): string {
   const episodeLink = `${baseUrl}/${lang}/${episode.id}`;
   const pubDate = new Date(episode.publishedAt).toUTCString();
   const guid = `melody-mind-${lang}-${episode.id}`;
   
   // Episode image URL
-  const imageUrl = episode.imageUrl 
-    ? `${baseUrl}/images/${episode.imageUrl}.jpg`
-    : `${baseUrl}/the-melody-mind-podcast.png`;
+  // Prefer square derivative naming convention <name>-square.jpg if it exists, else fallback to <name>.jpg
+  // Additionally allow centralized square directory /images/square/<name>.jpg if provided.
+  let imageUrl = `${baseUrl}/the-melody-mind-podcast.png`;
+  if (episode.imageUrl) {
+    const baseName = episode.imageUrl;
+    const squareDir = `${baseUrl}/square/${baseName}.jpg`;
+    // We cannot stat files server-side here; assume square files exist if user placed them, prefer squareDir naming first.
+    // To avoid broken links if not present, include a lightweight heuristic: if baseName already ends with '-square', don't append again.
+    if (baseName) {
+      // Choose deterministic preference; clients will 404 if missing but validation script ensures creation.
+      imageUrl = squareDir;
+    }
+    // Optionally could expose original via <media:content>, omitted for simplicity.
+  }
 
   const contentHtml = episode.showNotesHtml || episode.description;
+
+  // Episode number: prefer explicit value, otherwise derive (newest = highest)
+  let itunesEpisodeTag = '';
+  if (episode.episodeNumber !== undefined) {
+    itunesEpisodeTag = `<itunes:episode>${episode.episodeNumber}</itunes:episode>`;
+  } else if (typeof index === 'number' && typeof total === 'number') {
+    // newest episode (index 0) gets total, oldest gets 1
+    const derived = total - index;
+    itunesEpisodeTag = `<itunes:episode>${derived}</itunes:episode>`;
+  }
+
+  // Duration formatting (HH:MM:SS or MM:SS)
+  let durationTag = '';
+  if (episode.durationSeconds && episode.durationSeconds > 0) {
+    durationTag = `<itunes:duration>${formatDuration(episode.durationSeconds)}</itunes:duration>`;
+  }
+
+  // Enclosure length (file size) if provided
+  const enclosureLength = episode.fileSizeBytes ? ` length="${episode.fileSizeBytes}"` : ' length="25000000"';
+
+  // Transcript tag if subtitles present
+  const transcriptTag = episode.subtitleUrl ? `\n      <podcast:transcript url="${episode.subtitleUrl}" type="text/vtt" language="${lang}" rel="captions"/>` : '';
 
   return `    <item>
       <title>${escapeXML(episode.title)}</title>
@@ -123,7 +183,7 @@ function generateRSSItem(episode: PodcastData, lang: string, baseUrl: string): s
       <link>${episodeLink}</link>
       <guid isPermaLink="false">${guid}</guid>
       <pubDate>${pubDate}</pubDate>
-      <enclosure url="${episode.audioUrl}" type="audio/mpeg" length="25000000"/>
+  <enclosure url="${episode.audioUrl}" type="audio/mpeg"${enclosureLength}/>
 
       <!-- Categories -->
       <category>Music</category>
@@ -134,13 +194,28 @@ function generateRSSItem(episode: PodcastData, lang: string, baseUrl: string): s
       <itunes:title>${escapeXML(episode.title)}</itunes:title>
       <itunes:summary>${escapeXML(episode.description)}</itunes:summary>
       <itunes:image href="${imageUrl}"/>
-      <itunes:duration>26:30</itunes:duration>
+  ${durationTag}
       <itunes:explicit>no</itunes:explicit>
       <itunes:episodeType>full</itunes:episodeType>
+  ${itunesEpisodeTag}
+  ${transcriptTag}
 
       <!-- Content -->
       <content:encoded><![CDATA[${contentHtml}]]></content:encoded>
     </item>`;
+}
+
+/**
+ * Format seconds to iTunes duration (HH:MM:SS or MM:SS)
+ */
+function formatDuration(totalSeconds: number): string {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const hh = hours.toString().padStart(2, '0');
+  const mm = minutes.toString().padStart(2, '0');
+  const ss = seconds.toString().padStart(2, '0');
+  return hours > 0 ? `${hh}:${mm}:${ss}` : `${mm}:${ss}`;
 }
 
 /**

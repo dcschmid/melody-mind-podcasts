@@ -84,3 +84,25 @@ body {
   outline-color: #d946ef;
   background-color: rgba(217, 70, 239, 0.1);
 }
+
+/* Header refinements */
+header.sticky {
+  backdrop-filter: blur(12px);
+}
+
+@supports not (backdrop-filter: blur(12px)) {
+  header.sticky {
+    background-color: rgba(30,41,59,0.92);
+  }
+}
+
+header nav a[aria-label="MelodyMind Podcasts"]:hover span.bg-gradient-to-r {
+  filter: brightness(1.15);
+}
+
+/* Smaller screens: tighten vertical space */
+@media (max-width: 640px) {
+  header.sticky nav {
+    height: 56px;
+  }
+}

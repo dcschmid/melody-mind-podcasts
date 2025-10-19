@@ -10,7 +10,9 @@
       "showNotesHtml": "[DA_TRADURRE] HTML content from English version",
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/1950s.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/1950s.vtt",
-      "imageUrl": "1950s"
+      "imageUrl": "1950s",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
     }
   ]
 }

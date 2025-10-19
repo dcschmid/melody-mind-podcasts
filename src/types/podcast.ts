@@ -61,6 +61,8 @@ export interface PodcastData {
   audioUrl: string;
   /** Optional duration in seconds (if known / precomputed) */
   durationSeconds?: number;
+  /** Optional precise audio file size in bytes (for <enclosure length="...">) */
+  fileSizeBytes?: number;
   /** URL to the VTT subtitle file */
   subtitleUrl?: string;
   /** Cover image URL */
@@ -77,4 +79,6 @@ export interface PodcastData {
   isAvailable: boolean;
   /** Optional series name (podcast show) for structured data & SEO */
   seriesName?: string;
+  /** Optional explicit episode number (overrides auto numbering if present) */
+  episodeNumber?: number;
 }

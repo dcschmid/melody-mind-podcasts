@@ -46,6 +46,14 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 
 ### 🔗 Streaming Integration
 
+### 🧩 Podcast Operations (Tooling)
+
+- Automatische Audio-Metadaten-Ermittlung (Dateigröße, Dauer, Cache) via `update:audio-metadata` Script
+- Validierung aller Episodenmetadaten (fehlende Felder, Bilddimensionen, zukünftige Publish-Daten) via `validate:podcasts`
+- Bild-Normalisierung zu quadratischen Thumbnails (`normalize:images` mit Pad oder Crop Modus)
+- Podcasting 2.0 Erweiterungen: `<podcast:transcript>` und `<podcast:person>` Tags
+
+
 - **Multi-platform links**: RSS, Apple Podcasts, Spotify, Deezer, YouTube
 - **Brand-accurate styling** with platform colors
 - **Accessible buttons** with proper labels
@@ -84,7 +92,7 @@ npm run build
 
 # Vorschau ansehen
 npm run preview
-```
+```text
 
 ## 📁 Project Structure
 
@@ -148,9 +156,125 @@ melody-mind-podcasts/
   "imageUrl": "episode-image-filename",
   "audioUrl": "https://audio-hosting-url.com/episode.mp3",
   "showNotesHtml": "<h2>Show Notes</h2><p>Content...</p>",
-  "isAvailable": true
+  "isAvailable": true,
+  "fileSizeBytes": 12345678,
+  "durationSeconds": 3120,
+  "subtitleUrl": "https://cdn.example.com/episode.vtt",
+  "episodeNumber": 12
 }
 ```
+
+Felder wie `fileSizeBytes` und `durationSeconds` werden bevorzugt automatisch gepflegt (siehe Scripts unten). `subtitleUrl` ermöglicht Ausgabe eines `<podcast:transcript>` Tags für Untertitel/Transkripte.
+
+### Personen (Podcasting 2.0)
+
+Globale Datei `src/data/persons.json` definiert Personen, die im RSS als `<podcast:person>` erscheinen:
+
+```json
+[
+  {
+    "name": "Daniel Schmid",
+    "role": "host",
+    "href": "https://melody-mind.de",
+    "img": "https://melody-mind.de/images/daniel.jpg"
+  }
+]
+```
+
+Unterstützte Felder: `name` (Pflicht), `role`, `href`, `img`. Rollen können z.B. `host`, `producer`, `guest` sein.
+
+## 🔧 Scripts & Tooling
+
+### Audio Metadaten Aktualisieren
+
+Ermittelt Dateigrößen (Content-Length) und optional Dauer (ffprobe oder Fallback music-metadata). Nutzt Cache-Datei `.cache/audio-metadata.json` zur Reduktion von Netzwerkzugriffen.
+
+```bash
+yarn update:audio-metadata --duration --ffprobe
+```
+
+Flags:
+
+- `--duration` Dauer extrahieren
+- `--ffprobe` bevorzugt ffprobe (falls installiert)
+- `--max-bytes=10485760` begrenzt Bytes für Fallback-Analyse
+- `--no-cache` Cache nicht lesen
+- `--refresh` Cache ignorieren & neu schreiben
+
+### Validierung
+
+Prüft Vollständigkeit und Qualität.
+
+```bash
+yarn validate:podcasts --strict
+```
+
+Flags: `--strict`, `--json`, `--no-network`, `--filter=de,en`
+
+Zusätzliche Checks: Quadrat-Derivat `*-square.jpg` wenn Originalbild nicht quadratisch.
+
+#### Inhaltlicher Styleguide (Version 2.0, Emoji-frei)
+
+Alle Episoden-Metadaten (Titel & Kurzbeschreibung) folgen konsistenten Vorgaben für Branding, SEO & Plattform-Optimierung:
+
+- Titel: 55–65 Zeichen (inkl. Leerzeichen) – prägnant, keine Emojis
+- Beschreibung: 250–300 Zeichen – verdichteter Überblick, keine Emojis
+- Host-Phrase muss vorkommen: `Daniel and Annabelle guide you` (Groß-/Kleinschreibung egal)
+- Call-To-Action beginnt mit: `Press play and ...`
+- Keine Emojis in Titel oder Beschreibung (Unicode Extended_Pictographic wird geblockt)
+
+Der Validierungsscript führt diese Prüfungen automatisch aus. Mit `--style-strict` werden Style-Verstöße als Fehler statt Warnungen behandelt:
+
+```bash
+node scripts/validate-podcasts.mjs --style-strict --filter=en --no-network
+```
+
+Typische Hinweise bei Verstößen:
+
+- `Style: title length 52 outside 55–65`
+- `Style: missing host phrase`
+- `Style: description contains emoji`
+
+Empfohlener Workflow beim Hinzufügen neuer Episoden:
+
+1. Rohdaten schreiben
+2. Titel/Description gegen Längenfenster prüfen
+3. Host-Phrase + CTA ergänzen
+4. Emojis entfernen (falls aus Quellen kopiert)
+5. `validate-podcasts.mjs --style-strict` ausführen
+6. Korrekturen anwenden, erneut validieren
+
+### Bild Normalisierung
+
+Erzeugt quadratische Thumbnails mittels Padding (contain) oder Zentrums-Zuschnitt (crop).
+
+```bash
+# Vorschau ohne Schreiben
+yarn normalize:images --dry-run
+
+# Erstellen mit Crop Modus
+yarn normalize:images --mode=crop
+
+# Original ersetzen & transparenten Hintergrund
+yarn normalize:images --replace --background=transparent
+```
+
+Flags: `--filter=<lang>`, `--dry-run`, `--replace`, `--background=<hex|transparent>`, `--mode=<contain|crop>`
+
+### Personen Aktualisieren
+
+Bearbeite `src/data/persons.json` – bei Build/Abruf des RSS Feeds erscheinen aktualisierte `<podcast:person>` Einträge automatisch.
+
+## 🛰 RSS Erweiterungen
+
+- Namespace `xmlns:podcast="https://podcastindex.org/namespace/1.0"`
+- `<podcast:transcript>` bei vorhandenem `subtitleUrl`
+- `<podcast:person>` für jede Person in `persons.json`
+- Dynamische `<itunes:episode>` Nummerierung (Fallback auf Reihenfolge)
+- `<itunes:duration>` aus `durationSeconds`
+- `<enclosure length="fileSizeBytes">` für genaue Größe
+
+Generator Version aktuell: `MelodyMind RSS Generator v1.1.0`
 
 ## 🌐 Multi-Language Setup
 
@@ -176,7 +300,7 @@ The site supports automatic language detection and fallbacks:
 
 ```bash
 # Install accessibility testing tools
-npm install -g @axe-core/cli lighthouse
+yarn global add @axe-core/cli lighthouse
 
 # Run accessibility audit
 axe http://localhost:4321/en/1950s
