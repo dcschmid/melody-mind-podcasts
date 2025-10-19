@@ -187,7 +187,7 @@
     {
       "id": "female-pop-superstars",
       "title": "Superstar pop femminili – reinvenzione, presenza scenica e mito",
-  "description": "Produzione multidimensionale, branding narrativo e coreografie sincronizzate orchestrano empatia di massa mentre vulnerabilità strategica alimenta fandom globale. Daniel e Annabelle ti guidano tra hook, timbro modulato ed estetica visiva. Premi Play e osserva come queste icone plasmano emozione condivisa.",
+  "description": "Produzione multidimensionale, branding narrativo e coreografie sincronizzate catalizzano empatia di massa mentre vulnerabilità strategica alimenta fandom globale. Daniel e Annabelle ti guidano tra hook, timbro modulato ed estetica visiva. Premi Play e osserva queste icone plasmare emozione condivisa.",
       "language": "it",
       "isAvailable": true,
       "publishedAt": "2025-07-04T10:00:00Z",
@@ -237,6 +237,111 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/female-vocal-icons.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/female-vocal-icons.vtt",
       "imageUrl": "female-vocal-icons",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "piano",
+      "title": "Pianoforte – 88 tasti, memoria emotiva e linguaggio condiviso",
+      "description": "Dai salotti ottocenteschi a jazz club e playlist digitali i suoi 88 tasti fondono melodia, armonia e ritmo in strumento-orchestra che traduce intimità e spettacolo. Daniel e Annabelle ti guidano tra tocco, risonanza e timbro narrativo. Premi Play e senti il pianoforte modellare emozione quotidiana.",
+      "language": "it",
+      "isAvailable": true,
+      "publishedAt": "2025-08-01T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/piano.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/piano.vtt",
+      "imageUrl": "piano",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "orchestral",
+      "title": "Musica orchestrale – dinamiche collettive e architettura emotiva",
+      "description": "Archi, fiati, ottoni e percussioni respirano insieme trasformando gesto singolo in paesaggio sonoro che veicola rito civico, cinema e memoria culturale. Daniel e Annabelle ti guidano tra tessiture, crescendo e timbri fusi. Premi Play e percepisci organismo orchestrale scolpire emozione condivisa.",
+      "language": "it",
+      "isAvailable": true,
+      "publishedAt": "2025-08-08T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/orchestral.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/orchestral.vtt",
+      "imageUrl": "orchestral",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "soundtrack",
+      "title": "Colonne sonore – motivi, atmosfera, tensione e memoria narrativa",
+      "description": "Due note minacciose o tema espansivo fissano emozioni oltre la pellicola: orchestrazione, synth e selezioni curate codificano paura, speranza e mito pop. Daniel e Annabelle ti guidano tra leitmotiv, texture e ritmo narrativo. Premi Play e ascolta musica rivelare strato nascosto della storia.",
+      "language": "it",
+      "isAvailable": true,
+      "publishedAt": "2025-08-15T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/soundtrack.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/soundtrack.vtt",
+      "imageUrl": "soundtrack",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "opera",
+      "title": "Opera – voce amplificata, mito scenico e confessione rituale",
+      "description": "Arie sospendono il tempo, recitativi avanzano trama, coro e orchestra tessono emozione civica mentre regia e costumi rifrangono identità. Daniel e Annabelle ti guidano tra forma drammatica e gesto vocale. Premi Play e entra nel teatro dove vulnerabilità diventa mito condiviso.",
+      "language": "it",
+      "isAvailable": true,
+      "publishedAt": "2025-08-22T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/opera.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/opera.vtt",
+      "imageUrl": "opera",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "classical",
+      "title": "Classica – forme storiche, innovazione e viaggio temporale",
+      "description": "Da contrappunto barocco a sinfonie romantiche e colori modernisti la musica classica archivia memoria sociale e reinventa ascolto contemporaneo. Daniel e Annabelle ti guidano tra forme, spazio e tensione stilistica. Premi Play e lascia che secoli di espressione riemergano in presente condiviso.",
+      "language": "it",
+      "isAvailable": true,
+      "publishedAt": "2025-08-29T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/classical.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/classical.vtt",
+      "imageUrl": "classical",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "chamber-music",
+      "title": "Musica da camera – dialogo esposto e intimità condivisa",
+      "description": "Piccoli insiemi senza direttore scambiano frasi come conversazione: equilibrio, ascolto reciproco e vulnerabilità producono intensità sottile. Daniel e Annabelle ti guidano tra interplay, silenzio e micro dinamiche. Premi Play e percepisci verità musicale sussurrata diventare esperienza collettiva.",
+      "language": "it",
+      "isAvailable": true,
+      "publishedAt": "2025-09-05T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/chamber-music.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/chamber-music.vtt",
+      "imageUrl": "chamber-music",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "new-age",
+      "title": "New Age – ambienti lenti, respiro globale e funzione curativa",
+      "description": "Sintetizzatori fluttuanti, timbri etnici e droni morbidi trasformano ascolto in pratica di attenzione, immaginazione e riequilibrio emotivo. Daniel e Annabelle ti guidano tra radici ambient, rituale wellness e texture sospesa. Premi Play e lascia che il paesaggio sonoro allarghi respiro condiviso.",
+      "language": "it",
+      "isAvailable": true,
+      "publishedAt": "2025-09-12T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/new-age.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/new-age.vtt",
+      "imageUrl": "new-age",
       "fileSizeBytes": 110558060,
       "durationSeconds": 4607
     }
