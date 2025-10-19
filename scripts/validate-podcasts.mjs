@@ -57,12 +57,18 @@ function hasEmoji(str){
 const hostPhraseMap = {
   en: [/Daniel and Annabelle guide you/i],
   de: [/Daniel und Annabelle führen dich/i, /Daniel und Annabelle begleiten dich/i],
-  es: [/Daniel y Annabelle te guían/i, /Daniel y Annabelle te acompañan/i]
+  es: [/Daniel y Annabelle te guían/i, /Daniel y Annabelle te acompañan/i],
+  fr: [/Daniel et Annabelle te guident/i, /Daniel et Annabelle te accompagnent/i],
+  it: [/Daniel e Annabelle ti guidano/i, /Daniel e Annabelle ti accompagnano/i],
+  pt: [/Daniel e Annabelle te guiam/i, /Daniel e Annabelle te acompanham/i]
 };
 const ctaPhraseMap = {
   en: [/Press play and/i],
   de: [/Drück auf Play und/i, /Drücke auf Play und/i, /Drück Play und/i],
-  es: [/Dale Play y/i, /Pulsa Play y/i, /Presiona Play y/i]
+  es: [/Dale Play y/i, /Pulsa Play y/i, /Presiona Play y/i],
+  fr: [/Appuie sur Play et/i, /Appuye sur Play et/i, /Lance la lecture et/i],
+  it: [/Premi Play e/i, /Premi su Play e/i, /Premi il Play e/i],
+  pt: [/Pressiona Play e/i, /Prime Play e/i, /Aperta Play e/i]
 };
 
 function styleCheck(p){
