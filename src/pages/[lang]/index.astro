@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import PodcastLayout from '../../layouts/PodcastLayout.astro';
+import SearchBar from '../../components/SearchBar.astro';
 import type { PodcastData } from '../../types/podcast';
 
 // Import all podcast data files
@@ -224,12 +225,14 @@ const t = translations[lang as keyof typeof translations] || translations.en;
       </div>
     </header>
     
-    <section aria-labelledby="episodes-heading">
+  <SearchBar lang={lang as string} total={podcasts.length} />
+  <section aria-labelledby="episodes-heading">
       <h2 id="episodes-heading" class="text-3xl font-bold text-white mb-8">{t.episodes}</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" role="list">
         {podcasts.map((podcast) => (
-          <article class="bg-gray-800 rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl focus-within:shadow-2xl focus-within:-translate-y-1" role="listitem">
+          <article data-episode data-search={`${podcast.title} ${podcast.description}`}
+            class="bg-gray-800 rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl focus-within:shadow-2xl focus-within:-translate-y-1" role="listitem">
             <div class="aspect-[3/2] overflow-hidden">
               <Image 
                 src={`/images/${podcast.imageUrl}.jpg`} 

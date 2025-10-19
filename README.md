@@ -296,6 +296,20 @@ The site supports automatic language detection and fallbacks:
 - ✅ **Skip links** for efficient navigation
 - ✅ **Reduced motion** support for vestibular disorders
 
+### Accessible Search
+
+Die Sprach-Indexseiten besitzen eine barrierearme Suchfunktion (`SearchBar.astro`):
+
+ - `role="search"` mit sprachspezifischem `aria-label`.
+ - Screenreader-freundliches verborgenes Label (`.visually-hidden`).
+ - Live-Region (`aria-live="polite"`) meldet Trefferanzahl nach Filterung ohne Fokusverlust.
+ - Tastaturbedienung: Input & Lösch-Button voll fokussierbar, klare Fokus-Ringe (AAA Kontrast).
+ - Hoher Kontrast inkl. `prefers-contrast: high` Medienabfrage.
+ - Unterstützt reduzierte Bewegung (`prefers-reduced-motion`).
+ - Filterlogik nutzt `hidden` Attribut, erhält semantische Artikel-Struktur.
+
+Benutzung: Ab 2 Zeichen wird nach Titel + Beschreibung gefiltert; „Clear“ setzt zurück. Anpassungen für serverseitige Suche oder Fuzzy-Matching können leicht ergänzt werden.
+
 ### Testing Accessibility
 
 ```bash
