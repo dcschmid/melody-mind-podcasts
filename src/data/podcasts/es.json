@@ -1,5 +1,88 @@
 {
   "podcasts": [
-
+    {
+      "id": "1950s",
+  "title": "1950s – Chispa rock'n'roll que enciende juventud rebelde",
+      "description": "Noches de neón, jukebox y la chispa de rock'n'roll convierten a la juventud en fuerza cultural: crooners ceden a blues eléctrico, rockabilly y doo‑wop redefinen identidad. Daniel y Annabelle te guían por radios, singles y cruces. Dale Play y siente el inicio arder.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-04-04T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1950s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1950s.vtt",
+      "imageUrl": "1950s"
+    },
+    {
+      "id": "1960s",
+      "title": "1960s – Revoluciones sonoras moldean espíritu e identidad",
+      "description": "Contracultura, marchas civiles, clubes psicodélicos y juventud global hacen de música protesta, moda y mito: Beatles, Motown, Dylan y Hendrix mutan narrativa. Daniel y Annabelle te guían entre estudios, festivales y cambio. Dale Play y siente transformación encenderse.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-04-11T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1960s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1960s.vtt",
+      "imageUrl": "1960s"
+    },
+    {
+      "id": "1970s",
+      "title": "1970s – Brillo disco, punk rabioso y grooves planetarios",
+      "description": "Brillo disco, rebelión punk, arena rock, pulso reggae e intimidad cantautor chocan mientras síntesis, protestas y tribus estilísticas reconfiguran cultura. Daniel y Annabelle te guían por tensiones y laboratorio sonoro. Dale Play y viaja entre caleidoscópicos grooves.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-04-18T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1970s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1970s.vtt",
+      "imageUrl": "1970s"
+    },
+    {
+      "id": "1980s",
+  "title": "1980s – Neón, MTV, synthpop, metal y himnos pop globales",
+      "description": "Visuales neón, mitificación MTV, brillo synthpop, fuego metal, ascenso hip‑hop y megaeventos caritativos globalizan identidad pop y producción. Daniel y Annabelle te guían por imagen, subculturas e innovación. Dale Play y siente energía amplificada de la era.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-04-25T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1980s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1980s.vtt",
+      "imageUrl": "1980s"
+    },
+    {
+      "id": "1990s",
+  "title": "1990s – Grunge, hip‑hop, rave y mosaico pop digital plural",
+  "description": "Angustia grunge, narrativa hip‑hop, euforia rave, teen pop brillante y chispas digitales de CD a Napster funden tribus y estilos fragmentados. Daniel y Annabelle te guían por escenas, identidad, tecnología e innovación. Dale Play y deja que el décenio gire intenso en tus oídos.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-05-02T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1990s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1990s.vtt",
+      "imageUrl": "1990s"
+    },
+    {
+      "id": "2000s",
+      "title": "2000s – Descargas, iPod, emo y frontera streaming digital",
+      "description": "Declive CD, iPods, intercambio, confesión emo, rock híbrido, pop maximalista y semillas streaming transforman escucha mientras beats latinos, K‑Pop y clubes crecen. Daniel y Annabelle te acompañan por transición y fandom. Dale Play y cruza el puente digital.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-05-09T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/2000s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/2000s.vtt",
+      "imageUrl": "2000s"
+    },
+    {
+      "id": "2010s",
+      "title": "2010s – Streaming, viralidad, poder fandom y voces globales",
+      "description": "Dominio streaming, memes, bailes virales, disolución de géneros y voces globales (Latin, K‑Pop, Afrobeat) convierten música en cultura interactiva. Daniel y Annabelle te guían por algoritmos, activismo e identidad. Dale Play y únete al coro sin fronteras.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-05-16T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/2010s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/2010s.vtt",
+      "imageUrl": "2010s"
+    }
   ]
 }

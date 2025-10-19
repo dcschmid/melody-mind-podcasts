@@ -40,8 +40,12 @@ const publicImagesDir = path.join(root, 'public', 'images');
 // Content Style Guidelines (Version 2.0, Emoji-frei)
 //  - Title length: 55–65 characters (inclusive)
 //  - Description length: 250–300 characters (inclusive)
-//  - Must contain host phrase: "Daniel and Annabelle guide you" (case-insensitive)
-//  - Must contain CTA phrase beginning with: "Press play and" (case-insensitive)
+//  - Must contain host phrase (sprachabhängig)
+//        EN: "Daniel and Annabelle guide you"
+//        DE: "Daniel und Annabelle führen dich" | "Daniel und Annabelle begleiten dich"
+//  - Must contain CTA phrase beginning with (sprachabhängig)
+//        EN: "Press play and"
+//        DE: "Drück auf Play und" | "Drücke auf Play und" | "Drück Play und"
 //  - Must NOT contain any emoji (Unicode Extended_Pictographic) in title or description
 
 const styleStrict = args.includes('--style-strict');
@@ -50,8 +54,23 @@ function hasEmoji(str){
   return /[\p{Extended_Pictographic}]/u.test(str);
 }
 
+const hostPhraseMap = {
+  en: [/Daniel and Annabelle guide you/i],
+  de: [/Daniel und Annabelle führen dich/i, /Daniel und Annabelle begleiten dich/i],
+  es: [/Daniel y Annabelle te guían/i, /Daniel y Annabelle te acompañan/i]
+};
+const ctaPhraseMap = {
+  en: [/Press play and/i],
+  de: [/Drück auf Play und/i, /Drücke auf Play und/i, /Drück Play und/i],
+  es: [/Dale Play y/i, /Pulsa Play y/i, /Presiona Play y/i]
+};
+
 function styleCheck(p){
   const warnings = [];
+  const lang = (p.language || 'en').toLowerCase();
+  const hostPatterns = hostPhraseMap[lang] || hostPhraseMap.en;
+  const ctaPatterns = ctaPhraseMap[lang] || ctaPhraseMap.en;
+
   if(typeof p.title === 'string'){
     const tl = p.title.length;
     if(tl < 55 || tl > 65) warnings.push(`Style: title length ${tl} outside 55–65 ("${p.id}")`);
@@ -60,8 +79,12 @@ function styleCheck(p){
   if(typeof p.description === 'string'){
     const dl = p.description.length;
     if(dl < 250 || dl > 300) warnings.push(`Style: description length ${dl} outside 250–300 ("${p.id}")`);
-    if(!/Daniel and Annabelle guide you/i.test(p.description)) warnings.push(`Style: missing host phrase ("${p.id}")`);
-    if(!/Press play and/i.test(p.description)) warnings.push(`Style: missing CTA phrase ("${p.id}")`);
+    // Host phrase check (match any acceptable pattern)
+    const hostFound = hostPatterns.some(re => re.test(p.description));
+    if(!hostFound) warnings.push(`Style: missing host phrase ("${p.id}" lang=${lang})`);
+    // CTA check
+    const ctaFound = ctaPatterns.some(re => re.test(p.description));
+    if(!ctaFound) warnings.push(`Style: missing CTA phrase ("${p.id}" lang=${lang})`);
     if(hasEmoji(p.description)) warnings.push(`Style: description contains emoji ("${p.id}")`);
   }
   return warnings;
