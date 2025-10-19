@@ -2,17 +2,87 @@
   "podcasts": [
     {
       "id": "1950s",
-      "title": "[À_TRADUIRE] The 1950s – The Birth of Rock & Roll",
-      "description": "[À_TRADUIRE] Neon nights, jukebox dreams, and the spark of rock 'n' roll...",
+      "title": "Années 1950 – Naissance du rock et modernité électrique",
+      "description": "Vinyles 45 tours, radios crépitantes, doo-wop et premiers riffs électriques forgent une identité adolescente mondiale. Daniel et Annabelle te guident entre énergie brute, crooners et mutation culturelle. Appuie sur Play et revis la scène où pulsation rebelle redéfinit rythme social.",
       "language": "fr",
       "isAvailable": true,
       "publishedAt": "2025-04-04T10:00:00Z",
-      "showNotesHtml": "[À_TRADUIRE] HTML content from English version",
-      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/1950s.mp3",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1950s.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1950s.vtt",
-      "imageUrl": "1950s",
-      "fileSizeBytes": 110558060,
-      "durationSeconds": 4607
+      "imageUrl": "1950s"
+    },
+    {
+      "id": "1960s",
+      "title": "Années 1960 – Pop globale, studio psyché et conscience sociale",
+      "description": "Beatles, yé-yé, soul militante et expérimentations psychédéliques étendent mélodie, texture et message. Daniel et Annabelle te guident dans explosion créative, nouvelles techniques et engagement culturel. Appuie sur Play et plonge dans décennie où le son devient laboratoire d’idées.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-04-11T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1960s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1960s.vtt",
+      "imageUrl": "1960s"
+    },
+    {
+      "id": "1970s",
+      "title": "Années 1970 – Disco, prog, punk et expansion de textures",
+      "description": "Synthés modulaires, studios complexes, groove disco, virtuosité prog et urgence punk redéfinissent esthétique. Daniel et Annabelle te guident entre danse hédoniste, narration conceptuelle et réaction minimaliste. Appuie sur Play et sens comment pluralité sonore façonne économie émotionnelle moderne.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-04-18T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1970s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1970s.vtt",
+      "imageUrl": "1970s"
+    },
+    {
+      "id": "1980s",
+      "title": "Années 1980 – Claviers brillants, clip MTV et maximalisme pop",
+      "description": "Boîtes à rythmes, synthétiseurs hybrides, production gated et image MTV transforment diffusion globale. Daniel et Annabelle te guident à travers hooks monumentaux, identité visuelle et économie médiatique. Appuie sur Play et explore décennie où technologie dramatise emotion et accélère icônes.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-04-25T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1980s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1980s.vtt",
+      "imageUrl": "1980s"
+    },
+    {
+      "id": "1990s",
+      "title": "Années 1990 – Grunge brut, hip-hop narratif et fusion globale",
+      "description": "Alternatif rugueux, samples narratifs du hip-hop, electronica, pop européenne et métissages world tissent palette identitaire. Daniel et Annabelle te guident parmi vulnérabilité grunge, storytelling rap et hybrides digitaux. Appuie sur Play et revis comment authenticité redéfinit valeur musicale.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-05-02T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1990s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1990s.vtt",
+      "imageUrl": "1990s"
+    },
+    {
+      "id": "2000s",
+      "title": "Années 2000 – MP3, partage social et mutation du mixage",
+      "description": "Compression MP3, blogs, peer-to-peer et loudness digital modifient découverte, économie et esthétique. Daniel et Annabelle te guident à travers pop hybride, EDM émergente et stratégies virales naissantes. Appuie sur Play et traverse période où accès remodèle pouvoir narratif sonore.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-05-09T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/2000s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/2000s.vtt",
+      "imageUrl": "2000s"
+    },
+    {
+      "id": "2010s",
+      "title": "Années 2010 – Streaming, algorithmie et esthétique fragmentée",
+      "description": "Playlists algorithmiques, trap mélodique, bedroom pop et reggaeton global reconfigurent cadence d’écoute. Daniel et Annabelle te guident entre data, micro-scènes et fluidité de genre. Appuie sur Play et analyse comment attention programmable redéfinit forme émotionnelle moderne.",
+      "language": "fr",
+      "isAvailable": true,
+      "publishedAt": "2025-05-16T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/2010s.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/2010s.vtt",
+      "imageUrl": "2010s"
     }
   ]
 }
