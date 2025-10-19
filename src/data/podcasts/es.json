@@ -290,5 +290,102 @@
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/new-age.vtt",
       "imageUrl": "new-age"
     }
+    ,
+    {
+      "id": "cristina-scabbia",
+      "title": "Cristina Scabbia – Intensidad, rango oscuro y identidad moderna",
+      "description": "De demos góticos a éxito con Lacuna Coil: Cristina une potencia, calidez oscura y control mezclando metal y melodía accesible. Analizamos respiración, dúo vocal e evolución estética. Daniel y Annabelle te guían por color, dinámica y legado. Dale Play y siente intensidad consciente.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-10-10T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/cristina-scabbia.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/cristina-scabbia.vtt",
+      "imageUrl": "cristina-scabbia"
+    },
+    {
+      "id": "sharon-den-adel",
+      "title": "Sharon den Adel – Textura etérea, diseño melódico y alcance pop",
+      "description": "Within Temptation transforma raíces góticas en épica sinfónica y luego pulso pop; Sharon mezcla ligereza aérea y fraseo preciso para puente mainstream. Examinamos control dinámico, registro y marca vocal. Daniel y Annabelle te guían por estrategia tímbrica. Dale Play y vive elegancia expansiva.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-10-17T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/sharon-den-adel.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/sharon-den-adel.vtt",
+      "imageUrl": "sharon-den-adel"
+    },
+    {
+      "id": "amy-lee",
+      "title": "Amy Lee – Piano confesional, proyección dramática y sello híbrido",
+      "description": "Evanescence combinó rock, elementos góticos y melodías pop; Amy articula vulnerabilidad y potencia teatral sobre piano y arreglos. Observamos mezcla técnica, fraseo emotivo y estética visual integrada. Daniel y Annabelle te guían por capas expresivas. Dale Play y siente catarsis estructurada.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-10-24T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/amy-lee.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/amy-lee.vtt",
+      "imageUrl": "amy-lee"
+    },
+    {
+      "id": "charlotte-wessels",
+      "title": "Charlotte Wessels – Lirismo articulado y modernidad narrativa",
+      "description": "Delain une gancho accesible y ambiente sinfónico; Charlotte equilibra dicción clara, emoción controlada y poética moderna. Miramos registro, textura media y construcción temática. Daniel y Annabelle te guían por precisión lírica y evolución. Dale Play y explora narrativa cristalina.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-10-31T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/charlotte-wessels.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/charlotte-wessels.vtt",
+      "imageUrl": "charlotte-wessels"
+    },
+    {
+      "id": "doro-pesch",
+      "title": "Doro Pesch – Perseverancia, rugosidad emotiva y legado metal",
+      "description": "De Warlock a etapa solista, Doro simboliza continuidad y cercanía fan; timbre áspero y fraseo directo sostienen credibilidad. Revisamos resistencia vocal, marca y adaptación estilística sin perder núcleo. Daniel y Annabelle te guían por longevidad. Dale Play y experimenta fibra histórica.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-11-07T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/doro-pesch.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/doro-pesch.vtt",
+      "imageUrl": "doro-pesch"
+    },
+    {
+      "id": "floor-jansen",
+      "title": "Floor Jansen – Versatilidad, control técnico y potencia cálida",
+      "description": "Floor fusiona técnica clásica y ataque moderno, del susurro íntimo a proyección operística limpia. Nightwish amplifica alcance y narrativa épica. Analizamos respiración, colocación y estrategia estilística. Daniel y Annabelle te guían por rango híbrido. Dale Play y siente expansión controlada.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-11-14T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/floor-jansen.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/floor-jansen.vtt",
+      "imageUrl": "floor-jansen"
+    },
+    {
+      "id": "simone-simons",
+      "title": "Simone Simons – Color lírico, articulación y sello sinfónico",
+      "description": "Epica mezcla coros, riffs pesados y orquestación; Simone proyecta línea lírica con control de vibrato y corte preciso sobre densidad. Examinamos vocal fry inicial, respiración e integración coral. Daniel y Annabelle te guían por estética refinada. Dale Play y percibe claridad expansiva.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-11-21T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/simone-simons.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/simone-simons.vtt",
+      "imageUrl": "simone-simons"
+    },
+    {
+      "id": "tarja-turunen",
+      "title": "Tarja Turunen – Fusión lírica, metal sinfónico y pionerismo",
+      "description": "Tarja introduce técnica clásica en metal sinfónico temprano, define mezcla lírica y dramatismo; su etapa post Nightwish consolida marca solista. Observamos ataque frontal, resonancia alta y diseño de espacio. Daniel y Annabelle te guían por innovación vocal. Dale Play y percibe firma pionera.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-11-28T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/tarja-turunen.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/tarja-turunen.vtt",
+      "imageUrl": "tarja-turunen"
+    }
   ]
 }
