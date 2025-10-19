@@ -82,7 +82,7 @@ export const GET: APIRoute = async ({ params, request }) => {
       <itunes:name>Daniel Schmid</itunes:name>
       <itunes:email>dcschmid@murena.io</itunes:email>
     </itunes:owner>
-    <itunes:image href="https://podcasts.melody-mind.de/the-melody-mind-podcast.png"/>
+  <itunes:image href="https://podcasts.melody-mind.de/the-melody-mind-podcast.jpg"/>
     <itunes:category text="Music">
       <itunes:category text="Music History"/>
     </itunes:category>
@@ -139,7 +139,7 @@ export const GET: APIRoute = async ({ params, request }) => {
       <itunes:name>Daniel Schmid</itunes:name>
       <itunes:email>dcschmid@murena.io</itunes:email>
     </itunes:owner>
-    <itunes:image href="https://podcasts.melody-mind.de/the-melody-mind-podcast.png"/>
+  <itunes:image href="https://podcasts.melody-mind.de/the-melody-mind-podcast.jpg"/>
     <itunes:category text="Music">
       <itunes:category text="Music History"/>
     </itunes:category>

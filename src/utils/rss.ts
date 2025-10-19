@@ -98,7 +98,7 @@ export async function generatePodcastRSSFeed(
 
     <!-- Channel Image -->
     <image>
-      <url>${baseUrl}/the-melody-mind-podcast.png</url>
+  <url>${baseUrl}/the-melody-mind-podcast.jpg</url>
       <title>${escapeXML(title)}</title>
       <link>${channelLink}</link>
       <width>1400</width>
@@ -112,7 +112,7 @@ export async function generatePodcastRSSFeed(
       <itunes:name>Daniel Schmid</itunes:name>
       <itunes:email>dcschmid@murena.io</itunes:email>
     </itunes:owner>
-    <itunes:image href="${baseUrl}/the-melody-mind-podcast.png"/>
+  <itunes:image href="${baseUrl}/the-melody-mind-podcast.jpg"/>
     <itunes:category text="Music">
       <itunes:category text="Music History"/>
     </itunes:category>
@@ -144,7 +144,7 @@ function generateRSSItem(episode: PodcastData, lang: string, baseUrl: string, in
   // Episode image URL
   // Prefer square derivative naming convention <name>-square.jpg if it exists, else fallback to <name>.jpg
   // Additionally allow centralized square directory /images/square/<name>.jpg if provided.
-  let imageUrl = `${baseUrl}/the-melody-mind-podcast.png`;
+  let imageUrl = `${baseUrl}/the-melody-mind-podcast.jpg`;
   if (episode.imageUrl) {
     const baseName = episode.imageUrl;
     const squareDir = `${baseUrl}/square/${baseName}.jpg`;
