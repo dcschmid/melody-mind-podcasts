@@ -84,5 +84,126 @@
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/2010s.vtt",
       "imageUrl": "2010s"
     }
+    ,
+    {
+      "id": "female-blues-legends",
+      "title": "Leyendas del Blues Femeninas: Poder, Alma, Fuego, Legado",
+      "description": "Ma Rainey, Bessie Smith, Memphis Minnie, Big Mama Thornton, Etta James y Koko Taylor convierten supervivencia y dignidad en blues vocal crudo que modela soul, rock e hip‑hop. Daniel y Annabelle te guían por timbre, letras, resistencia y legado. Dale Play y siente base encender identidad sonora viva.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-05-23T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-blues-legends.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-blues-legends.vtt",
+      "imageUrl": "female-blues-legends"
+    },
+    {
+      "id": "female-country-stars",
+      "title": "Estrellas Country Femeninas: Verdad, Corazón, Valentía, Voces",
+      "description": "De Kitty Wells a Loretta, Dolly, Tammy, Reba, Shania, Carrie, Miranda y Kacey: porches y trabajo se vuelven canciones sobre clase, autonomía, humor y corazón. Daniel y Annabelle te acompañan por letras, imagen, crossover y evolución. Dale Play y siente storytelling expandiendo experiencia femenina.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-06-06T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-country-stars.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-country-stars.vtt",
+      "imageUrl": "female-country-stars"
+    },
+    {
+      "id": "female-djs",
+      "title": "DJs Femeninas: Barreras rotas, Beats, Noche, Libertad Plena",
+      "description": "De sótanos disco a mainstage: Sharon White, DJ Rap, Miss Kittin, Honey Dijon, Peggy Gou y Charlotte de Witte rompen gatekeeping y convierten la pista en refugio liberador. Daniel y Annabelle te guían por técnica, cultura, moda e inclusión. Dale Play y siente pulso que transforma comunidad nocturna.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-06-13T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-djs.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-djs.vtt",
+      "imageUrl": "female-djs"
+    },
+    {
+      "id": "female-grunge-artists",
+      "title": "Artistas Grunge Femeninas: Verdad distorsión, Furia, Resiliencia",
+      "description": "Courtney Love, Kat Bjelland, L7, Bikini Kill y voces afines giran distorsión, zines, moda subvertida y gritos catárticos en energía feminista de supervivencia. Daniel y Annabelle te guían por crudeza, identidad, DIY y manifiesto. Dale Play y escucha rebelión chispear en feedback visceral.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-06-20T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-grunge-artists.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-grunge-artists.vtt",
+      "imageUrl": "female-grunge-artists"
+    },
+    {
+      "id": "female-hip-hop-artists",
+      "title": "Artistas Hip-Hop Femeninas: Flow, Moda, Poder, Resistencia, Voz",
+      "description": "MC Sha‑Rock, Roxanne Shanté, Salt‑N‑Pepa, MC Lyte, Queen Latifah, Missy, Lauryn, Nicki, Cardi y Megan giran narrativa con flow, moda y poder empresarial. Daniel y Annabelle te acompañan por voz, agencia, impacto e historia. Dale Play y siente salto del micrófono redefiniendo espacio cultural vivo.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-06-27T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-hip-hop-artists.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-hip-hop-artists.vtt",
+      "imageUrl": "female-hip-hop-artists"
+    },
+    {
+      "id": "female-jazz-vocalists",
+      "title": "Vocalistas Jazz Femeninas: Alma, Swing, Fraseo, Riesgo, Valor",
+      "description": "Billie Holiday, Ella Fitzgerald, Sarah Vaughan, Nina Simone, Betty Carter y herederas transforman fraseo, scat, riesgo y activismo en archivo emocional vivo. Daniel y Annabelle te guían por timbre, improvisación y herencia. Dale Play y deja que memoria swinguee formando identidad sonora colectiva.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-07-04T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-jazz-vocalists.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-jazz-vocalists.vtt",
+      "imageUrl": "female-jazz-vocalists"
+    },
+    {
+      "id": "female-pop-superstars",
+      "title": "Superestrellas Pop Femeninas: Cambio, Emoción, Brillo, Activismo",
+      "description": "Diana, Aretha, Madonna, Whitney, Mariah, Britney, Beyoncé, Gaga, Rihanna, Taylor y Billie convierten reinvención, vulnerabilidad, activismo y fandom en motor pop transgeneracional. Daniel y Annabelle te acompañan por épocas, persona e influencia. Dale Play y siente mito vivo moldeando deseo social.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-07-11T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-pop-superstars.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-pop-superstars.vtt",
+      "imageUrl": "female-pop-superstars"
+    },
+    {
+      "id": "female-rb-divas",
+      "title": "Divas R&B Femeninas: Fuerza Soul, Cambio, Sanación, Legado",
+      "description": "Aretha, Etta, Chaka, Whitney, Mariah, Mary J., Beyoncé, Rihanna, SZA, H.E.R. y Lizzo llevan fuego gospel, melisma, intimidad, protesta y reinvención más allá de listas. Daniel y Annabelle te guían por resiliencia, crossover, sanación y voz. Dale Play y deja que el soul mueva mundos interiores.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-07-25T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-rb-divas.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-rb-divas.vtt",
+      "imageUrl": "female-rb-divas"
+    },
+    {
+      "id": "female-rock-metal-vocalists",
+      "title": "Vocalistas Rock & Metal Femeninas: Poder, Grit, Mito, Futuro",
+      "description": "Janis, Grace, Joan, Doro, Amy Lee, Cristina, Angela, Tarja, Floor, Lzzy y Tatiana unen dureza, rango, vulnerabilidad y presencia mítica creando nueva gravedad. Daniel y Annabelle te acompañan por extremos, géneros, ritual y energía fan. Dale Play y mira expectativas romperse ante intensidad plural.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-08-01T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-rock-metal-vocalists.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-rock-metal-vocalists.vtt",
+      "imageUrl": "female-rock-metal-vocalists"
+    },
+    {
+      "id": "female-vocal-icons",
+      "title": "Íconos Vocales Femeninos: Técnica, Timbre, Emoción, Influencia",
+      "description": "Billie, Ella, Aretha, Whitney, Mariah, Céline, Sade, Adele, Beyoncé y nuevas voces entrelazan técnica, color, emoción y timing cultural en épocas vocales. Daniel y Annabelle te guían por timbres, riesgo interpretativo e influencia. Dale Play y encuentra estándar dorado forjando memoria colectiva.",
+      "language": "es",
+      "isAvailable": true,
+      "publishedAt": "2025-08-15T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-vocal-icons.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/female-vocal-icons.vtt",
+      "imageUrl": "female-vocal-icons"
+    }
   ]
 }
