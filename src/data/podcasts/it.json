@@ -187,7 +187,7 @@
     {
       "id": "female-pop-superstars",
       "title": "Superstar pop femminili – reinvenzione, presenza scenica e mito",
-  "description": "Produzione multidimensionale, branding narrativo e coreografie sincronizzate catalizzano empatia di massa mentre vulnerabilità strategica alimenta fandom globale. Daniel e Annabelle ti guidano tra hook, timbro modulato ed estetica visiva. Premi Play e osserva queste icone plasmare emozione condivisa.",
+  "description": "Produzione multidimensionale, branding narrativo e coreografie sincronizzate catalizzano empatia di massa mentre vulnerabilità strategica alimenta fandom globale. Daniel e Annabelle ti guidano tra hook, timbro modulato ed estetica visiva. Premi Play e osserva icone plasmare emozione comune.",
       "language": "it",
       "isAvailable": true,
       "publishedAt": "2025-07-04T10:00:00Z",
@@ -342,6 +342,126 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/new-age.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/new-age.vtt",
       "imageUrl": "new-age",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "cristina-scabbia",
+      "title": "Cristina Scabbia – dualità emotiva e eredità gothic metal",
+      "description": "Dalle sale prova milanesi ai festival globali la voce nitida e vellutata di Cristina fonde vulnerabilità e forza definendo identità duale Lacuna Coil. Daniel e Annabelle ti guidano tra timbro, simbolismo e connessione fan. Premi Play e entra nel bagliore d'ombra condiviso che ispira resilienza.",
+      "language": "it",
+      "isAvailable": false,
+      "publishedAt": "2025-09-19T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/cristina-scabbia.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/cristina-scabbia.vtt",
+      "imageUrl": "cristina-scabbia",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "sharon-den-adel",
+      "title": "Sharon den Adel – fragilità, potenza e atmosfera cinematica",
+      "description": "Calore etereo e forza da arena elevano Within Temptation da radici olandesi a mito globale: fragilità, atmosfera e inclusione. Daniel e Annabelle ti guidano tra timbro, simboli e reinvenzione. Premi Play e cavalca quiete nel vortice condiviso che rende intimo il grandioso.",
+      "language": "it",
+      "isAvailable": false,
+      "publishedAt": "2025-09-26T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/sharon-den-adel.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/sharon-den-adel.vtt",
+      "imageUrl": "sharon-den-adel",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "amy-lee",
+      "title": "Amy Lee – emozione cinematica e resilienza alternative gothic",
+      "description": "Pianoforte confessionale, registro espanso e vulnerabilità gotica ridefiniscono alternative 2000s mentre ballate catartiche diventano sostegno globale. Daniel e Annabelle ti guidano tra colore vocale, trama orchestrale e narrazioni di forza. Premi Play e traccia luce nel buio condiviso che guarisce.",
+      "language": "it",
+      "isAvailable": false,
+      "publishedAt": "2025-10-03T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/amy-lee.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/amy-lee.vtt",
+      "imageUrl": "amy-lee",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "charlotte-wessels",
+      "title": "Charlotte Wessels – storie intime, coraggio e spazi heavy",
+      "description": "Nuance letteraria, melodia d'acciaio e reinvenzione senza paura portano dagli inni inclusivi Delain a diari solisti sotterranei. Daniel e Annabelle ti guidano tra liriche, immagine e fusione di generi. Premi Play e ascolta eleganza affilata modellare empatia condivisa duratura.",
+      "language": "it",
+      "isAvailable": false,
+      "publishedAt": "2025-10-10T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/charlotte-wessels.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/charlotte-wessels.vtt",
+      "imageUrl": "charlotte-wessels",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "doro-pesch",
+      "title": "Doro Pesch – quattro decenni di grinta, cuore e lealtà metal",
+      "description": "Quattro decenni di grinta e cuore trasformano inni Warlock e capitoli solisti in famiglia metal vivente, lealtà e unità. Daniel e Annabelle ti guidano tra tessitura vocale, rituali fan, perseveranza e eredità. Premi Play e alza il pugno condiviso che non svanisce mai.",
+      "language": "it",
+      "isAvailable": false,
+      "publishedAt": "2025-10-17T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/doro-pesch.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/doro-pesch.vtt",
+      "imageUrl": "doro-pesch",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "floor-jansen",
+      "title": "Floor Jansen – precisione operistica, fuoco umano e potenza",
+      "description": "Precisione operistica, grinta rock e apertura autentica dalla radice After Forever a vasti palchi Nightwish e resilienza solista. Daniel e Annabelle ti guidano tra estensione, stamina, vulnerabilità e rito fan. Premi Play e senti voce tettonica accendere energia condivisa resistente.",
+      "language": "it",
+      "isAvailable": false,
+      "publishedAt": "2025-10-24T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/floor-jansen.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/floor-jansen.vtt",
+      "imageUrl": "floor-jansen",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "simone-simons",
+      "title": "Simone Simons – potenza operistica, filosofia e epica riflessiva",
+      "description": "Dall'Olanda ai palchi globali Simone fonde precisione operistica con storytelling filosofico Epica: scienza, umanità e cosmo. Daniel e Annabelle ti guidano tra timbro, temi e potere riflessivo. Premi Play e senti metal sinfonico pensare e amplificare coscienza condivisa.",
+      "language": "it",
+      "isAvailable": false,
+      "publishedAt": "2025-10-31T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/simone-simons.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/simone-simons.vtt",
+      "imageUrl": "simone-simons",
+      "fileSizeBytes": 110558060,
+      "durationSeconds": 4607
+    }
+    ,
+    {
+      "id": "tarja-turunen",
+      "title": "Tarja Turunen – soprano cristallino che forgia nucleo sinfonico",
+      "description": "Soprano cristallino di Tarja accende metal sinfonico: disciplina incontra distorsione unendo sacro, stagionale e pesante in arco espressivo. Daniel e Annabelle ti guidano tra purezza, resilienza ed atmosfera. Premi Play e ascolta fiamma invernale irradiarsi in memoria condivisa.",
+      "language": "it",
+      "isAvailable": false,
+      "publishedAt": "2025-11-07T10:00:00Z",
+      "showNotesHtml": "",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/tarja-turunen.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/tarja-turunen.vtt",
+      "imageUrl": "tarja-turunen",
       "fileSizeBytes": 110558060,
       "durationSeconds": 4607
     }
