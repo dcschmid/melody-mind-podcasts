@@ -66,10 +66,11 @@ export const GET: APIRoute = async ({ params, request }) => {
 
     if (availableEpisodes.length === 0) {
       // Return empty but valid RSS feed if no episodes
-      const emptyRSS = `<?xml version="1.0" encoding="UTF-8"?>
+  const emptyRSS = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
      xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
-     xmlns:atom="http://www.w3.org/2005/Atom">
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:podcast="https://podcastindex.org/namespace/1.0">
   <channel>
     <title>MelodyMind Podcasts - ${lang.toUpperCase()}</title>
     <description>Music history podcast episodes - no episodes available yet</description>
@@ -86,7 +87,9 @@ export const GET: APIRoute = async ({ params, request }) => {
       <itunes:category text="Music History"/>
     </itunes:category>
     <itunes:explicit>no</itunes:explicit>
-    <itunes:type>episodic</itunes:type>
+  <itunes:type>episodic</itunes:type>
+  <podcast:guid>urn:podcast:melodymind:${lang}</podcast:guid>
+  <podcast:locked owner="dcschmid@murena.io">yes</podcast:locked>
     <atom:link href="https://podcasts.melody-mind.de/${lang}/rss.xml" rel="self" type="application/rss+xml"/>
   </channel>
 </rss>`;
@@ -122,17 +125,34 @@ export const GET: APIRoute = async ({ params, request }) => {
     console.error(`RSS feed generation error for ${params.lang}:`, error);
 
     // Return error as valid RSS feed
-    const errorRSS = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+    // Even in error state supply required iTunes tags so directory validators don't flag missing channel elements
+  const errorRSS = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:podcast="https://podcastindex.org/namespace/1.0">
   <channel>
     <title>MelodyMind Podcast - Error</title>
     <description>RSS feed temporarily unavailable</description>
     <link>https://podcasts.melody-mind.de/${params.lang}</link>
     <language>${params.lang}</language>
+    <itunes:author>MelodyMind</itunes:author>
+    <itunes:summary>RSS feed temporarily unavailable</itunes:summary>
+    <itunes:owner>
+      <itunes:name>Daniel Schmid</itunes:name>
+      <itunes:email>dcschmid@murena.io</itunes:email>
+    </itunes:owner>
+    <itunes:image href="https://podcasts.melody-mind.de/the-melody-mind-podcast.png"/>
+    <itunes:category text="Music">
+      <itunes:category text="Music History"/>
+    </itunes:category>
+    <itunes:explicit>no</itunes:explicit>
+  <itunes:type>episodic</itunes:type>
+  <podcast:guid>urn:podcast:melodymind:${params.lang}</podcast:guid>
+  <podcast:locked owner="dcschmid@murena.io">yes</podcast:locked>
+    <atom:link href="https://podcasts.melody-mind.de/${params.lang}/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>Service Temporarily Unavailable</title>
       <description>Please try again later</description>
       <pubDate>${new Date().toUTCString()}</pubDate>
+      <guid isPermaLink="false">melody-mind-error-${Date.now()}</guid>
     </item>
   </channel>
 </rss>`;

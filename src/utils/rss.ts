@@ -119,6 +119,11 @@ export async function generatePodcastRSSFeed(
     <itunes:explicit>no</itunes:explicit>
     <itunes:type>episodic</itunes:type>
 
+  <!-- Podcasting 2.0 Required/Recommended Channel Tags -->
+  <podcast:guid>urn:podcast:melodymind:${lang}</podcast:guid>
+  <!-- "locked" prevents unauthorized migrations; set owner email to confirm control -->
+  <podcast:locked owner="dcschmid@murena.io">yes</podcast:locked>
+
     <!-- Podcasting 2.0 Persons -->
     ${personsTags}
 
