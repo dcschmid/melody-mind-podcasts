@@ -48,6 +48,7 @@ const translations = {
     totalEpisodes: 'episodes available',
     availableOn: 'Available on your favorite platforms:',
     spotifyUrl: 'https://open.spotify.com/show/0AkUiN6Vnd0PsKuGtbp4W7',
+    applePodcastUrl: 'https://podcasts.apple.com/us/podcast/melody-mind-–-english/id1847445333',
     keywords: ['music history podcast', 'rock and roll', 'music culture', 'vintage music', 'music documentary', 'audio stories'],
   },
   de: {
@@ -60,7 +61,8 @@ const translations = {
     featuredContent: 'Entdecke die Stimmen, Rhythmen und Revolutionen, die Generationen geprägt haben',
     totalEpisodes: 'Episoden verfügbar',
     availableOn: 'Verfügbar auf deinen Lieblingsplattformen:',
-    spotifyUrl: 'https://open.spotify.com/show/7kcX6jPey7Axx9lZYoMV2A', 
+  spotifyUrl: 'https://open.spotify.com/show/7kcX6jPey7Axx9lZYoMV2A', 
+  applePodcastUrl: 'https://podcasts.apple.com/de/podcast/TODO-DE', // TODO: echte deutsche Apple Podcast URL
     keywords: ['musikgeschichte podcast', 'rock and roll', 'musikkultur', 'vintage musik', 'musik dokumentation', 'audio geschichten'],
   },
   es: {
@@ -73,7 +75,8 @@ const translations = {
     featuredContent: 'Descubre las voces, ritmos y revoluciones que definieron generaciones',
     totalEpisodes: 'episodios disponibles',
     availableOn: 'Disponible en tus plataformas favoritas:',
-    spotifyUrl: 'https://open.spotify.com/show/3T0gL6OlS0AtwiLIx4mFWK', // TODO: Ersetzen mit tatsächlicher spanischer Spotify-Show-ID
+  spotifyUrl: 'https://open.spotify.com/show/3T0gL6OlS0AtwiLIx4mFWK', // TODO: Ersetzen mit tatsächlicher spanischer Spotify-Show-ID
+  applePodcastUrl: 'https://podcasts.apple.com/es/podcast/TODO-ES', // TODO: echte spanische Apple Podcast URL
     keywords: ['podcast historia musical', 'rock and roll', 'cultura musical', 'música vintage', 'documental musical', 'historias audio'],
   },
   fr: {
@@ -86,10 +89,12 @@ const translations = {
     featuredContent: 'Découvrez les voix, rythmes et révolutions qui ont défini des générations',
     totalEpisodes: 'épisodes disponibles',
     availableOn: 'Disponible sur vos plateformes préférées:',
-    spotifyUrl: 'https://open.spotify.com/show/3Jih0BwDDpy7V6izQjGT3u', // TODO: Ersetzen mit tatsächlicher französischer Spotify-Show-ID
+  spotifyUrl: 'https://open.spotify.com/show/3Jih0BwDDpy7V6izQjGT3u', // TODO: Ersetzen mit tatsächlicher französischer Spotify-Show-ID
+  applePodcastUrl: 'https://podcasts.apple.com/fr/podcast/TODO-FR', // TODO: echte französische Apple Podcast URL
     keywords: ['podcast histoire musicale', 'rock and roll', 'culture musicale', 'musique vintage', 'documentaire musical', 'histoires audio'],
   },
   it: {
+  applePodcastUrl: 'https://podcasts.apple.com/it/podcast/TODO-IT', // TODO: echte italienische Apple Podcast URL
     title: 'MelodyMind Podcasts',
     subtitle: 'Viaggia nel tempo della musica con Daniel & Annabelle',
     description: "Il tuo viaggio epico nella storia della musica – guidato da Daniel e Annabelle. In ogni episodio scendiamo nelle svolte che hanno plasmato il suono di generazioni: dalla nascita ribelle del rock 'n' roll e l’impulso politico del folk all’esplosione creativa elettronica fino alla rivoluzione dello streaming odierna. Sveliamo le storie dietro i brani – artisti coraggiosi, pionieri visionari, fratture culturali e innovazioni tecniche. Non un archivio polveroso: una capsula vivente di emozioni, aneddoti sorprendenti e nuove prospettive di ascolto. Entra – ogni episodio è un portale temporale con colonna sonora.",
@@ -103,6 +108,7 @@ const translations = {
     keywords: ['podcast storia musicale', 'rock and roll', 'cultura musicale', 'musica vintage', 'documentario musicale', 'storie audio'],
   },
   pt: {
+  applePodcastUrl: 'https://podcasts.apple.com/pt/podcast/TODO-PT', // TODO: echte portugiesische Apple Podcast URL
     title: 'MelodyMind Podcasts',
     subtitle: 'Uma viagem temporal musical com Daniel & Annabelle',
     description: "Sua jornada épica pela história da música – guiada por Daniel e Annabelle. Em cada episódio mergulhamos nos pontos de virada que moldaram o som de gerações: do nascimento rebelde do rock 'n' roll e o pulso político do folk à explosão criativa eletrônica e à revolução do streaming atual. Revelamos as histórias por trás das faixas – artistas corajosos, pioneiros visionários, rupturas culturais e inovações técnicas. Não é um arquivo frio; é uma cápsula do tempo viva cheia de arrepios, anedotas surpreendentes e novos ângulos para ouvir. Entre – cada episódio é um portal temporal com trilha sonora.",
@@ -185,10 +191,12 @@ const t = translations[lang as keyof typeof translations] || translations.en;
                 RSS
               </a>
               
-              <!-- Apple Music -->
-              <a href="#" 
-                 class="inline-flex items-center gap-2 px-3 py-2 bg-gray-700 hover:bg-gray-600 focus:bg-gray-600 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-purple-900" 
-                 aria-label="Listen on Apple Music">
+          <!-- Apple Podcasts -->
+          <a href={t.applePodcastUrl} 
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 px-3 py-2 bg-gray-700 hover:bg-gray-600 focus:bg-gray-600 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-purple-900" 
+            aria-label="Listen on Apple Podcasts">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path d="M23.997 6.124c0-.738-.065-1.47-.24-2.19-.317-1.31-1.062-2.31-2.18-3.043C21.003.517 20.373.285 19.7.164c-.517-.093-1.038-.135-1.564-.15-.04-.001-.08-.004-.12-.004H6.03c-.04 0-.08.003-.12.004-.525.015-1.046.057-1.563.15-.674.121-1.304.353-1.878.727-1.118.733-1.863 1.732-2.18 3.043-.175.72-.24 1.452-.24 2.19v11.72c0 .747.065 1.478.24 2.197.317 1.31 1.062 2.31 2.18 3.043.574.374 1.204.606 1.878.727.517.093 1.038.135 1.563.15.04.001.08.004.12.004h11.97c.04 0 .08-.003.12-.004.526-.015 1.047-.057 1.564-.15.673-.121 1.303-.353 1.877-.727 1.118-.733 1.863-1.732 2.18-3.043.175-.719.24-1.45.24-2.197V6.124zM22.124 6.124v11.72c0 .649-.056 1.293-.203 1.918-.27 1.139-.91 2.016-1.897 2.592-.474.277-.99.458-1.533.553-.447.078-.9.115-1.357.128H6.866c-.458-.013-.91-.05-1.357-.128-.543-.095-1.059-.276-1.533-.553-.987-.576-1.627-1.453-1.897-2.592-.147-.625-.203-1.269-.203-1.918V6.124c0-.65.056-1.294.203-1.92.27-1.138.91-2.015 1.897-2.591.474-.277.99-.458 1.533-.553.447-.078.899-.115 1.357-.128h10.268c.457.013.91.05 1.357.128.543.095 1.059.276 1.533.553.987.576 1.627 1.453 1.897 2.591.147.626.203 1.27.203 1.92z"/>
                   <path d="M12.587 3.513c-3.13 0-6.03 1.936-7.143 4.728-.277.695-.42 1.428-.42 2.18v1.818c0 .338.274.612.612.612s.612-.274.612-.612V10.42c0-.567.107-1.118.318-1.637.84-2.066 2.857-3.404 5.233-3.471 1.156-.032 2.31.19 3.357.647 1.047.458 1.955 1.15 2.64 2.013.343.432.863.68 1.415.675.552-.005 1.067-.26 1.403-.696.336-.437.466-.993.354-1.516-.224-1.048-.693-2.021-1.364-2.83-1.342-1.619-3.285-2.647-5.41-2.863-.427-.043-.86-.064-1.295-.064l-.312.025z"/>
