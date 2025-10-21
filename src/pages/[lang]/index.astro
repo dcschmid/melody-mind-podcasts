@@ -1,20 +1,20 @@
 ---
-import { Image } from 'astro:assets';
-import PodcastLayout from '../../layouts/PodcastLayout.astro';
-import SearchBar from '../../components/SearchBar.astro';
-import type { PodcastData } from '../../types/podcast';
+import { Image } from "astro:assets";
+import PodcastLayout from "../../layouts/PodcastLayout.astro";
+import SearchBar from "../../components/SearchBar.astro";
+import type { PodcastData } from "../../types/podcast";
 
 // Import all podcast data files
-import enPodcasts from '../../data/podcasts/en.json';
-import dePodcasts from '../../data/podcasts/de.json';
-import esPodcasts from '../../data/podcasts/es.json';
-import frPodcasts from '../../data/podcasts/fr.json';
-import itPodcasts from '../../data/podcasts/it.json';
-import ptPodcasts from '../../data/podcasts/pt.json';
+import enPodcasts from "../../data/podcasts/en.json";
+import dePodcasts from "../../data/podcasts/de.json";
+import esPodcasts from "../../data/podcasts/es.json";
+import frPodcasts from "../../data/podcasts/fr.json";
+import itPodcasts from "../../data/podcasts/it.json";
+import ptPodcasts from "../../data/podcasts/pt.json";
 
 export async function getStaticPaths() {
-  const languages = ['en', 'de', 'es', 'fr', 'it', 'pt'];
-  return languages.map(lang => ({ params: { lang } }));
+  const languages = ["en", "de", "es", "fr", "it", "pt"];
+  return languages.map((lang) => ({ params: { lang } }));
 }
 
 const { lang } = Astro.params;
@@ -29,106 +29,175 @@ function getPodcastsForLanguage(language: string): PodcastData[] {
     it: itPodcasts.podcasts,
     pt: ptPodcasts.podcasts,
   } as const;
-  
-  return (podcastMap[language as keyof typeof podcastMap] || enPodcasts.podcasts) as PodcastData[];
+
+  return (podcastMap[language as keyof typeof podcastMap] ||
+    enPodcasts.podcasts) as PodcastData[];
 }
 
-const podcasts = getPodcastsForLanguage(lang as string).filter(p => p.isAvailable);
+const podcasts = getPodcastsForLanguage(lang as string).filter(
+  (p) => p.isAvailable
+);
 
 // SEO optimized translations
 const translations = {
   en: {
-    title: 'MelodyMind Podcasts',
-    subtitle: 'Time‑travel through music with Daniel & Annabelle',
-    description: "Your epic journey through music history – guided by Daniel and Annabelle. In each episode we dive deep into the turning points that shaped the sound of generations: from the rebellious birth of rock 'n' roll and the political pulse of folk to the explosion of electronic creativity and today’s streaming revolution. We uncover the stories behind the songs – courageous artists, visionary pioneers, cultural ruptures and technical innovations. Not an archive. A living time‑capsule of goosebump moments, surprising anecdotes and new angles for how you listen. Step in – every episode is a time portal with a soundtrack.",
-    seoDescription: 'Discover music history through expert podcasts. Explore decades of musical evolution, from 1950s rock \'n\' roll to modern streaming. Premium audio content featuring legendary artists, cultural movements, and industry insights.',
-    episodes: 'Episodes',
-    listen: 'Listen Now',
-    featuredContent: 'Discover the voices, rhythms, and revolutions that defined generations',
-    totalEpisodes: 'episodes available',
-    availableOn: 'Available on your favorite platforms:',
-    spotifyUrl: 'https://open.spotify.com/show/0AkUiN6Vnd0PsKuGtbp4W7',
-    applePodcastUrl: 'https://podcasts.apple.com/us/podcast/melody-mind-–-english/id1847445333',
-    keywords: ['music history podcast', 'rock and roll', 'music culture', 'vintage music', 'music documentary', 'audio stories'],
+    title: "MelodyMind Podcasts",
+    subtitle: "Time‑travel through music with Daniel & Annabelle",
+    description:
+      "Your epic journey through music history – guided by Daniel and Annabelle. In each episode we dive deep into the turning points that shaped the sound of generations: from the rebellious birth of rock 'n' roll and the political pulse of folk to the explosion of electronic creativity and today’s streaming revolution. We uncover the stories behind the songs – courageous artists, visionary pioneers, cultural ruptures and technical innovations. Not an archive. A living time‑capsule of goosebump moments, surprising anecdotes and new angles for how you listen. Step in – every episode is a time portal with a soundtrack.",
+    seoDescription:
+      "Discover music history through expert podcasts. Explore decades of musical evolution, from 1950s rock 'n' roll to modern streaming. Premium audio content featuring legendary artists, cultural movements, and industry insights.",
+    episodes: "Episodes",
+    listen: "Listen Now",
+    featuredContent:
+      "Discover the voices, rhythms, and revolutions that defined generations",
+    totalEpisodes: "episodes available",
+    availableOn: "Available on your favorite platforms:",
+    spotifyUrl: "https://open.spotify.com/show/0AkUiN6Vnd0PsKuGtbp4W7",
+    applePodcastUrl:
+      "https://podcasts.apple.com/us/podcast/melody-mind-–-english/id1847445333",
+    keywords: [
+      "music history podcast",
+      "rock and roll",
+      "music culture",
+      "vintage music",
+      "music documentary",
+      "audio stories",
+    ],
   },
   de: {
-    title: 'MelodyMind Podcasts',
-    subtitle: 'Zeitreise durch Musik mit Daniel & Annabelle',
-    description: "Deine epische Reise durch die Musikgeschichte – begleitet von Daniel und Annabelle. In jeder Episode tauchen wir tief ein in die Wendepunkte, die den Sound ganzer Generationen geprägt haben: vom rebellischen Aufbruch des Rock 'n' Roll und der politischen Kraft des Folk über die Explosion elektronischer Klangwelten bis zur Streaming-Revolution von heute. Wir erzählen die Geschichten hinter den Songs – mutige Künstler:innen, visionäre Pionier:innen, kulturelle Brüche und technische Innovationen. Kein trockenes Archiv, sondern lebendige Zeitkapsel voller Gänsehaut, überraschender Anekdoten und neuer Perspektiven aufs Hören. Steig ein – jede Folge ist ein Zeitportal mit Soundtrack.",
-    seoDescription: 'Entdecke Musikgeschichte durch Experten-Podcasts. Erkunde Jahrzehnte musikalischer Evolution, von 1950er Rock \'n\' Roll bis zum modernen Streaming. Premium Audio-Inhalte mit legendären Künstlern, kulturellen Bewegungen und Brancheneinblicken.',
-    episodes: 'Episoden',
-    listen: 'Jetzt anhören',
-    featuredContent: 'Entdecke die Stimmen, Rhythmen und Revolutionen, die Generationen geprägt haben',
-    totalEpisodes: 'Episoden verfügbar',
-    availableOn: 'Verfügbar auf deinen Lieblingsplattformen:',
-  spotifyUrl: 'https://open.spotify.com/show/7kcX6jPey7Axx9lZYoMV2A', 
-  applePodcastUrl: 'https://podcasts.apple.com/us/podcast/melody-mind-–-deutsch/id1847452262',
-    keywords: ['musikgeschichte podcast', 'rock and roll', 'musikkultur', 'vintage musik', 'musik dokumentation', 'audio geschichten'],
+    title: "MelodyMind Podcasts",
+    subtitle: "Zeitreise durch Musik mit Daniel & Annabelle",
+    description:
+      "Deine epische Reise durch die Musikgeschichte – begleitet von Daniel und Annabelle. In jeder Episode tauchen wir tief ein in die Wendepunkte, die den Sound ganzer Generationen geprägt haben: vom rebellischen Aufbruch des Rock 'n' Roll und der politischen Kraft des Folk über die Explosion elektronischer Klangwelten bis zur Streaming-Revolution von heute. Wir erzählen die Geschichten hinter den Songs – mutige Künstler:innen, visionäre Pionier:innen, kulturelle Brüche und technische Innovationen. Kein trockenes Archiv, sondern lebendige Zeitkapsel voller Gänsehaut, überraschender Anekdoten und neuer Perspektiven aufs Hören. Steig ein – jede Folge ist ein Zeitportal mit Soundtrack.",
+    seoDescription:
+      "Entdecke Musikgeschichte durch Experten-Podcasts. Erkunde Jahrzehnte musikalischer Evolution, von 1950er Rock 'n' Roll bis zum modernen Streaming. Premium Audio-Inhalte mit legendären Künstlern, kulturellen Bewegungen und Brancheneinblicken.",
+    episodes: "Episoden",
+    listen: "Jetzt anhören",
+    featuredContent:
+      "Entdecke die Stimmen, Rhythmen und Revolutionen, die Generationen geprägt haben",
+    totalEpisodes: "Episoden verfügbar",
+    availableOn: "Verfügbar auf deinen Lieblingsplattformen:",
+    spotifyUrl: "https://open.spotify.com/show/7kcX6jPey7Axx9lZYoMV2A",
+    applePodcastUrl:
+      "https://podcasts.apple.com/us/podcast/melody-mind-–-deutsch/id1847452262",
+    keywords: [
+      "musikgeschichte podcast",
+      "rock and roll",
+      "musikkultur",
+      "vintage musik",
+      "musik dokumentation",
+      "audio geschichten",
+    ],
   },
   es: {
-    title: 'MelodyMind Podcasts',
-    subtitle: 'Viaja en el tiempo musical con Daniel & Annabelle',
-    description: "Tu viaje épico por la historia de la música – guiado por Daniel y Annabelle. En cada episodio nos sumergimos en los puntos de inflexión que moldearon el sonido de generaciones: desde el nacimiento rebelde del rock 'n' roll y el pulso político del folk hasta la explosión creativa electrónica y la revolución del streaming actual. Revelamos las historias detrás de las canciones: artistas valientes, pioneros visionarios, rupturas culturales e innovaciones técnicas. No es un archivo frío; es una cápsula de tiempo viva llena de momentos de piel de gallina, anécdotas sorprendentes y nuevas miradas para escuchar. Entra: cada episodio es un portal temporal con banda sonora.",
-    seoDescription: 'Descubre la historia musical a través de podcasts expertos. Explora décadas de evolución musical, desde el rock \'n\' roll de los años 50 hasta el streaming moderno. Contenido de audio premium con artistas legendarios, movimientos culturales y perspectivas de la industria.',
-    episodes: 'Episodios',
-    listen: 'Escuchar Ahora',
-    featuredContent: 'Descubre las voces, ritmos y revoluciones que definieron generaciones',
-    totalEpisodes: 'episodios disponibles',
-    availableOn: 'Disponible en tus plataformas favoritas:',
-  spotifyUrl: 'https://open.spotify.com/show/3T0gL6OlS0AtwiLIx4mFWK',
-  applePodcastUrl: 'https://podcasts.apple.com/es/podcast/TODO-ES', // TODO: echte spanische Apple Podcast URL
-    keywords: ['podcast historia musical', 'rock and roll', 'cultura musical', 'música vintage', 'documental musical', 'historias audio'],
+    title: "MelodyMind Podcasts",
+    subtitle: "Viaja en el tiempo musical con Daniel & Annabelle",
+    description:
+      "Tu viaje épico por la historia de la música – guiado por Daniel y Annabelle. En cada episodio nos sumergimos en los puntos de inflexión que moldearon el sonido de generaciones: desde el nacimiento rebelde del rock 'n' roll y el pulso político del folk hasta la explosión creativa electrónica y la revolución del streaming actual. Revelamos las historias detrás de las canciones: artistas valientes, pioneros visionarios, rupturas culturales e innovaciones técnicas. No es un archivo frío; es una cápsula de tiempo viva llena de momentos de piel de gallina, anécdotas sorprendentes y nuevas miradas para escuchar. Entra: cada episodio es un portal temporal con banda sonora.",
+    seoDescription:
+      "Descubre la historia musical a través de podcasts expertos. Explora décadas de evolución musical, desde el rock 'n' roll de los años 50 hasta el streaming moderno. Contenido de audio premium con artistas legendarios, movimientos culturales y perspectivas de la industria.",
+    episodes: "Episodios",
+    listen: "Escuchar Ahora",
+    featuredContent:
+      "Descubre las voces, ritmos y revoluciones que definieron generaciones",
+    totalEpisodes: "episodios disponibles",
+    availableOn: "Disponible en tus plataformas favoritas:",
+    spotifyUrl: "https://open.spotify.com/show/3T0gL6OlS0AtwiLIx4mFWK",
+    applePodcastUrl:
+      "https://podcasts.apple.com/us/podcast/melody-mind-–-español/id1847456266",
+    keywords: [
+      "podcast historia musical",
+      "rock and roll",
+      "cultura musical",
+      "música vintage",
+      "documental musical",
+      "historias audio",
+    ],
   },
   fr: {
-    title: 'MelodyMind Podcasts',
-    subtitle: 'Voyage temporel musical avec Daniel & Annabelle',
-    description: "Votre voyage épique à travers l’histoire de la musique – guidé par Daniel et Annabelle. À chaque épisode nous plongeons au cœur des tournants qui ont façonné le son de générations: de la naissance rebelle du rock 'n' roll et l’élan politique du folk à l’explosion créative électronique puis à la révolution du streaming. Nous dévoilons l’histoire derrière les morceaux – artistes courageux, pionniers visionnaires, fractures culturelles et innovations techniques. Pas un simple archive: une capsule temporelle vivante, frissons garantis, anecdotes inattendues et nouveaux angles d’écoute. Entrez – chaque épisode est un portail temporel avec sa bande‑son.",
-    seoDescription: 'Découvrez l\'histoire musicale à travers des podcasts d\'experts. Explorez des décennies d\'évolution musicale, du rock \'n\' roll des années 50 au streaming moderne. Contenu audio premium avec des artistes légendaires, des mouvements culturels et des perspectives de l\'industrie.',
-    episodes: 'Épisodes',
-    listen: 'Écouter Maintenant',
-    featuredContent: 'Découvrez les voix, rythmes et révolutions qui ont défini des générations',
-    totalEpisodes: 'épisodes disponibles',
-    availableOn: 'Disponible sur vos plateformes préférées:',
-  spotifyUrl: 'https://open.spotify.com/show/3Jih0BwDDpy7V6izQjGT3u', // TODO: Ersetzen mit tatsächlicher französischer Spotify-Show-ID
-  applePodcastUrl: 'https://podcasts.apple.com/fr/podcast/TODO-FR', // TODO: echte französische Apple Podcast URL
-    keywords: ['podcast histoire musicale', 'rock and roll', 'culture musicale', 'musique vintage', 'documentaire musical', 'histoires audio'],
+    title: "MelodyMind Podcasts",
+    subtitle: "Voyage temporel musical avec Daniel & Annabelle",
+    description:
+      "Votre voyage épique à travers l’histoire de la musique – guidé par Daniel et Annabelle. À chaque épisode nous plongeons au cœur des tournants qui ont façonné le son de générations: de la naissance rebelle du rock 'n' roll et l’élan politique du folk à l’explosion créative électronique puis à la révolution du streaming. Nous dévoilons l’histoire derrière les morceaux – artistes courageux, pionniers visionnaires, fractures culturelles et innovations techniques. Pas un simple archive: une capsule temporelle vivante, frissons garantis, anecdotes inattendues et nouveaux angles d’écoute. Entrez – chaque épisode est un portail temporel avec sa bande‑son.",
+    seoDescription:
+      "Découvrez l'histoire musicale à travers des podcasts d'experts. Explorez des décennies d'évolution musicale, du rock 'n' roll des années 50 au streaming moderne. Contenu audio premium avec des artistes légendaires, des mouvements culturels et des perspectives de l'industrie.",
+    episodes: "Épisodes",
+    listen: "Écouter Maintenant",
+    featuredContent:
+      "Découvrez les voix, rythmes et révolutions qui ont défini des générations",
+    totalEpisodes: "épisodes disponibles",
+    availableOn: "Disponible sur vos plateformes préférées:",
+    spotifyUrl: "https://open.spotify.com/show/3Jih0BwDDpy7V6izQjGT3u",
+    applePodcastUrl:
+      "https://podcasts.apple.com/us/podcast/melody-mind-–-français/id1847553489",
+    keywords: [
+      "podcast histoire musicale",
+      "rock and roll",
+      "culture musicale",
+      "musique vintage",
+      "documentaire musical",
+      "histoires audio",
+    ],
   },
   it: {
-  applePodcastUrl: 'https://podcasts.apple.com/it/podcast/TODO-IT', // TODO: echte italienische Apple Podcast URL
-    title: 'MelodyMind Podcasts',
-    subtitle: 'Viaggia nel tempo della musica con Daniel & Annabelle',
-    description: "Il tuo viaggio epico nella storia della musica – guidato da Daniel e Annabelle. In ogni episodio scendiamo nelle svolte che hanno plasmato il suono di generazioni: dalla nascita ribelle del rock 'n' roll e l’impulso politico del folk all’esplosione creativa elettronica fino alla rivoluzione dello streaming odierna. Sveliamo le storie dietro i brani – artisti coraggiosi, pionieri visionari, fratture culturali e innovazioni tecniche. Non un archivio polveroso: una capsula vivente di emozioni, aneddoti sorprendenti e nuove prospettive di ascolto. Entra – ogni episodio è un portale temporale con colonna sonora.",
-    seoDescription: 'Scopri la storia musicale attraverso podcast di esperti. Esplora decenni di evoluzione musicale, dal rock \'n\' roll degli anni \'50 al streaming moderno. Contenuti audio premium con artisti leggendari, movimenti culturali e prospettive dell\'industria.',
-    episodes: 'Episodi',
-    listen: 'Ascolta Ora',
-    featuredContent: 'Scopri le voci, i ritmi e le rivoluzioni che hanno definito le generazioni',
-    totalEpisodes: 'episodi disponibili',
-    availableOn: 'Disponibile sulle tue piattaforme preferite:',
-    spotifyUrl: 'https://open.spotify.com/show/3kBZwNsvuSs8x0MjKIeJ7i', // TODO: Ersetzen mit tatsächlicher italienischer Spotify-Show-ID
-    keywords: ['podcast storia musicale', 'rock and roll', 'cultura musicale', 'musica vintage', 'documentario musicale', 'storie audio'],
+    title: "MelodyMind Podcasts",
+    subtitle: "Viaggia nel tempo della musica con Daniel & Annabelle",
+    description:
+      "Il tuo viaggio epico nella storia della musica – guidato da Daniel e Annabelle. In ogni episodio scendiamo nelle svolte che hanno plasmato il suono di generazioni: dalla nascita ribelle del rock 'n' roll e l’impulso politico del folk all’esplosione creativa elettronica fino alla rivoluzione dello streaming odierna. Sveliamo le storie dietro i brani – artisti coraggiosi, pionieri visionari, fratture culturali e innovazioni tecniche. Non un archivio polveroso: una capsula vivente di emozioni, aneddoti sorprendenti e nuove prospettive di ascolto. Entra – ogni episodio è un portale temporale con colonna sonora.",
+    seoDescription:
+      "Scopri la storia musicale attraverso podcast di esperti. Esplora decenni di evoluzione musicale, dal rock 'n' roll degli anni '50 al streaming moderno. Contenuti audio premium con artisti leggendari, movimenti culturali e prospettive dell'industria.",
+    episodes: "Episodi",
+    listen: "Ascolta Ora",
+    featuredContent:
+      "Scopri le voci, i ritmi e le rivoluzioni che hanno definito le generazioni",
+    totalEpisodes: "episodi disponibili",
+    availableOn: "Disponibile sulle tue piattaforme preferite:",
+    spotifyUrl: "https://open.spotify.com/show/3kBZwNsvuSs8x0MjKIeJ7i",
+    applePodcastUrl:
+      "https://podcasts.apple.com/us/podcast/melody-mind-–-italiano/id1847554151",
+
+    keywords: [
+      "podcast storia musicale",
+      "rock and roll",
+      "cultura musicale",
+      "musica vintage",
+      "documentario musicale",
+      "storie audio",
+    ],
   },
   pt: {
-  applePodcastUrl: 'https://podcasts.apple.com/pt/podcast/TODO-PT', // TODO: echte portugiesische Apple Podcast URL
-    title: 'MelodyMind Podcasts',
-    subtitle: 'Uma viagem temporal musical com Daniel & Annabelle',
-    description: "Sua jornada épica pela história da música – guiada por Daniel e Annabelle. Em cada episódio mergulhamos nos pontos de virada que moldaram o som de gerações: do nascimento rebelde do rock 'n' roll e o pulso político do folk à explosão criativa eletrônica e à revolução do streaming atual. Revelamos as histórias por trás das faixas – artistas corajosos, pioneiros visionários, rupturas culturais e inovações técnicas. Não é um arquivo frio; é uma cápsula do tempo viva cheia de arrepios, anedotas surpreendentes e novos ângulos para ouvir. Entre – cada episódio é um portal temporal com trilha sonora.",
-    seoDescription: 'Descubra a história musical através de podcasts especializados. Explore décadas de evolução musical, do rock \'n\' roll dos anos 50 ao streaming moderno. Conteúdo de áudio premium com artistas lendários, movimentos culturais e perspectivas da indústria.',
-    episodes: 'Episódios',
-    listen: 'Ouvir Agora',
-    featuredContent: 'Descubra as vozes, ritmos e revoluções que definiram gerações',
-    totalEpisodes: 'episódios disponíveis',
-    availableOn: 'Disponível nas suas plataformas favoritas:',
-    spotifyUrl: 'https://open.spotify.com/show/0ujcLCCydgDhCK5eiUCJWY', // TODO: Ersetzen mit tatsächlicher portugiesischer Spotify-Show-ID
-    keywords: ['podcast história musical', 'rock and roll', 'cultura musical', 'música vintage', 'documentário musical', 'histórias áudio'],
+    title: "MelodyMind Podcasts",
+    subtitle: "Uma viagem temporal musical com Daniel & Annabelle",
+    description:
+      "Sua jornada épica pela história da música – guiada por Daniel e Annabelle. Em cada episódio mergulhamos nos pontos de virada que moldaram o som de gerações: do nascimento rebelde do rock 'n' roll e o pulso político do folk à explosão criativa eletrônica e à revolução do streaming atual. Revelamos as histórias por trás das faixas – artistas corajosos, pioneiros visionários, rupturas culturais e inovações técnicas. Não é um arquivo frio; é uma cápsula do tempo viva cheia de arrepios, anedotas surpreendentes e novos ângulos para ouvir. Entre – cada episódio é um portal temporal com trilha sonora.",
+    seoDescription:
+      "Descubra a história musical através de podcasts especializados. Explore décadas de evolução musical, do rock 'n' roll dos anos 50 ao streaming moderno. Conteúdo de áudio premium com artistas lendários, movimentos culturais e perspectivas da indústria.",
+    episodes: "Episódios",
+    listen: "Ouvir Agora",
+    featuredContent:
+      "Descubra as vozes, ritmos e revoluções que definiram gerações",
+    totalEpisodes: "episódios disponíveis",
+    availableOn: "Disponível nas suas plataformas favoritas:",
+    spotifyUrl: "https://open.spotify.com/show/0ujcLCCydgDhCK5eiUCJWY",
+    applePodcastUrl: "https://podcasts.apple.com/us/podcast/melody-mind-–-português/id1847572169", 
+    keywords: [
+      "podcast história musical",
+      "rock and roll",
+      "cultura musical",
+      "música vintage",
+      "documentário musical",
+      "histórias áudio",
+    ],
   },
 };
 
 const t = translations[lang as keyof typeof translations] || translations.en;
 ---
 
-<PodcastLayout 
-  title={t.title} 
-  description={t.seoDescription} 
+<PodcastLayout
+  title={t.title}
+  description={t.seoDescription}
   lang={lang as string}
   keywords={t.keywords}
   type="website"
@@ -137,101 +206,180 @@ const t = translations[lang as keyof typeof translations] || translations.en;
     <header class="text-center mb-16">
       <!-- Main Title -->
       <div class="mb-8">
-        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent">
+        <h1
+          class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent"
+        >
           {t.title}
         </h1>
-        <p class="text-xl sm:text-2xl md:text-3xl font-semibold text-purple-300 mb-6">
+        <p
+          class="text-xl sm:text-2xl md:text-3xl font-semibold text-purple-300 mb-6"
+        >
           {t.subtitle}
         </p>
       </div>
-      
+
       <!-- Description -->
       <div class="max-w-4xl mx-auto mb-8">
         <p class="text-lg sm:text-xl text-gray-300 leading-relaxed mb-6">
           {t.description}
         </p>
-        <div class="bg-gradient-to-r from-purple-900/30 to-indigo-900/30 rounded-xl p-6 border border-purple-500/20">
+        <div
+          class="bg-gradient-to-r from-purple-900/30 to-indigo-900/30 rounded-xl p-6 border border-purple-500/20"
+        >
           <p class="text-purple-200 text-base sm:text-lg font-medium mb-2">
             🎵 {t.featuredContent}
           </p>
-          <div class="flex items-center justify-center gap-4 text-sm text-gray-400">
+          <div
+            class="flex items-center justify-center gap-4 text-sm text-gray-400"
+          >
             <span class="flex items-center gap-2">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              <svg
+                class="w-4 h-4"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                ></path>
               </svg>
               <span aria-label={`${podcasts.length} ${t.totalEpisodes}`}>
-                {podcasts.length} {t.totalEpisodes}
+                {podcasts.length}
+                {t.totalEpisodes}
               </span>
             </span>
             <span class="hidden sm:flex items-center gap-2">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              <svg
+                class="w-4 h-4"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                ></path>
               </svg>
               Premium Content
             </span>
             <span class="hidden sm:flex items-center gap-2">
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+              <svg
+                class="w-4 h-4"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                ></path>
               </svg>
               Expert Hosts
             </span>
           </div>
-          
+
           <!-- Streaming Platforms -->
           <div class="mt-6 pt-4 border-t border-purple-500/20">
-            <p class="text-purple-200 text-sm text-center mb-4">{t.availableOn}</p>
+            <p class="text-purple-200 text-sm text-center mb-4">
+              {t.availableOn}
+            </p>
             <div class="flex items-center justify-center gap-3 flex-wrap">
               <!-- RSS -->
-              <a href={`/${lang}/rss.xml`} 
-                 class="inline-flex items-center gap-2 px-3 py-2 bg-orange-600 hover:bg-orange-700 focus:bg-orange-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-purple-900" 
-                 aria-label="Subscribe to RSS feed">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248S0 22.546 0 20.752s1.456-3.248 3.252-3.248 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-3.368c10.58.046 19.152 8.594 19.183 19.188h4.817c-.03-13.231-10.755-23.954-24-24v4.812z"/>
+              <a
+                href={`/${lang}/rss.xml`}
+                class="inline-flex items-center gap-2 px-3 py-2 bg-orange-600 hover:bg-orange-700 focus:bg-orange-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-purple-900"
+                aria-label="Subscribe to RSS feed"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248S0 22.546 0 20.752s1.456-3.248 3.252-3.248 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-3.368c10.58.046 19.152 8.594 19.183 19.188h4.817c-.03-13.231-10.755-23.954-24-24v4.812z"
+                  ></path>
                 </svg>
                 RSS
               </a>
-              
-          <!-- Apple Podcasts -->
-          <a href={t.applePodcastUrl} 
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 px-3 py-2 bg-gray-700 hover:bg-gray-600 focus:bg-gray-600 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-purple-900" 
-            aria-label="Listen on Apple Podcasts">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M23.997 6.124c0-.738-.065-1.47-.24-2.19-.317-1.31-1.062-2.31-2.18-3.043C21.003.517 20.373.285 19.7.164c-.517-.093-1.038-.135-1.564-.15-.04-.001-.08-.004-.12-.004H6.03c-.04 0-.08.003-.12.004-.525.015-1.046.057-1.563.15-.674.121-1.304.353-1.878.727-1.118.733-1.863 1.732-2.18 3.043-.175.72-.24 1.452-.24 2.19v11.72c0 .747.065 1.478.24 2.197.317 1.31 1.062 2.31 2.18 3.043.574.374 1.204.606 1.878.727.517.093 1.038.135 1.563.15.04.001.08.004.12.004h11.97c.04 0 .08-.003.12-.004.526-.015 1.047-.057 1.564-.15.673-.121 1.303-.353 1.877-.727 1.118-.733 1.863-1.732 2.18-3.043.175-.719.24-1.45.24-2.197V6.124zM22.124 6.124v11.72c0 .649-.056 1.293-.203 1.918-.27 1.139-.91 2.016-1.897 2.592-.474.277-.99.458-1.533.553-.447.078-.9.115-1.357.128H6.866c-.458-.013-.91-.05-1.357-.128-.543-.095-1.059-.276-1.533-.553-.987-.576-1.627-1.453-1.897-2.592-.147-.625-.203-1.269-.203-1.918V6.124c0-.65.056-1.294.203-1.92.27-1.138.91-2.015 1.897-2.591.474-.277.99-.458 1.533-.553.447-.078.899-.115 1.357-.128h10.268c.457.013.91.05 1.357.128.543.095 1.059.276 1.533.553.987.576 1.627 1.453 1.897 2.591.147.626.203 1.27.203 1.92z"/>
-                  <path d="M12.587 3.513c-3.13 0-6.03 1.936-7.143 4.728-.277.695-.42 1.428-.42 2.18v1.818c0 .338.274.612.612.612s.612-.274.612-.612V10.42c0-.567.107-1.118.318-1.637.84-2.066 2.857-3.404 5.233-3.471 1.156-.032 2.31.19 3.357.647 1.047.458 1.955 1.15 2.64 2.013.343.432.863.68 1.415.675.552-.005 1.067-.26 1.403-.696.336-.437.466-.993.354-1.516-.224-1.048-.693-2.021-1.364-2.83-1.342-1.619-3.285-2.647-5.41-2.863-.427-.043-.86-.064-1.295-.064l-.312.025z"/>
+
+              <!-- Apple Podcasts -->
+              <a
+                href={t.applePodcastUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 px-3 py-2 bg-gray-700 hover:bg-gray-600 focus:bg-gray-600 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-purple-900"
+                aria-label="Listen on Apple Podcasts"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M23.997 6.124c0-.738-.065-1.47-.24-2.19-.317-1.31-1.062-2.31-2.18-3.043C21.003.517 20.373.285 19.7.164c-.517-.093-1.038-.135-1.564-.15-.04-.001-.08-.004-.12-.004H6.03c-.04 0-.08.003-.12.004-.525.015-1.046.057-1.563.15-.674.121-1.304.353-1.878.727-1.118.733-1.863 1.732-2.18 3.043-.175.72-.24 1.452-.24 2.19v11.72c0 .747.065 1.478.24 2.197.317 1.31 1.062 2.31 2.18 3.043.574.374 1.204.606 1.878.727.517.093 1.038.135 1.563.15.04.001.08.004.12.004h11.97c.04 0 .08-.003.12-.004.526-.015 1.047-.057 1.564-.15.673-.121 1.303-.353 1.877-.727 1.118-.733 1.863-1.732 2.18-3.043.175-.719.24-1.45.24-2.197V6.124zM22.124 6.124v11.72c0 .649-.056 1.293-.203 1.918-.27 1.139-.91 2.016-1.897 2.592-.474.277-.99.458-1.533.553-.447.078-.9.115-1.357.128H6.866c-.458-.013-.91-.05-1.357-.128-.543-.095-1.059-.276-1.533-.553-.987-.576-1.627-1.453-1.897-2.592-.147-.625-.203-1.269-.203-1.918V6.124c0-.65.056-1.294.203-1.92.27-1.138.91-2.015 1.897-2.591.474-.277.99-.458 1.533-.553.447-.078.899-.115 1.357-.128h10.268c.457.013.91.05 1.357.128.543.095 1.059.276 1.533.553.987.576 1.627 1.453 1.897 2.591.147.626.203 1.27.203 1.92z"
+                  ></path>
+                  <path
+                    d="M12.587 3.513c-3.13 0-6.03 1.936-7.143 4.728-.277.695-.42 1.428-.42 2.18v1.818c0 .338.274.612.612.612s.612-.274.612-.612V10.42c0-.567.107-1.118.318-1.637.84-2.066 2.857-3.404 5.233-3.471 1.156-.032 2.31.19 3.357.647 1.047.458 1.955 1.15 2.64 2.013.343.432.863.68 1.415.675.552-.005 1.067-.26 1.403-.696.336-.437.466-.993.354-1.516-.224-1.048-.693-2.021-1.364-2.83-1.342-1.619-3.285-2.647-5.41-2.863-.427-.043-.86-.064-1.295-.064l-.312.025z"
+                  ></path>
                 </svg>
                 Apple
               </a>
-              
+
               <!-- Spotify -->
-              <a href={t.spotifyUrl} 
-                 target="_blank"
-                 rel="noopener noreferrer"
-                 class="inline-flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 focus:bg-green-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-purple-900" 
-                 aria-label="Listen on Spotify">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"/>
+              <a
+                href={t.spotifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 focus:bg-green-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-purple-900"
+                aria-label="Listen on Spotify"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"
+                  ></path>
                 </svg>
                 Spotify
               </a>
-              
+
               <!-- Deezer -->
-              <a href="#" 
-                 class="inline-flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-purple-900" 
-                 aria-label="Listen on Deezer">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M18.81 12.74h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm-4.5 6.45h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm-4.5 8.6h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm-4.5 10.75h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm-4.5 12.9h3.02v1.52H.81zm0-2.15h3.02v1.52H.81zm0-2.15h3.02v1.52H.81z"/>
+              <a
+                href="#"
+                class="inline-flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-purple-900"
+                aria-label="Listen on Deezer"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M18.81 12.74h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm-4.5 6.45h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm-4.5 8.6h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm-4.5 10.75h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm-4.5 12.9h3.02v1.52H.81zm0-2.15h3.02v1.52H.81zm0-2.15h3.02v1.52H.81z"
+                  ></path>
                 </svg>
                 Deezer
               </a>
-              
+
               <!-- YouTube -->
-              <a href="#" 
-                 class="inline-flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 focus:bg-red-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-purple-900" 
-                 aria-label="Listen on YouTube">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              <a
+                href="#"
+                class="inline-flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 focus:bg-red-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-purple-900"
+                aria-label="Listen on YouTube"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+                  ></path>
                 </svg>
                 YouTube
               </a>
@@ -240,44 +388,64 @@ const t = translations[lang as keyof typeof translations] || translations.en;
         </div>
       </div>
     </header>
-    
-  <SearchBar lang={lang as string} total={podcasts.length} />
-  <section aria-labelledby="episodes-heading">
-      <h2 id="episodes-heading" class="text-3xl font-bold text-white mb-8">{t.episodes}</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" role="list">
-        {podcasts.map((podcast) => (
-          <article data-episode data-search={`${podcast.title} ${podcast.description}`}
-            class="bg-gray-800 rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl focus-within:shadow-2xl focus-within:-translate-y-1" role="listitem">
-            <div class="aspect-[3/2] overflow-hidden">
-              <Image 
-                src={`/images/${podcast.imageUrl}.jpg`} 
-                alt={`Cover image for ${podcast.title} podcast episode`}
-                class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                loading="lazy"
-                decoding="async"
-                width={400}
-                height={267}
-                format="webp"
-                quality={85}
-              />
-            </div>
-            <div class="p-4 sm:p-6">
-              <h3 class="text-lg sm:text-xl font-semibold text-purple-400 mb-3">{podcast.title}</h3>
-              <p class="text-gray-300 mb-4 leading-relaxed">{podcast.description}</p>
-              <a 
-                href={`/${lang}/${podcast.id}`} 
-                class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-800"
-                aria-label={`Listen to ${podcast.title} podcast episode`}
-              >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
-                {t.listen}
-              </a>
-            </div>
-          </article>
-        ))}
+
+    <SearchBar lang={lang as string} total={podcasts.length} />
+    <section aria-labelledby="episodes-heading">
+      <h2 id="episodes-heading" class="text-3xl font-bold text-white mb-8">
+        {t.episodes}
+      </h2>
+
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+        role="list"
+      >
+        {
+          podcasts.map((podcast) => (
+            <article
+              data-episode
+              data-search={`${podcast.title} ${podcast.description}`}
+              class="bg-gray-800 rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl focus-within:shadow-2xl focus-within:-translate-y-1"
+              role="listitem"
+            >
+              <div class="aspect-[3/2] overflow-hidden">
+                <Image
+                  src={`/images/${podcast.imageUrl}.jpg`}
+                  alt={`Cover image for ${podcast.title} podcast episode`}
+                  class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                  width={400}
+                  height={267}
+                  format="webp"
+                  quality={85}
+                />
+              </div>
+              <div class="p-4 sm:p-6">
+                <h3 class="text-lg sm:text-xl font-semibold text-purple-400 mb-3">
+                  {podcast.title}
+                </h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  {podcast.description}
+                </p>
+                <a
+                  href={`/${lang}/${podcast.id}`}
+                  class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-800"
+                  aria-label={`Listen to ${podcast.title} podcast episode`}
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                  {t.listen}
+                </a>
+              </div>
+            </article>
+          ))
+        }
       </div>
     </section>
   </div>
