@@ -190,6 +190,72 @@ Example: `Update: data episode metadata corrections 2025-10-23`.
 
 Group related JSON adjustments in one commit when possible.
 
+### Conventional Commits (English Required)
+
+Agents should prefer the Conventional Commits specification for all commit messages (always in English) unless a task explicitly requests the legacy format above. If both formats are used together, place the conventional type first followed by the legacy scope format if needed.
+
+Basic pattern:
+
+```text
+<type>(<optional scope>): <short imperative summary>
+
+<optional body>
+
+<optional footer(s)>
+```
+
+Supported `type` values and usage guidelines:
+
+- `feat`: Introduces a new user‑visible feature (UI component, RSS enhancement, new episode attribute).
+- `fix`: Corrects a bug (broken layout, incorrect RSS tag ordering, validation error logic).
+- `docs`: Documentation only changes (`Agents.md`, `README.md`, comments).
+- `style`: Non‑functional code style changes (formatting, whitespace) – avoid noisy diffs.
+- `refactor`: Code change that neither fixes a bug nor adds a feature (structure, decomposition, naming).
+- `perf`: Performance improvement (reduced bundle size, faster script execution).
+- `test`: Adds or adjusts tests or validation scripts.
+- `build`: Build system or dependency changes (package.json, Astro config, Tailwind setup).
+- `ci`: Continuous integration workflow adjustments (if CI added later).
+- `chore`: Minor maintenance tasks that don’t affect src logic (dependency bumps, housekeeping).
+
+Capitalization & grammar:
+- Summary starts lowercase (unless first word is a proper noun) and is written in imperative mood: `add duration formatting`, `fix transcript tag ordering`.
+- No period at end of summary.
+- Keep summary under ~70 characters.
+
+Scopes (choose one when helpful): `rss`, `layout`, `data`, `scripts`, `styleguide`, `i18n`, `images`, `accessibility`, `audio`, `seo`.
+
+Examples:
+
+```text
+feat(rss): add podcast:chapters tag fallback generation
+fix(layout): correct hreflang ordering for pt locale
+docs: expand Agents.md with conventional commits section
+perf(images): reduce processed cover size by 25%
+refactor(audio): extract time formatting helper
+```
+
+Body recommendations:
+- Explain reasoning for non‑obvious changes (`Why` + constraints).
+- Reference validation script outputs if a fix addresses warnings.
+- List follow‑ups with `Follow-up:` prefix if needed.
+
+Footers:
+- Use `BREAKING CHANGE:` only when public structures (episode JSON contract or RSS root shape) change in a way that requires consumer updates.
+- Use issue references (`Closes #12`) when resolving tracked tasks.
+
+Do NOT:
+- Start summary with a capital unless required.
+- Include emoji in commit messages.
+- Mix multiple unrelated scopes; split commits instead.
+
+Hybrid format example (if legacy style retained for audit trail):
+
+```text
+feat(rss): implement enclosure length fallback
+
+Update: rss enclosure fallback logic 2025-10-23
+```
+
 ---
  
 ## 12. Extensibility Guidelines
