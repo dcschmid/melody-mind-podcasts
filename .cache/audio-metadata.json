@@ -20,5 +20,27 @@
   "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/pt/1950s.mp3": {
     "fileSizeBytes": 225643437,
     "durationSeconds": 4607
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/de/1960s.mp3": {
+    "fileSizeBytes": 150319341,
+    "durationSeconds": 4581
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/1960s.mp3": {
+    "fileSizeBytes": 179491437,
+    "durationSeconds": 4581
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1960s.mp3": {
+    "fileSizeBytes": 157568301
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1960s.mp3": {
+    "fileSizeBytes": 128916909
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/1960s.mp3": {
+    "fileSizeBytes": 137750445,
+    "durationSeconds": 4607
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/pt/1960s.mp3": {
+    "fileSizeBytes": 128354733,
+    "durationSeconds": 4520
   }
 }
