@@ -1011,10 +1011,10 @@ astro-minify-html-swc@^0.1.8:
     "@swc/html" "^1.13.19"
     fast-glob "^3.3.3"
 
-astro@^5.15.0:
-  version "5.15.0"
-  resolved "https://registry.yarnpkg.com/astro/-/astro-5.15.0.tgz#8b91a1f00ca6f0f75765a2055050be609e9e358a"
-  integrity sha512-hPfCc+5BoieeDuFLiGanLMeeFngOuKH/XqgQn4x2ZZW9klpb9PzI4PTuZb4siw5YhOFfeaeQAbgBgzhut8Kvfw==
+astro@^5.15.1:
+  version "5.15.1"
+  resolved "https://registry.yarnpkg.com/astro/-/astro-5.15.1.tgz#e1575e2b68adb6e922c787abfe336156672ad779"
+  integrity sha512-VM679M1qxOjGo6q3vKYDNDddkALGgMopG93IwbEXd3Buc2xVLuuPj4HNziNugSbPQx5S6UReMp5uzw10EJN81A==
   dependencies:
     "@astrojs/compiler" "^2.12.2"
     "@astrojs/internal-helpers" "0.7.4"
