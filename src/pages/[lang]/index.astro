@@ -35,7 +35,7 @@ function getPodcastsForLanguage(language: string): PodcastData[] {
 }
 
 const podcasts = getPodcastsForLanguage(lang as string).filter(
-  (p) => p.isAvailable
+  (p) => p.isAvailable,
 );
 
 // SEO optimized translations
@@ -57,6 +57,8 @@ const translations = {
     applePodcastUrl:
       "https://podcasts.apple.com/us/podcast/melody-mind-–-english/id1847445333",
     deezerUrl: "https://www.deezer.com/en/show/1002304482",
+    youtubeUrl:
+      "https://www.youtube.com/playlist?list=PLioOQ4LuNFxtx2d70QKywiPC8WVBxgXN0",
     keywords: [
       "music history podcast",
       "rock and roll",
@@ -83,6 +85,8 @@ const translations = {
     applePodcastUrl:
       "https://podcasts.apple.com/us/podcast/melody-mind-–-deutsch/id1847452262",
     deezerUrl: "https://www.deezer.com/en/show/1002304492",
+    youtubeUrl:
+      "https://www.youtube.com/playlist?list=PLioOQ4LuNFxt9PoRCn58x09K8SXCwH9Sh",
     keywords: [
       "musikgeschichte podcast",
       "rock and roll",
@@ -109,6 +113,8 @@ const translations = {
     applePodcastUrl:
       "https://podcasts.apple.com/us/podcast/melody-mind-–-español/id1847456266",
     deezerUrl: "https://www.deezer.com/en/show/1002304522",
+    youtubeUrl:
+      "https://www.youtube.com/playlist?list=PLioOQ4LuNFxuqOqvQWqJfsjWJOi66DqN4",
     keywords: [
       "podcast historia musical",
       "rock and roll",
@@ -135,6 +141,8 @@ const translations = {
     applePodcastUrl:
       "https://podcasts.apple.com/us/podcast/melody-mind-–-français/id1847553489",
     deezerUrl: "https://www.deezer.com/en/show/1002304612",
+    youtubeUrl:
+      "https://www.youtube.com/playlist?list=PLioOQ4LuNFxu9gktpNrP_VmWoPvhmJq4k",
     keywords: [
       "podcast histoire musicale",
       "rock and roll",
@@ -161,6 +169,8 @@ const translations = {
     applePodcastUrl:
       "https://podcasts.apple.com/us/podcast/melody-mind-–-italiano/id1847554151",
     deezerUrl: "https://www.deezer.com/en/show/1002304652",
+    youtubeUrl:
+      "https://www.youtube.com/playlist?list=PLioOQ4LuNFxv8DO2_cE0b8g8zL1FLEg5_",
     keywords: [
       "podcast storia musicale",
       "rock and roll",
@@ -187,6 +197,8 @@ const translations = {
     applePodcastUrl:
       "https://podcasts.apple.com/us/podcast/melody-mind-–-português/id1847572169",
     deezerUrl: "https://www.deezer.com/en/show/1002304662",
+    youtubeUrl:
+      "https://www.youtube.com/playlist?list=PLioOQ4LuNFxshRgri3vJ8KrNXnSEpnQ0N",
     keywords: [
       "podcast história musical",
       "rock and roll",
@@ -355,8 +367,8 @@ const t = translations[lang as keyof typeof translations] || translations.en;
               <!-- Deezer -->
               <a
                 href={t.deezerUrl}
-                target={t.deezerUrl !== '#' ? '_blank' : undefined}
-                rel={t.deezerUrl !== '#' ? 'noopener noreferrer' : undefined}
+                target={t.deezerUrl !== "#" ? "_blank" : undefined}
+                rel={t.deezerUrl !== "#" ? "noopener noreferrer" : undefined}
                 class="inline-flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-purple-900"
                 aria-label="Listen on Deezer"
               >
@@ -375,7 +387,9 @@ const t = translations[lang as keyof typeof translations] || translations.en;
 
               <!-- YouTube -->
               <a
-                href="#"
+                href={t.youtubeUrl}
+                target={t.youtubeUrl !== "#" ? "_blank" : undefined}
+                rel={t.youtubeUrl !== "#" ? "noopener noreferrer" : undefined}
                 class="inline-flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 focus:bg-red-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-purple-900"
                 aria-label="Listen on YouTube"
               >
