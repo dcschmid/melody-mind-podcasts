@@ -64,5 +64,23 @@
   "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/pt/1970s.mp3": {
     "fileSizeBytes": 122934284,
     "durationSeconds": 4802
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/1980s.mp3": {
+    "fileSizeBytes": 137998124,
+    "durationSeconds": 5476
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1980s.mp3": {
+    "fileSizeBytes": 113096684
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1980s.mp3": {
+    "fileSizeBytes": 114061484
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/1980s.mp3": {
+    "fileSizeBytes": 130556684,
+    "durationSeconds": 4607
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/pt/1980s.mp3": {
+    "fileSizeBytes": 143323244,
+    "durationSeconds": 4680
   }
 }
