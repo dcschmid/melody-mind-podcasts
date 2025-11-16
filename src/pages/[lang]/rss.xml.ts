@@ -9,7 +9,6 @@
 
 import type { APIRoute } from 'astro';
 import enPodcastsJson from '../../data/podcasts/en.json';
-import dePodcastsJson from '../../data/podcasts/de.json';
 import esPodcastsJson from '../../data/podcasts/es.json';
 import frPodcastsJson from '../../data/podcasts/fr.json';
 import itPodcastsJson from '../../data/podcasts/it.json';
@@ -18,7 +17,7 @@ import { generatePodcastRSSFeed } from '../../utils/rss';
 import type { PodcastData } from '../../types/podcast';
 
 // Supported languages
-const SUPPORTED_LANGUAGES = ['en', 'de', 'es', 'fr', 'it', 'pt'];
+const SUPPORTED_LANGUAGES = ['en', 'es', 'fr', 'it', 'pt'];
 const FALLBACK_LANGUAGE = 'en';
 
 /**
@@ -27,7 +26,7 @@ const FALLBACK_LANGUAGE = 'en';
 async function loadPodcastsForLanguage(language: string): Promise<PodcastData[]> {
   const podcastMap = {
     en: enPodcastsJson.podcasts,
-    de: dePodcastsJson.podcasts,
+  // de: removed - German locale deprecated
     es: esPodcastsJson.podcasts,
     fr: frPodcastsJson.podcasts,
     it: itPodcastsJson.podcasts,

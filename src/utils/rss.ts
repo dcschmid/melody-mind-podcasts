@@ -11,7 +11,6 @@ import type { PodcastData } from '../types/podcast';
  */
 const CHANNEL_TITLES: Record<string, string> = {
   en: 'Melody Mind – English',
-  de: 'Melody Mind – Deutsch',
   es: 'Melody Mind – Español',
   fr: 'Melody Mind – Français',
   it: 'Melody Mind – Italiano',
@@ -23,7 +22,6 @@ const CHANNEL_TITLES: Record<string, string> = {
  */
 const CHANNEL_DESCRIPTIONS: Record<string, string> = {
   en: 'Join Daniel and Annabelle on a journey through music history — exploring the sounds, stories, and emotions that shaped every decade and genre.',
-  de: 'Begleite Daniel und Annabelle auf einer Reise durch die Musikgeschichte – sie entdecken Klänge, Geschichten und Gefühle, die jede Epoche und jedes Genre geprägt haben.',
   es: 'Acompaña a Daniel y Annabelle en un viaje por la historia de la música: descubriendo los sonidos, historias y emociones que marcaron cada época y género.',
   fr: 'Rejoignez Daniel et Annabelle pour un voyage à travers l’histoire de la musique – une exploration des sons, des histoires et des émotions qui ont façonné chaque époque et chaque genre.',
   it: 'Unisciti a Daniel e Annabelle in un viaggio nella storia della musica, esplorando suoni, storie ed emozioni che hanno plasmato ogni epoca e genere.',

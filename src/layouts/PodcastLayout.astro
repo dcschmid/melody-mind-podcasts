@@ -107,7 +107,7 @@ const allKeywords = [...currentLangMeta.defaultKeywords, ...keywords].join(
 // Translations for skip link
 const skipLinkTranslations = {
   en: "Skip to main content",
-  de: "Zum Hauptinhalt springen",
+  // de: removed
   es: "Saltar al contenido principal",
   fr: "Aller au contenu principal",
   it: "Vai al contenuto principale",
@@ -201,11 +201,7 @@ const skipLinkText =
       hreflang="en"
       href={`${siteUrl}/en${Astro.url.pathname.replace(`/${lang}`, "")}`}
     />
-    <link
-      rel="alternate"
-      hreflang="de"
-      href={`${siteUrl}/de${Astro.url.pathname.replace(`/${lang}`, "")}`}
-    />
+    <!-- de: removed -->
     <link
       rel="alternate"
       hreflang="es"

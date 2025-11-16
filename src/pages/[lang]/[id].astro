@@ -10,17 +10,15 @@ import { formatDate } from '../../utils/helpers';
 
 // Import all podcast data files
 import enPodcasts from '../../data/podcasts/en.json';
-import dePodcasts from '../../data/podcasts/de.json';
 import esPodcasts from '../../data/podcasts/es.json';
 import frPodcasts from '../../data/podcasts/fr.json';
 import itPodcasts from '../../data/podcasts/it.json';
 import ptPodcasts from '../../data/podcasts/pt.json';
 
 export async function getStaticPaths() {
-  const languages = ['en', 'de', 'es', 'fr', 'it', 'pt'];
+  const languages = ['en', 'es', 'fr', 'it', 'pt'];
   const podcastData = {
     en: enPodcasts.podcasts,
-    de: dePodcasts.podcasts,
     es: esPodcasts.podcasts,
     fr: frPodcasts.podcasts,
     it: itPodcasts.podcasts,
@@ -42,7 +40,6 @@ const { lang, id } = Astro.params;
 function getPodcastsForLanguage(language: string): PodcastData[] {
   const podcastMap = {
     en: enPodcasts.podcasts,
-    de: dePodcasts.podcasts,
     es: esPodcasts.podcasts,
     fr: frPodcasts.podcasts,
     it: itPodcasts.podcasts,
@@ -106,23 +103,6 @@ const translations = {
     loading: 'Loading transcript...',
     notAvailable: 'Transcript not available',
     error: 'Error loading transcript'
-  },
-  de: {
-    backToAll: '← Zurück zu allen Podcasts',
-    listenToEpisode: '🎧 Episode anhören',
-    episode: 'Episode',
-    previousEpisode: 'Vorherige Episode',
-    nextEpisode: 'Nächste Episode',
-    episodeNavigation: 'Episode Navigation',
-    publishedOn: 'Veröffentlicht am',
-    duration: 'Dauer',
-    musicHistory: 'Musikgeschichte',
-    transcript: 'Transkript',
-    showTranscript: 'Transkript anzeigen',
-    hideTranscript: 'Transkript ausblenden',
-    loading: 'Transkript wird geladen...',
-    notAvailable: 'Transkript nicht verfügbar',
-    error: 'Fehler beim Laden des Transkripts'
   },
   es: {
     backToAll: '← Volver a todos los podcasts',

@@ -6,14 +6,13 @@ import type { PodcastData } from "../../types/podcast";
 
 // Import all podcast data files
 import enPodcasts from "../../data/podcasts/en.json";
-import dePodcasts from "../../data/podcasts/de.json";
 import esPodcasts from "../../data/podcasts/es.json";
 import frPodcasts from "../../data/podcasts/fr.json";
 import itPodcasts from "../../data/podcasts/it.json";
 import ptPodcasts from "../../data/podcasts/pt.json";
 
 export async function getStaticPaths() {
-  const languages = ["en", "de", "es", "fr", "it", "pt"];
+  const languages = ["en", "es", "fr", "it", "pt"];
   return languages.map((lang) => ({ params: { lang } }));
 }
 
@@ -23,7 +22,6 @@ const { lang } = Astro.params;
 function getPodcastsForLanguage(language: string): PodcastData[] {
   const podcastMap = {
     en: enPodcasts.podcasts,
-    de: dePodcasts.podcasts,
     es: esPodcasts.podcasts,
     fr: frPodcasts.podcasts,
     it: itPodcasts.podcasts,
@@ -66,34 +64,6 @@ const translations = {
       "vintage music",
       "music documentary",
       "audio stories",
-    ],
-  },
-  de: {
-    title: "MelodyMind Podcasts",
-    subtitle: "Zeitreise durch Musik mit Daniel & Annabelle",
-    description:
-      "Deine epische Reise durch die Musikgeschichte – begleitet von Daniel und Annabelle. In jeder Episode tauchen wir tief ein in die Wendepunkte, die den Sound ganzer Generationen geprägt haben: vom rebellischen Aufbruch des Rock 'n' Roll und der politischen Kraft des Folk über die Explosion elektronischer Klangwelten bis zur Streaming-Revolution von heute. Wir erzählen die Geschichten hinter den Songs – mutige Künstler:innen, visionäre Pionier:innen, kulturelle Brüche und technische Innovationen. Kein trockenes Archiv, sondern lebendige Zeitkapsel voller Gänsehaut, überraschender Anekdoten und neuer Perspektiven aufs Hören. Steig ein – jede Folge ist ein Zeitportal mit Soundtrack.",
-    seoDescription:
-      "Entdecke Musikgeschichte durch Experten-Podcasts. Erkunde Jahrzehnte musikalischer Evolution, von 1950er Rock 'n' Roll bis zum modernen Streaming. Premium Audio-Inhalte mit legendären Künstlern, kulturellen Bewegungen und Brancheneinblicken.",
-    episodes: "Episoden",
-    listen: "Jetzt anhören",
-    featuredContent:
-      "Entdecke die Stimmen, Rhythmen und Revolutionen, die Generationen geprägt haben",
-    totalEpisodes: "Episoden verfügbar",
-    availableOn: "Verfügbar auf deinen Lieblingsplattformen:",
-    spotifyUrl: "https://open.spotify.com/show/7kcX6jPey7Axx9lZYoMV2A",
-    applePodcastUrl:
-      "https://podcasts.apple.com/us/podcast/melody-mind-–-deutsch/id1847452262",
-    deezerUrl: "https://www.deezer.com/en/show/1002304492",
-    youtubeUrl:
-      "https://www.youtube.com/playlist?list=PLioOQ4LuNFxt9PoRCn58x09K8SXCwH9Sh",
-    keywords: [
-      "musikgeschichte podcast",
-      "rock and roll",
-      "musikkultur",
-      "vintage musik",
-      "musik dokumentation",
-      "audio geschichten",
     ],
   },
   es: {
