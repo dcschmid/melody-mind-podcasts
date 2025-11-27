@@ -1,73 +1,52 @@
 /**
  * Simplified RSS Feed Generator for MelodyMind Podcasts
  *
- * @author Daniel Schmid <dcschmid@murena.io>
+ * Generates a single English RSS feed.
  */
 
-import type { PodcastData } from '../types/podcast';
+import type { PodcastData } from "../types/podcast";
 
-/**
- * Language-specific channel titles
- */
-const CHANNEL_TITLES: Record<string, string> = {
-  en: 'Melody Mind – English',
-  es: 'Melody Mind – Español',
-  fr: 'Melody Mind – Français',
-  it: 'Melody Mind – Italiano',
-  pt: 'Melody Mind – Português',
-};
-
-/**
- * Language-specific descriptions
- */
-const CHANNEL_DESCRIPTIONS: Record<string, string> = {
-  en: 'Join Daniel and Annabelle on a journey through music history — exploring the sounds, stories, and emotions that shaped every decade and genre.',
-  es: 'Acompaña a Daniel y Annabelle en un viaje por la historia de la música: descubriendo los sonidos, historias y emociones que marcaron cada época y género.',
-  fr: 'Rejoignez Daniel et Annabelle pour un voyage à travers l’histoire de la musique – une exploration des sons, des histoires et des émotions qui ont façonné chaque époque et chaque genre.',
-  it: 'Unisciti a Daniel e Annabelle in un viaggio nella storia della musica, esplorando suoni, storie ed emozioni che hanno plasmato ogni epoca e genere.',
-  pt: 'Junte-se a Daniel e Annabelle em uma jornada pela história da música – explorando os sons, histórias e emoções que moldaram cada época e gênero.',
-};
-
-/**
- * Generate RSS feed for podcast episodes
- */
 export async function generatePodcastRSSFeed(
-  lang: string,
   episodes: PodcastData[],
-  baseUrl: string = 'https://podcasts.melody-mind.de'
+  baseUrl: string = "https://podcasts.melody-mind.de",
 ): Promise<string> {
-  const title = CHANNEL_TITLES[lang] || CHANNEL_TITLES.en;
-  const description = CHANNEL_DESCRIPTIONS[lang] || CHANNEL_DESCRIPTIONS.en;
-  
-  // Sort episodes by publication date (newest first)
+  const lang = "en";
+  const title = "Melody Mind – English";
+  const description =
+    "Join Daniel and Annabelle on a journey through music history — exploring the sounds, stories, and emotions that shaped every decade and genre.";
+
   const sortedEpisodes = episodes
     .filter((episode) => episode.isAvailable)
-    .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    .sort(
+      (a, b) =>
+        new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+    );
 
-  const channelLink = `${baseUrl}/${lang}`;
-  const rssLink = `${baseUrl}/${lang}/rss.xml`;
+  const channelLink = `${baseUrl}/`;
+  const rssLink = `${baseUrl}/rss.xml`;
   const lastBuildDate = new Date().toUTCString();
 
   const total = sortedEpisodes.length;
-  const items = sortedEpisodes.map((episode, index) => generateRSSItem(episode, lang, baseUrl, index, total)).join('\n');
+  const items = sortedEpisodes
+    .map((episode, index) => generateRSSItem(episode, baseUrl, index, total))
+    .join("\n");
 
-  // Podcasting 2.0 persons
-  let personsTags = '';
+  let personsTags = "";
   try {
-    const personsModule = await import('../data/persons.json');
+    const personsModule = await import("../data/persons.json");
     const persons = personsModule.default ?? personsModule;
     if (Array.isArray(persons)) {
       personsTags = persons
         .map((p: any) => {
-          if (!p || !p.name) return '';
+          if (!p || !p.name) return "";
           const name = escapeXML(p.name);
-          const role = p.role ? escapeXML(p.role) : 'host';
-          const href = p.href ? ` href="${p.href}"` : '';
-          const img = p.img ? ` img="${p.img}"` : '';
+          const role = p.role ? escapeXML(p.role) : "host";
+          const href = p.href ? ` href="${p.href}"` : "";
+          const img = p.img ? ` img="${p.img}"` : "";
           return `<podcast:person${href}${img} role="${role}" name="${name}"/>`;
         })
         .filter(Boolean)
-        .join('\n    ');
+        .join("\n    ");
     }
   } catch (e) {
     // ignore if file missing
@@ -87,7 +66,7 @@ export async function generatePodcastRSSFeed(
     <language>${lang}</language>
     <copyright>© ${new Date().getFullYear()} MelodyMind</copyright>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
-  <generator>MelodyMind RSS Generator v1.1.0</generator>
+    <generator>MelodyMind RSS Generator v1.1.0</generator>
     <webMaster>dcschmid@murena.io</webMaster>
     <managingEditor>dcschmid@murena.io</managingEditor>
 
@@ -96,7 +75,7 @@ export async function generatePodcastRSSFeed(
 
     <!-- Channel Image -->
     <image>
-  <url>${baseUrl}/the-melody-mind-podcast.jpg</url>
+      <url>${baseUrl}/the-melody-mind-podcast.jpg</url>
       <title>${escapeXML(title)}</title>
       <link>${channelLink}</link>
       <width>1400</width>
@@ -110,17 +89,16 @@ export async function generatePodcastRSSFeed(
       <itunes:name>Daniel Schmid</itunes:name>
       <itunes:email>dcschmid@murena.io</itunes:email>
     </itunes:owner>
-  <itunes:image href="${baseUrl}/the-melody-mind-podcast.jpg"/>
+    <itunes:image href="${baseUrl}/the-melody-mind-podcast.jpg"/>
     <itunes:category text="Music">
       <itunes:category text="Music History"/>
     </itunes:category>
     <itunes:explicit>no</itunes:explicit>
     <itunes:type>episodic</itunes:type>
 
-  <!-- Podcasting 2.0 Required/Recommended Channel Tags -->
-  <podcast:guid>urn:podcast:melodymind:${lang}</podcast:guid>
-  <!-- "locked" prevents unauthorized migrations; set owner email to confirm control -->
-  <podcast:locked owner="dcschmid@murena.io">yes</podcast:locked>
+    <!-- Podcasting 2.0 Required/Recommended Channel Tags -->
+    <podcast:guid>urn:podcast:melodymind:en</podcast:guid>
+    <podcast:locked owner="dcschmid@murena.io">yes</podcast:locked>
 
     <!-- Podcasting 2.0 Persons -->
     ${personsTags}
@@ -131,53 +109,47 @@ ${items}
 </rss>`;
 }
 
-/**
- * Generate RSS item for a single podcast episode
- */
-function generateRSSItem(episode: PodcastData, lang: string, baseUrl: string, index?: number, total?: number): string {
-  const episodeLink = `${baseUrl}/${lang}/${episode.id}`;
+function generateRSSItem(
+  episode: PodcastData,
+  baseUrl: string,
+  index?: number,
+  total?: number,
+): string {
+  const episodeLink = `${baseUrl}/${episode.id}`;
   const pubDate = new Date(episode.publishedAt).toUTCString();
-  const guid = `melody-mind-${lang}-${episode.id}`;
-  
-  // Episode image URL
-  // Prefer square derivative naming convention <name>-square.jpg if it exists, else fallback to <name>.jpg
-  // Additionally allow centralized square directory /images/square/<name>.jpg if provided.
+  const guid = `melody-mind-en-${episode.id}`;
+
   let imageUrl = `${baseUrl}/the-melody-mind-podcast.jpg`;
   if (episode.imageUrl) {
     const baseName = episode.imageUrl;
     const squareDir = `${baseUrl}/square/${baseName}.jpg`;
-    // We cannot stat files server-side here; assume square files exist if user placed them, prefer squareDir naming first.
-    // To avoid broken links if not present, include a lightweight heuristic: if baseName already ends with '-square', don't append again.
     if (baseName) {
-      // Choose deterministic preference; clients will 404 if missing but validation script ensures creation.
       imageUrl = squareDir;
     }
-    // Optionally could expose original via <media:content>, omitted for simplicity.
   }
 
   const contentHtml = episode.showNotesHtml || episode.description;
 
-  // Episode number: prefer explicit value, otherwise derive (newest = highest)
-  let itunesEpisodeTag = '';
+  let itunesEpisodeTag = "";
   if (episode.episodeNumber !== undefined) {
     itunesEpisodeTag = `<itunes:episode>${episode.episodeNumber}</itunes:episode>`;
-  } else if (typeof index === 'number' && typeof total === 'number') {
-    // newest episode (index 0) gets total, oldest gets 1
+  } else if (typeof index === "number" && typeof total === "number") {
     const derived = total - index;
     itunesEpisodeTag = `<itunes:episode>${derived}</itunes:episode>`;
   }
 
-  // Duration formatting (HH:MM:SS or MM:SS)
-  let durationTag = '';
+  let durationTag = "";
   if (episode.durationSeconds && episode.durationSeconds > 0) {
     durationTag = `<itunes:duration>${formatDuration(episode.durationSeconds)}</itunes:duration>`;
   }
 
-  // Enclosure length (file size) if provided
-  const enclosureLength = episode.fileSizeBytes ? ` length="${episode.fileSizeBytes}"` : ' length="25000000"';
+  const enclosureLength = episode.fileSizeBytes
+    ? ` length="${episode.fileSizeBytes}"`
+    : ' length="25000000"';
 
-  // Transcript tag if subtitles present
-  const transcriptTag = episode.subtitleUrl ? `\n      <podcast:transcript url="${episode.subtitleUrl}" type="text/vtt" language="${lang}" rel="captions"/>` : '';
+  const transcriptTag = episode.subtitleUrl
+    ? `\n      <podcast:transcript url="${episode.subtitleUrl}" type="text/vtt" language="en" rel="captions"/>`
+    : "";
 
   return `    <item>
       <title>${escapeXML(episode.title)}</title>
@@ -186,7 +158,7 @@ function generateRSSItem(episode: PodcastData, lang: string, baseUrl: string, in
       <link>${episodeLink}</link>
       <guid isPermaLink="false">${guid}</guid>
       <pubDate>${pubDate}</pubDate>
-  <enclosure url="${episode.audioUrl}" type="audio/mpeg"${enclosureLength}/>
+      <enclosure url="${episode.audioUrl}" type="audio/mpeg"${enclosureLength}/>
 
       <!-- Categories -->
       <category>Music</category>
@@ -197,38 +169,32 @@ function generateRSSItem(episode: PodcastData, lang: string, baseUrl: string, in
       <itunes:title>${escapeXML(episode.title)}</itunes:title>
       <itunes:summary>${escapeXML(episode.description)}</itunes:summary>
       <itunes:image href="${imageUrl}"/>
-  ${durationTag}
+      ${durationTag}
       <itunes:explicit>no</itunes:explicit>
       <itunes:episodeType>full</itunes:episodeType>
-  ${itunesEpisodeTag}
-  ${transcriptTag}
+      ${itunesEpisodeTag}
+      ${transcriptTag}
 
       <!-- Content -->
       <content:encoded><![CDATA[${contentHtml}]]></content:encoded>
     </item>`;
 }
 
-/**
- * Format seconds to iTunes duration (HH:MM:SS or MM:SS)
- */
 function formatDuration(totalSeconds: number): string {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
-  const hh = hours.toString().padStart(2, '0');
-  const mm = minutes.toString().padStart(2, '0');
-  const ss = seconds.toString().padStart(2, '0');
+  const hh = hours.toString().padStart(2, "0");
+  const mm = minutes.toString().padStart(2, "0");
+  const ss = seconds.toString().padStart(2, "0");
   return hours > 0 ? `${hh}:${mm}:${ss}` : `${mm}:${ss}`;
 }
 
-/**
- * Escape XML special characters
- */
 function escapeXML(text: string): string {
   return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }

@@ -1,197 +1,89 @@
 ---
-import { Image } from 'astro:assets';
-import PodcastLayout from '../../layouts/PodcastLayout.astro';
-import Headline from '../../components/Headline.astro';
-import Paragraph from '../../components/Paragraph.astro';
-import Prose from '../../components/Prose.astro';
-import TranscriptDropdown from '../../components/TranscriptDropdown.astro';
-import type { PodcastData } from '../../types/podcast';
-import { formatDate } from '../../utils/helpers';
+import { Image } from "astro:assets";
+import PodcastLayout from "../layouts/PodcastLayout.astro";
+import Headline from "../components/Headline.astro";
+import Prose from "../components/Prose.astro";
+import TranscriptDropdown from "../components/TranscriptDropdown.astro";
+import type { PodcastData } from "../types/podcast";
+import { formatDate } from "../utils/helpers";
 
-// Import all podcast data files
-import enPodcasts from '../../data/podcasts/en.json';
-import esPodcasts from '../../data/podcasts/es.json';
-import frPodcasts from '../../data/podcasts/fr.json';
-import itPodcasts from '../../data/podcasts/it.json';
-import ptPodcasts from '../../data/podcasts/pt.json';
+import enPodcasts from "../data/podcasts/en.json";
 
 export async function getStaticPaths() {
-  const languages = ['en', 'es', 'fr', 'it', 'pt'];
-  const podcastData = {
-    en: enPodcasts.podcasts,
-    es: esPodcasts.podcasts,
-    fr: frPodcasts.podcasts,
-    it: itPodcasts.podcasts,
-    pt: ptPodcasts.podcasts,
-  };
-  
-  return languages.flatMap(lang => {
-    // Get only available episodes for each specific language
-    const availableEpisodes = podcastData[lang].filter(p => p.isAvailable);
-    return availableEpisodes.map(episode => ({
-      params: { lang, id: episode.id }
-    }));
-  });
+  const podcasts = (enPodcasts.podcasts as PodcastData[]).filter(
+    (podcast) => podcast.isAvailable,
+  );
+  return podcasts.map((podcast) => ({
+    params: { id: podcast.id },
+  }));
 }
 
-const { lang, id } = Astro.params;
+const { id } = Astro.params;
 
-// Get podcasts for the current language
-function getPodcastsForLanguage(language: string): PodcastData[] {
-  const podcastMap = {
-    en: enPodcasts.podcasts,
-    es: esPodcasts.podcasts,
-    fr: frPodcasts.podcasts,
-    it: itPodcasts.podcasts,
-    pt: ptPodcasts.podcasts,
-  } as const;
-  
-  return (podcastMap[language as keyof typeof podcastMap] || enPodcasts.podcasts) as PodcastData[];
-}
-
-const podcasts = getPodcastsForLanguage(lang as string);
-const podcast = podcasts.find(p => p.id === id);
-
-// If podcast not found, try English fallback
-const fallbackPodcast = lang !== 'en' ? 
-  enPodcasts.podcasts.find(p => p.id === id) : null;
-
-const currentPodcast = podcast || fallbackPodcast;
+const podcasts = (enPodcasts.podcasts as PodcastData[]).filter(
+  (podcast) => podcast.isAvailable,
+);
+const currentPodcast = podcasts.find((podcast) => podcast.id === id);
 
 if (!currentPodcast) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
-// Get navigation (previous/next episodes)
 function getNavigation() {
-  // Navigation soll nur Episoden zeigen, die bereits freigeschaltet (isAvailable=true) sind.
-  // Dadurch verschwinden Links zu zukünftigen / nicht veröffentlichten Episoden (z.B. 1960s, wenn noch false).
-  const availablePodcasts = getPodcastsForLanguage(lang as string).filter(p => p.isAvailable);
-  const currentIndex = availablePodcasts.findIndex(p => p.id === id);
+  const currentIndex = podcasts.findIndex((podcast) => podcast.id === id);
 
-  // Falls aktuelle Episode nicht im gefilterten Array (z.B. Fallback-Szenario), keine Navigation anzeigen.
   if (currentIndex === -1) {
     return { prev: null, next: null };
   }
 
   return {
-    prev: currentIndex > 0 ? availablePodcasts[currentIndex - 1] : null,
-    next: currentIndex < availablePodcasts.length - 1 ? availablePodcasts[currentIndex + 1] : null
+    prev: currentIndex > 0 ? podcasts[currentIndex - 1] : null,
+    next:
+      currentIndex < podcasts.length - 1 ? podcasts[currentIndex + 1] : null,
   };
 }
 
 const { prev, next } = getNavigation();
+const episodeNumber = podcasts.findIndex((podcast) => podcast.id === id) + 1;
 
-// Calculate episode number
-const episodeNumber = podcasts.findIndex(p => p.id === id) + 1;
-
-// Basic translations
-const translations = {
-  en: {
-    backToAll: '← Back to all podcasts',
-    listenToEpisode: '🎧 Listen to Episode',
-    episode: 'Episode',
-    previousEpisode: 'Previous Episode',
-    nextEpisode: 'Next Episode',
-    episodeNavigation: 'Episode navigation',
-    publishedOn: 'Published on',
-    duration: 'Duration',
-    musicHistory: 'Music History',
-    transcript: 'Transcript',
-    showTranscript: 'Show Transcript',
-    hideTranscript: 'Hide Transcript',
-    loading: 'Loading transcript...',
-    notAvailable: 'Transcript not available',
-    error: 'Error loading transcript'
-  },
-  es: {
-    backToAll: '← Volver a todos los podcasts',
-    listenToEpisode: '🎧 Escuchar episodio',
-    episode: 'Episodio',
-    previousEpisode: 'Episodio anterior',
-    nextEpisode: 'Próximo episodio',
-    episodeNavigation: 'Navegación de episodios',
-    publishedOn: 'Publicado el',
-    duration: 'Duración',
-    musicHistory: 'Historia Musical',
-    transcript: 'Transcripción',
-    showTranscript: 'Mostrar transcripción',
-    hideTranscript: 'Ocultar transcripción',
-    loading: 'Cargando transcripción...',
-    notAvailable: 'Transcripción no disponible',
-    error: 'Error al cargar la transcripción'
-  },
-  fr: {
-    backToAll: '← Retour à tous les podcasts',
-    listenToEpisode: '🎧 Écouter l\'épisode',
-    episode: 'Épisode',
-    previousEpisode: 'Épisode précédent',
-    nextEpisode: 'Épisode suivant',
-    episodeNavigation: 'Navigation des épisodes',
-    publishedOn: 'Publié le',
-    duration: 'Durée',
-    musicHistory: 'Histoire Musicale',
-    transcript: 'Transcription',
-    showTranscript: 'Afficher la transcription',
-    hideTranscript: 'Masquer la transcription',
-    loading: 'Chargement de la transcription...',
-    notAvailable: 'Transcription non disponible',
-    error: 'Erreur lors du chargement de la transcription'
-  },
-  it: {
-    backToAll: '← Torna a tutti i podcast',
-    listenToEpisode: '🎧 Ascolta episodio',
-    episode: 'Episodio',
-    previousEpisode: 'Episodio precedente',
-    nextEpisode: 'Prossimo episodio',
-    episodeNavigation: 'Navigazione episodi',
-    publishedOn: 'Pubblicato il',
-    duration: 'Durata',
-    musicHistory: 'Storia Musicale',
-    transcript: 'Trascrizione',
-    showTranscript: 'Mostra trascrizione',
-    hideTranscript: 'Nascondi trascrizione',
-    loading: 'Caricamento trascrizione...',
-    notAvailable: 'Trascrizione non disponibile',
-    error: 'Errore nel caricamento della trascrizione'
-  },
-  pt: {
-    backToAll: '← Voltar a todos os podcasts',
-    listenToEpisode: '🎧 Ouvir episódio',
-    episode: 'Episódio',
-    previousEpisode: 'Episódio anterior',
-    nextEpisode: 'Próximo episódio',
-    episodeNavigation: 'Navegação de episódios',
-    publishedOn: 'Publicado em',
-    duration: 'Duração',
-    musicHistory: 'História Musical',
-    transcript: 'Transcrição',
-    showTranscript: 'Mostrar transcrição',
-    hideTranscript: 'Ocultar transcrição',
-    loading: 'Carregando transcrição...',
-    notAvailable: 'Transcrição não disponível',
-    error: 'Erro ao carregar transcrição'
-  },
+const t = {
+  backToAll: "← Back to all podcasts",
+  listenToEpisode: "🎧 Listen to Episode",
+  episode: "Episode",
+  previousEpisode: "Previous Episode",
+  nextEpisode: "Next Episode",
+  episodeNavigation: "Episode navigation",
+  publishedOn: "Published on",
+  duration: "Duration",
+  musicHistory: "Music History",
+  transcript: "Transcript",
+  showTranscript: "Show Transcript",
+  hideTranscript: "Hide Transcript",
+  loading: "Loading transcript...",
+  notAvailable: "Transcript not available",
+  error: "Error loading transcript",
 };
-
-const t = translations[lang as keyof typeof translations] || translations.en;
 ---
 
-<PodcastLayout 
-  title={currentPodcast.title} 
-  description={`${currentPodcast.description} - ${t.episode} ${episodeNumber} of MelodyMind Podcasts exploring ${currentPodcast.title} in music history.`}
-  lang={lang as string}
+<PodcastLayout
+  title={currentPodcast.title}
+  description={`${currentPodcast.description} - Episode ${episodeNumber} of MelodyMind Podcasts exploring ${currentPodcast.title} in music history.`}
   type="article"
   publishedTime={currentPodcast.publishedAt}
   modifiedTime={currentPodcast.publishedAt}
   image={`/images/${currentPodcast.imageUrl}.jpg`}
-  keywords={[currentPodcast.title.toLowerCase(), t.musicHistory.toLowerCase(), 'music podcast', 'audio story', 'music history']}
-  canonical={`https://podcasts.melody-mind.de/${lang}/${currentPodcast.id}`}
+  keywords={[
+    currentPodcast.title.toLowerCase(),
+    t.musicHistory.toLowerCase(),
+    "music podcast",
+    "audio story",
+    "music history",
+  ]}
+  canonical={`https://podcasts.melody-mind.de/${currentPodcast.id}`}
 >
-  <!-- Back navigation -->
   <nav class="mb-8" aria-label="Breadcrumb navigation">
     <a
-      href={`/${lang}/`}
+      href="/"
       class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-purple-400 transition-all duration-300 hover:-translate-x-1 hover:bg-purple-500/10 hover:text-purple-300 focus:bg-purple-500/10 focus:text-purple-300 border border-purple-500/20 hover:border-purple-400/40 focus:border-purple-400/40 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900"
       aria-label="Go back to all podcasts"
     >
@@ -199,10 +91,8 @@ const t = translations[lang as keyof typeof translations] || translations.en;
     </a>
   </nav>
 
-  <!-- Episode header -->
   <section class="mb-12" aria-labelledby="episode-title">
     <div class="mb-8 flex flex-col gap-10 text-center md:text-left lg:flex-row">
-      <!-- Episode image -->
       <div class="relative w-full flex-shrink-0 lg:w-96">
         <div class="group relative aspect-[3/2] w-full overflow-hidden">
           <Image
@@ -219,42 +109,43 @@ const t = translations[lang as keyof typeof translations] || translations.en;
         </div>
       </div>
 
-      <!-- Episode info -->
       <div class="flex-1">
-        <!-- Episode metadata -->
         <div class="mb-6 flex flex-wrap items-center justify-start gap-3 text-sm">
-          <span class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 text-sm font-bold tracking-wider text-white shadow-lg ring-1 ring-white/10"
-                aria-label={`${t.episode} number ${episodeNumber}`}>
+          <span
+            class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 text-sm font-bold tracking-wider text-white shadow-lg ring-1 ring-white/10"
+            aria-label={`${t.episode} number ${episodeNumber}`}
+          >
             {t.episode} {episodeNumber}
           </span>
-          <time class="inline-flex items-center gap-2 rounded-full bg-gray-800 px-3 py-1 text-gray-300" 
-                datetime={currentPodcast.publishedAt}
-                aria-label={`${t.publishedOn} ${formatDate(currentPodcast.publishedAt)}`}>
+          <time
+            class="inline-flex items-center gap-2 rounded-full bg-gray-800 px-3 py-1 text-gray-300"
+            datetime={currentPodcast.publishedAt}
+            aria-label={`${t.publishedOn} ${formatDate(currentPodcast.publishedAt)}`}
+          >
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             {t.publishedOn} {formatDate(currentPodcast.publishedAt)}
           </time>
         </div>
-        
+
         <Headline level="h1" textSize="2xl" className="mb-4">
           <span id="episode-title">{currentPodcast.title}</span>
         </Headline>
-        
+
         <div class="prose prose-lg prose-invert prose-slate max-w-none mb-6">
           <p>{currentPodcast.description}</p>
         </div>
       </div>
     </div>
 
-    <!-- Audio player -->
     {currentPodcast.audioUrl && (
       <section class="rounded-2xl text-center shadow-xl" aria-labelledby="audio-player-heading">
         <div class="mb-6 rounded-xl border border-gray-600 bg-gray-900 p-6 shadow-inner">
           <Headline level="h2" textSize="lg" className="mb-6 text-center text-white">
             <span id="audio-player-heading">{t.listenToEpisode}</span>
           </Headline>
-          
+
           <div class="mb-4 flex flex-col items-center justify-center gap-4 md:flex-row md:items-center">
             <div class="relative">
               <button
@@ -264,10 +155,10 @@ const t = translations[lang as keyof typeof translations] || translations.en;
                 class="flex h-12 w-12 items-center justify-center rounded-full bg-purple-600 shadow-lg transition-transform duration-150 hover:scale-105 focus:scale-105 focus:ring-4 focus:ring-purple-400 focus:outline-none md:h-16 md:w-16"
               >
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-                  <path d="M8 5v14l11-7z"/>
+                  <path d="M8 5v14l11-7z" />
                 </svg>
               </button>
-              
+
               <button
                 id="pause-button"
                 aria-label={`Pause ${currentPodcast.title} episode`}
@@ -275,36 +166,32 @@ const t = translations[lang as keyof typeof translations] || translations.en;
                 class="hidden h-12 w-12 items-center justify-center rounded-full bg-purple-600 shadow-lg transition-transform duration-150 hover:scale-105 focus:scale-105 focus:ring-4 focus:ring-purple-400 focus:outline-none md:h-16 md:w-16"
               >
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
                 </svg>
               </button>
             </div>
-            
+
             <div class="text-center md:text-left">
-              <div class="text-lg font-semibold text-white" id="audio-status">{currentPodcast.title}</div>
+              <div class="text-lg font-semibold text-white" id="audio-status">
+                {currentPodcast.title}
+              </div>
             </div>
           </div>
 
-          <audio
-            id="audio-player"
-            preload="metadata"
-            class="hidden"
-            aria-label={`Audio player for ${currentPodcast.title}`}
-          >
+          <audio id="audio-player" preload="metadata" class="hidden" aria-label={`Audio player for ${currentPodcast.title}`}>
             <source src={currentPodcast.audioUrl} type="audio/mpeg" />
             {currentPodcast.subtitleUrl && (
               <track
                 kind="captions"
                 src={currentPodcast.subtitleUrl}
-                srclang={lang}
-                label={lang}
+                srclang="en"
+                label="English"
                 default
               />
             )}
             Your browser does not support the audio element.
           </audio>
 
-          <!-- Progress bar -->
           <div class="mb-4 w-full">
             <label for="progress-bar" class="sr-only">Audio progress</label>
             <div
@@ -326,12 +213,10 @@ const t = translations[lang as keyof typeof translations] || translations.en;
             </div>
           </div>
 
-          <!-- Time display -->
           <div class="mb-4 flex flex-col items-center gap-2 text-sm text-gray-400 md:flex-row md:justify-center md:gap-4">
             <span id="time-display" aria-live="polite" aria-label="Current playback time">0:00 / 0:00</span>
           </div>
 
-          <!-- Controls -->
           <div class="flex items-center justify-center gap-6" role="group" aria-label="Audio player controls">
             <button
               class="text-gray-400 transition-colors duration-200 hover:text-white focus:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md p-1"
@@ -342,7 +227,7 @@ const t = translations[lang as keyof typeof translations] || translations.en;
                 <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" />
               </svg>
             </button>
-            
+
             <button
               class="text-gray-400 transition-colors duration-200 hover:text-white focus:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md p-1"
               id="forward-button"
@@ -357,15 +242,12 @@ const t = translations[lang as keyof typeof translations] || translations.en;
       </section>
     )}
 
-    <!-- Transcript Dropdown -->
-    <TranscriptDropdown 
-      subtitleUrl={currentPodcast.subtitleUrl} 
-      lang={lang as string} 
+    <TranscriptDropdown
+      subtitleUrl={currentPodcast.subtitleUrl}
       podcastTitle={currentPodcast.title}
     />
   </section>
 
-  <!-- Show notes -->
   {currentPodcast.showNotesHtml && (
     <section class="mb-12" aria-labelledby="show-notes-heading">
       <article role="region" aria-labelledby="show-notes-heading">
@@ -374,14 +256,13 @@ const t = translations[lang as keyof typeof translations] || translations.en;
     </section>
   )}
 
-  <!-- Episode navigation -->
   {(prev || next) && (
     <nav class="mb-12" aria-labelledby="episode-nav-heading">
       <h2 id="episode-nav-heading" class="sr-only">{t.episodeNavigation}</h2>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
         {prev && (
           <a
-            href={`/${lang}/${prev.id}`}
+            href={`/${prev.id}`}
             class="flex items-center gap-4 rounded-xl border border-gray-700 bg-gray-800 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-gray-600 hover:bg-gray-700 hover:shadow-xl focus:-translate-y-1 focus:border-gray-600 focus:bg-gray-700 focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900"
             aria-label={`Go to previous episode: ${prev.title}`}
           >
@@ -394,10 +275,10 @@ const t = translations[lang as keyof typeof translations] || translations.en;
             </div>
           </a>
         )}
-        
+
         {next && (
           <a
-            href={`/${lang}/${next.id}`}
+            href={`/${next.id}`}
             class="flex items-center gap-4 rounded-xl border border-gray-700 bg-gray-800 p-6 text-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-gray-600 hover:bg-gray-700 hover:shadow-xl focus:-translate-y-1 focus:border-gray-600 focus:bg-gray-700 focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900 md:col-start-2"
             aria-label={`Go to next episode: ${next.title}`}
           >
@@ -415,9 +296,9 @@ const t = translations[lang as keyof typeof translations] || translations.en;
   )}
 
   <script>
-    import { initSimpleAudioPlayer } from '../../utils/audioPlayer';
-    
-    document.addEventListener('DOMContentLoaded', () => {
+    import { initSimpleAudioPlayer } from "../utils/audioPlayer";
+
+    document.addEventListener("DOMContentLoaded", () => {
       initSimpleAudioPlayer();
     });
   </script>

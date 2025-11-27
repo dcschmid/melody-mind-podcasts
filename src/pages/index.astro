@@ -1,4 +1,293 @@
 ---
-// Redirect to English version
-return Astro.redirect('/en');
+import { Image } from "astro:assets";
+import PodcastLayout from "../layouts/PodcastLayout.astro";
+import SearchBar from "../components/SearchBar.astro";
+import type { PodcastData } from "../types/podcast";
+
+import enPodcasts from "../data/podcasts/en.json";
+
+const podcasts = (enPodcasts.podcasts as PodcastData[]).filter(
+  (podcast) => podcast.isAvailable,
+);
+
+const t = {
+  title: "MelodyMind Podcasts",
+  subtitle: "Time‑travel through music with Daniel & Annabelle",
+  description:
+    "Your epic journey through music history – guided by Daniel and Annabelle. In each episode we dive deep into the turning points that shaped the sound of generations: from the rebellious birth of rock 'n' roll and the political pulse of folk to the explosion of electronic creativity and today’s streaming revolution. We uncover the stories behind the songs – courageous artists, visionary pioneers, cultural ruptures and technical innovations. Not an archive. A living time‑capsule of goosebump moments, surprising anecdotes and new angles for how you listen. Step in – every episode is a time portal with a soundtrack.",
+  seoDescription:
+    "Discover music history through expert podcasts. Explore decades of musical evolution, from 1950s rock 'n' roll to modern streaming. Premium audio content featuring legendary artists, cultural movements, and industry insights.",
+  episodes: "Episodes",
+  listen: "Listen Now",
+  featuredContent:
+    "Discover the voices, rhythms, and revolutions that defined generations",
+  totalEpisodes: " episodes available",
+  availableOn: "Available on your favorite platforms:",
+  spotifyUrl: "https://open.spotify.com/show/0AkUiN6Vnd0PsKuGtbp4W7",
+  applePodcastUrl:
+    "https://podcasts.apple.com/us/podcast/melody-mind-–-english/id1847445333",
+  deezerUrl: "https://www.deezer.com/en/show/1002304482",
+  youtubeUrl:
+    "https://www.youtube.com/playlist?list=PLioOQ4LuNFxtx2d70QKywiPC8WVBxgXN0",
+  keywords: [
+    "music history podcast",
+    "rock and roll",
+    "music culture",
+    "vintage music",
+    "music documentary",
+    "audio stories",
+  ],
+};
 ---
+
+<PodcastLayout
+  title={t.title}
+  description={t.seoDescription}
+  keywords={t.keywords}
+  type="website"
+>
+  <div class="container mx-auto py-8">
+    <header class="text-center mb-16">
+      <div class="mb-8">
+        <h1
+          class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent"
+        >
+          {t.title}
+        </h1>
+        <p
+          class="text-xl sm:text-2xl md:text-3xl font-semibold text-purple-300 mb-6"
+        >
+          {t.subtitle}
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto mb-8">
+        <p class="text-lg sm:text-xl text-gray-300 leading-relaxed mb-6">
+          {t.description}
+        </p>
+        <div
+          class="bg-gradient-to-r from-purple-900/30 to-indigo-900/30 rounded-xl p-6 border border-purple-500/20"
+        >
+          <p class="text-purple-200 text-base sm:text-lg font-medium mb-2">
+            🎵 {t.featuredContent}
+          </p>
+          <div
+            class="flex items-center justify-center gap-4 text-sm text-gray-400"
+          >
+            <span class="flex items-center gap-2">
+              <svg
+                class="w-4 h-4"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+                ></path>
+              </svg>
+              <span aria-label={`${podcasts.length} ${t.totalEpisodes}`}>
+                {podcasts.length}
+                {t.totalEpisodes}
+              </span>
+            </span>
+            <span class="hidden sm:flex items-center gap-2">
+              <svg
+                class="w-4 h-4"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+                ></path>
+              </svg>
+              Premium Content
+            </span>
+            <span class="hidden sm:flex items-center gap-2">
+              <svg
+                class="w-4 h-4"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
+                ></path>
+              </svg>
+              Expert Hosts
+            </span>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-purple-500/20">
+            <p class="text-purple-200 text-sm text-center mb-4">
+              {t.availableOn}
+            </p>
+            <div class="flex items-center justify-center gap-3 flex-wrap">
+              <a
+                href="/rss.xml"
+                class="inline-flex items-center gap-2 px-3 py-2 bg-orange-600 hover:bg-orange-700 focus:bg-orange-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-purple-900"
+                aria-label="Subscribe to RSS feed"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248S0 22.546 0 20.752s1.456-3.248 3.252-3.248 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-3.368c10.58.046 19.152 8.594 19.183 19.188h4.817c-.03-13.231-10.755-23.954-24-24v4.812z"
+                  ></path>
+                </svg>
+                RSS
+              </a>
+
+              <a
+                href={t.applePodcastUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 px-3 py-2 bg-gray-700 hover:bg-gray-600 focus:bg-gray-600 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-purple-900"
+                aria-label="Listen on Apple Podcasts"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M23.997 6.124c0-.738-.065-1.47-.24-2.19-.317-1.31-1.062-2.31-2.18-3.043C21.003.517 20.373.285 19.7.164c-.517-.093-1.038-.135-1.564-.15-.04-.001-.08-.004-.12-.004H6.03c-.04 0-.08.003-.12.004-.525.015-1.046.057-1.563.15-.674.121-1.304.353-1.878.727-1.118.733-1.863 1.732-2.18 3.043-.175.72-.24 1.452-.24 2.19v11.72c0 .747.065 1.478.24 2.197.317 1.31 1.062 2.31 2.18 3.043.574.374 1.204.606 1.878.727.517.093 1.038.135 1.563.15.04.001.08.004.12.004h11.97c.04 0 .08-.003.12-.004.526-.015 1.047-.057 1.564-.15.673-.121 1.303-.353 1.877-.727 1.118-.733 1.863-1.732 2.18-3.043.175-.719.24-1.45.24-2.197V6.124zM22.124 6.124v11.72c0 .649-.056 1.293-.203 1.918-.27 1.139-.91 2.016-1.897 2.592-.474.277-.99.458-1.533.553-.447.078-.9.115-1.357.128H6.866c-.458-.013-.91-.05-1.357-.128-.543-.095-1.059-.276-1.533-.553-.987-.576-1.627-1.453-1.897-2.592-.147-.625-.203-1.269-.203-1.918V6.124c0-.65.056-1.294.203-1.92.27-1.138.91-2.015 1.897-2.591.474-.277.99-.458 1.533-.553.447-.078.899-.115 1.357-.128h10.268c.457.013.91.05 1.357.128.543.095 1.059.276 1.533.553.987.576 1.627 1.453 1.897 2.591.147.626.203 1.27.203 1.92z"
+                  ></path>
+                  <path
+                    d="M12.587 3.513c-3.13 0-6.03 1.936-7.143 4.728-.277.695-.42 1.428-.42 2.18v1.818c0 .338.274.612.612.612s.612-.274.612-.612V10.42c0-.567.107-1.118.318-1.637.84-2.066 2.857-3.404 5.233-3.471 1.156-.032 2.31.19 3.357.647 1.047.458 1.955 1.15 2.64 2.013.343.432.863.68 1.415.675.552-.005 1.067-.26 1.403-.696.336-.437.466-.993.354-1.516-.224-1.048-.693-2.021-1.364-2.83-1.342-1.619-3.285-2.647-5.41-2.863-.427-.043-.86-.064-1.295-.064l-.312.025z"
+                  ></path>
+                </svg>
+                Apple
+              </a>
+
+              <a
+                href={t.spotifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 focus:bg-green-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-purple-900"
+                aria-label="Listen on Spotify"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"
+                  ></path>
+                </svg>
+                Spotify
+              </a>
+
+              <a
+                href={t.deezerUrl}
+                target={t.deezerUrl !== "#" ? "_blank" : undefined}
+                rel={t.deezerUrl !== "#" ? "noopener noreferrer" : undefined}
+                class="inline-flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-purple-900"
+                aria-label="Listen on Deezer"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M18.81 12.74h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm-4.5 6.45h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm-4.5 8.6h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm-4.5 10.75h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm-4.5 12.9h3.02v1.52H.81zm0-2.15h3.02v1.52H.81zm0-2.15h3.02v1.52H.81z"
+                  ></path>
+                </svg>
+                Deezer
+              </a>
+
+              <a
+                href={t.youtubeUrl}
+                target={t.youtubeUrl !== "#" ? "_blank" : undefined}
+                rel={t.youtubeUrl !== "#" ? "noopener noreferrer" : undefined}
+                class="inline-flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 focus:bg-red-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-purple-900"
+                aria-label="Listen on YouTube"
+              >
+                <svg
+                  class="w-4 h-4"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+                  ></path>
+                </svg>
+                YouTube
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <SearchBar total={podcasts.length} />
+    <section aria-labelledby="episodes-heading">
+      <h2 id="episodes-heading" class="text-3xl font-bold text-white mb-8">
+        {t.episodes}
+      </h2>
+
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
+        role="list"
+        id="episodes-list"
+      >
+        {
+          podcasts.map((podcast) => (
+            <article
+              data-episode
+              data-search={`${podcast.title} ${podcast.description}`}
+              class="bg-gray-800 rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl focus-within:shadow-2xl focus-within:-translate-y-1"
+              role="listitem"
+            >
+              <div class="aspect-[3/2] overflow-hidden">
+                <Image
+                  src={`/images/${podcast.imageUrl}.jpg`}
+                  alt={`Cover image for ${podcast.title} podcast episode`}
+                  class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                  loading="lazy"
+                  decoding="async"
+                  width={400}
+                  height={267}
+                  format="webp"
+                  quality={85}
+                />
+              </div>
+              <div class="p-4 sm:p-6">
+                <h3 class="text-lg sm:text-xl font-semibold text-purple-400 mb-3">
+                  {podcast.title}
+                </h3>
+                <p class="text-gray-300 mb-4 leading-relaxed">
+                  {podcast.description}
+                </p>
+                <a
+                  href={`/${podcast.id}`}
+                  class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-800"
+                  aria-label={`Listen to ${podcast.title} podcast episode`}
+                >
+                  <svg
+                    class="w-4 h-4"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                  {t.listen}
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</PodcastLayout>

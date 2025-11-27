@@ -1,98 +1,142 @@
 ---
-const { lang, total } = Astro.props as { lang: string; total: number };
-// Simple client-side filtering via Alpine-like minimal custom script (vanilla) for accessibility.
-// We'll output a script that updates aria-live region on results count change.
+const { total } = Astro.props as { total: number };
+
 const labels = {
-  en: { placeholder: 'Search episodes', label: 'Search episodes', results: 'results', resultOne:'result', clear: 'Clear search', hint: 'Type to filter episodes. Matches title & description.', empty: 'No matching episodes.', statusTemplate: 'Found: {found} of {total} {word}' },
-  es: { placeholder: 'Buscar episodios', label: 'Buscar episodios', results: 'resultados', resultOne:'resultado', clear: 'Borrar búsqueda', hint: 'Escribe para filtrar episodios. Coincide título y descripción.', empty: 'No hay episodios coincidentes.', statusTemplate: 'Encontrados: {found} de {total} {word}' },
-  fr: { placeholder: 'Rechercher des épisodes', label: 'Rechercher des épisodes', results: 'résultats', resultOne:'résultat', clear: 'Effacer la recherche', hint: 'Tapez pour filtrer les épisodes. Correspond titre et description.', empty: 'Aucun épisode correspondant.', statusTemplate: 'Trouvés: {found} sur {total} {word}' },
-  it: { placeholder: 'Cerca episodi', label: 'Cerca episodi', results: 'risultati', resultOne:'risultato', clear: 'Cancella ricerca', hint: 'Digita per filtrare gli episodi. Cerca in titolo e descrizione.', empty: 'Nessun episodio corrispondente.', statusTemplate: 'Trovati: {found} di {total} {word}' },
-  pt: { placeholder: 'Pesquisar episódios', label: 'Pesquisar episódios', results: 'resultados', resultOne:'resultado', clear: 'Limpar pesquisa', hint: 'Digite para filtrar episódios. Busca em título e descrição.', empty: 'Nenhum episódio correspondente.', statusTemplate: 'Encontrados: {found} de {total} {word}' }
+  placeholder: "Search episodes",
+  label: "Search episodes",
+  results: "results",
+  resultOne: "result",
+  clear: "Clear search",
+  hint: "Type to filter episodes. Matches title & description.",
+  empty: "No matching episodes.",
+  statusTemplate: "Found: {found} of {total} {word}",
 };
-const l = labels[lang as keyof typeof labels] || labels.en;
 ---
-<form role="search" class="search-bar mb-10 max-w-3xl mx-auto" aria-label={l.label} onsubmit="event.preventDefault()" aria-controls="episodes-list">
+<form
+  role="search"
+  class="search-bar mb-10 max-w-3xl mx-auto"
+  aria-label={labels.label}
+  onsubmit="event.preventDefault()"
+  aria-controls="episodes-list"
+>
   <div class="flex gap-3 items-stretch">
     <div class="relative flex-1">
-      <label for="episode-search" class="visually-hidden">{l.label}</label>
-      <input id="episode-search" name="q" type="search" inputmode="search" autocomplete="off"
-        placeholder={l.placeholder}
+      <label for="episode-search" class="visually-hidden">{labels.label}</label>
+      <input
+        id="episode-search"
+        name="q"
+        type="search"
+        inputmode="search"
+        autocomplete="off"
+        placeholder={labels.placeholder}
         aria-describedby="search-hint"
         class="w-full rounded-lg bg-gray-800 border border-purple-500/40 focus:border-purple-400 px-4 py-3 text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-900"
-        oninput="filterEpisodes(this.value)" />
-      <button type="button" aria-label={l.clear} onclick="clearSearch()" class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-sm rounded-md text-gray-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900">×</button>
+        oninput="filterEpisodes(this.value)"
+      />
+      <button
+        type="button"
+        aria-label={labels.clear}
+        onclick="clearSearch()"
+        class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-sm rounded-md text-gray-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+      >
+        ×
+      </button>
     </div>
   </div>
-  <p id="search-hint" class="mt-2 text-xs text-gray-400" aria-hidden="true">{l.hint}</p>
-  <div aria-live="polite" aria-atomic="true" id="search-status" class="mt-2 text-sm text-purple-300" data-total={total}>{l.statusTemplate.replace('{found}', String(total)).replace('{total}', String(total)).replace('{word}', total === 1 ? l.resultOne : l.results)}</div>
-  <div id="search-empty" class="mt-2 text-sm text-red-300 hidden" role="status">{l.empty}</div>
+  <p id="search-hint" class="mt-2 text-xs text-gray-400" aria-hidden="true">
+    {labels.hint}
+  </p>
+  <div
+    aria-live="polite"
+    aria-atomic="true"
+    id="search-status"
+    class="mt-2 text-sm text-purple-300"
+    data-total={total}
+  >
+    {labels.statusTemplate
+      .replace("{found}", String(total))
+      .replace("{total}", String(total))
+      .replace("{word}", total === 1 ? labels.resultOne : labels.results)}
+  </div>
+  <div
+    id="search-empty"
+    class="mt-2 text-sm text-red-300 hidden"
+    role="status"
+  >
+    {labels.empty}
+  </div>
 </form>
 <script>
   const minChars = 1;
-  const diacriticRegex = /\p{Diacritic}/gu;
-  function normalizeText(str){
-    return str.normalize('NFD').replace(diacriticRegex,'').toLowerCase();
+  function normalizeText(str) {
+    return str.trim().toLowerCase();
   }
-  function filterEpisodes(query){
-    const q = normalizeText(query.trim());
-    const items = Array.from(document.querySelectorAll('[data-episode]'));
+  function filterEpisodes(query) {
+    const q = normalizeText(query);
+    const items = Array.from(document.querySelectorAll("[data-episode]"));
     let shown = 0;
-    if(q.length < minChars){
-      items.forEach(el => { if(el instanceof HTMLElement){ el.hidden = false; el.setAttribute('tabindex','0'); } });
+    if (q.length < minChars) {
+      items.forEach((el) => {
+        if (el instanceof HTMLElement) {
+          el.hidden = false;
+          el.setAttribute("tabindex", "0");
+        }
+      });
       shown = items.length;
     } else {
-      items.forEach(el => {
-        const hay = normalizeText(el.getAttribute('data-search')||'');
+      items.forEach((el) => {
+        const hay = normalizeText(el.getAttribute("data-search") || "");
         const match = hay.indexOf(q) !== -1;
-        if(el instanceof HTMLElement){
+        if (el instanceof HTMLElement) {
           el.hidden = !match;
-          if(match){ shown++; el.setAttribute('tabindex','0'); } else { el.removeAttribute('tabindex'); }
+          if (match) {
+            shown++;
+            el.setAttribute("tabindex", "0");
+          } else {
+            el.removeAttribute("tabindex");
+          }
         }
       });
     }
     updateStatus(shown);
   }
-  function updateStatus(count){
-    const status = document.getElementById('search-status');
-    const empty = document.getElementById('search-empty');
-    if(status){
-      const total = status.getAttribute('data-total') || '0';
-      const foundNum = String(count);
-      const template = status.textContent.includes('Found:') || status.textContent.includes('Gefunden:') ? null : null;
-      // We have labels embedded at build time; reconstruct using data attributes + language detection from form label
-      const form = status.closest('form');
-      const ariaLabel = form ? form.getAttribute('aria-label') : '';
-      // Map ariaLabel back to l by scanning labels object
-      let active = null;
-      const localLabels = {
-        en:{label:'Search episodes',results:'results',resultOne:'result',statusTemplate:'Found: {found} of {total} {word}'},
-    // de: removed
-        es:{label:'Buscar episodios',results:'resultados',resultOne:'resultado',statusTemplate:'Encontrados: {found} de {total} {word}'},
-        fr:{label:'Rechercher des épisodes',results:'résultats',resultOne:'résultat',statusTemplate:'Trouvés: {found} sur {total} {word}'},
-        it:{label:'Cerca episodi',results:'risultati',resultOne:'risultato',statusTemplate:'Trovati: {found} di {total} {word}'},
-        pt:{label:'Pesquisar episódios',results:'resultados',resultOne:'resultado',statusTemplate:'Encontrados: {found} de {total} {word}'}
-      };
-      for(const key of Object.keys(localLabels)){
-        if(localLabels[key].label === ariaLabel){ active = localLabels[key]; break; }
-      }
-      const pack = active || localLabels.en;
-      const word = count === 1 ? pack.resultOne : pack.results;
-      status.textContent = pack.statusTemplate.replace('{found}', foundNum).replace('{total}', total).replace('{word}', word);
+  function updateStatus(count) {
+    const status = document.getElementById("search-status");
+    const empty = document.getElementById("search-empty");
+    if (status) {
+      const total = status.getAttribute("data-total") || "0";
+      const word = count === 1 ? "result" : "results";
+      status.textContent = `Found: ${count} of ${total} ${word}`;
     }
-    if(empty){ empty.classList.toggle('hidden', count !== 0); }
+    if (empty) {
+      empty.classList.toggle("hidden", count !== 0);
+    }
   }
-  function clearSearch(){
-    const input = document.getElementById('episode-search');
-  if(input instanceof HTMLInputElement){ input.value=''; input.focus(); filterEpisodes(''); }
+  function clearSearch() {
+    const input = document.getElementById("episode-search");
+    if (input instanceof HTMLInputElement) {
+      input.value = "";
+      input.focus();
+      filterEpisodes("");
+    }
   }
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const total = document.querySelectorAll('[data-episode]').length;
+  document.addEventListener("DOMContentLoaded", () => {
+    const total = document.querySelectorAll("[data-episode]").length;
     updateStatus(total);
   });
-  // Expose globally for inline event handler
   (window as any).filterEpisodes = filterEpisodes;
   (window as any).clearSearch = clearSearch;
 </script>
 <style>
-  .visually-hidden { position:absolute !important; width:1px !important; height:1px !important; padding:0 !important; margin:-1px !important; overflow:hidden !important; clip:rect(0 0 0 0) !important; white-space:nowrap !important; border:0 !important; }
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
 </style>

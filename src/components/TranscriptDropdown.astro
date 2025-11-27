@@ -1,75 +1,17 @@
 ---
 interface Props {
   subtitleUrl?: string;
-  lang: string;
   podcastTitle: string;
 }
 
-const { subtitleUrl, lang, podcastTitle } = Astro.props;
-
-// Übersetzungen für das Transkript-Dropdown
-const translations = {
-  en: {
-    transcript: 'Transcript',
-    showTranscript: 'Show Transcript',
-    hideTranscript: 'Hide Transcript',
-    loading: 'Loading transcript...',
-    notAvailable: 'Transcript not available',
-    error: 'Error loading transcript',
-    nowPlaying: 'Now playing'
-  },
-  de: {
-    transcript: 'Transkript',
-    showTranscript: 'Transkript anzeigen',
-    hideTranscript: 'Transkript ausblenden',
-    loading: 'Transkript wird geladen...',
-    notAvailable: 'Transkript nicht verfügbar',
-    error: 'Fehler beim Laden des Transkripts',
-    nowPlaying: 'Wird abgespielt'
-  },
-  es: {
-    transcript: 'Transcripción',
-    showTranscript: 'Mostrar transcripción',
-    hideTranscript: 'Ocultar transcripción',
-    loading: 'Cargando transcripción...',
-    notAvailable: 'Transcripción no disponible',
-    error: 'Error al cargar la transcripción',
-    nowPlaying: 'Reproduciendo'
-  },
-  fr: {
-    transcript: 'Transcription',
-    showTranscript: 'Afficher la transcription',
-    hideTranscript: 'Masquer la transcription',
-    loading: 'Chargement de la transcription...',
-    notAvailable: 'Transcription non disponible',
-    error: 'Erreur lors du chargement de la transcription',
-    nowPlaying: 'En cours de lecture'
-  },
-  it: {
-    transcript: 'Trascrizione',
-    showTranscript: 'Mostra trascrizione',
-    hideTranscript: 'Nascondi trascrizione',
-    loading: 'Caricamento trascrizione...',
-    notAvailable: 'Trascrizione non disponibile',
-    error: 'Errore nel caricamento della trascrizione',
-    nowPlaying: 'In riproduzione'
-  },
-  pt: {
-    transcript: 'Transcrição',
-    showTranscript: 'Mostrar transcrição',
-    hideTranscript: 'Ocultar transcrição',
-    loading: 'Carregando transcrição...',
-    notAvailable: 'Transcrição não disponível',
-    error: 'Erro ao carregar transcrição',
-    nowPlaying: 'Reproduzindo'
-  }
-};
-
-const t = translations[lang as keyof typeof translations] || translations.en;
+const { subtitleUrl, podcastTitle } = Astro.props as Props;
 ---
 
 {subtitleUrl && (
-  <section class="mt-6 rounded-xl border border-gray-600 bg-gray-900/50 shadow-inner" aria-labelledby="transcript-heading">
+  <section
+    class="mt-6 rounded-xl border border-gray-600 bg-gray-900/50 shadow-inner"
+    aria-labelledby="transcript-heading"
+  >
     <div class="border-b border-gray-600 p-4">
       <button
         id="transcript-toggle"
@@ -79,11 +21,11 @@ const t = translations[lang as keyof typeof translations] || translations.en;
         aria-describedby="transcript-description"
       >
         <h3 id="transcript-heading" class="text-lg font-semibold text-white">
-          📄 {t.transcript}
+          📄 Transcript
         </h3>
         <div class="flex items-center gap-2">
           <span id="transcript-toggle-text" class="text-sm text-gray-300">
-            {t.showTranscript}
+            Show Transcript
           </span>
           <svg
             id="transcript-chevron"
@@ -93,15 +35,20 @@ const t = translations[lang as keyof typeof translations] || translations.en;
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            />
           </svg>
         </div>
       </button>
       <p id="transcript-description" class="mt-1 text-xs text-gray-400">
-        {t.transcript} für "{podcastTitle}"
+        Transcript for "{podcastTitle}"
       </p>
     </div>
-    
+
     <div
       id="transcript-content"
       class="hidden overflow-hidden"
@@ -112,23 +59,34 @@ const t = translations[lang as keyof typeof translations] || translations.en;
         <div id="transcript-loading" class="text-center text-gray-400 py-8">
           <div class="inline-flex items-center gap-2">
             <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              ></circle>
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              ></path>
             </svg>
-            {t.loading}
+            Loading transcript...
           </div>
         </div>
-        
+
         <div id="transcript-error" class="hidden text-center text-red-400 py-8">
           <div class="inline-flex items-center gap-2">
             <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2L2 7v10c0 5.55 3.84 9.95 9 9.95s9-4.4 9-9.95V7l-10-5zm0 2.18L19 8v9c0 4.42-3.13 7.95-7 7.95S5 21.42 5 17V8l7-3.82z"/>
-              <path d="M11 14h2v2h-2zm0-6h2v4h-2z"/>
+              <path d="M12 2L2 7v10c0 5.55 3.84 9.95 9 9.95s9-4.4 9-9.95V7l-10-5zm0 2.18L19 8v9c0 4.42-3.13 7.95-7 7.95S5 21.42 5 17V8l7-3.82z" />
+              <path d="M11 14h2v2h-2zm0-6h2v4h-2z" />
             </svg>
-            {t.error}
+            Error loading transcript
           </div>
         </div>
-        
+
         <div id="transcript-text" class="hidden max-h-96 overflow-y-auto">
           <div class="prose prose-sm prose-invert prose-slate max-w-none">
             <!-- VTT content will be loaded here -->
@@ -153,23 +111,35 @@ const t = translations[lang as keyof typeof translations] || translations.en;
     private toggleText: HTMLSpanElement;
     private loadingElement: HTMLDivElement;
     private errorElement: HTMLDivElement;
-    private textElement: HTMLDivElement;
-    private isExpanded: boolean = false;
-    private isLoaded: boolean = false;
-    private subtitleUrl: string;
-    private translations: any;
+  private textElement: HTMLDivElement;
+  private isExpanded = false;
+  private isLoaded = false;
+  private subtitleUrl: string;
 
-    constructor(subtitleUrl: string, translations: any) {
-      this.subtitleUrl = subtitleUrl;
-      this.translations = translations;
-      
-      this.toggleButton = document.getElementById('transcript-toggle') as HTMLButtonElement;
-      this.content = document.getElementById('transcript-content') as HTMLDivElement;
-      this.chevron = document.getElementById('transcript-chevron') as HTMLElement;
-      this.toggleText = document.getElementById('transcript-toggle-text') as HTMLSpanElement;
-      this.loadingElement = document.getElementById('transcript-loading') as HTMLDivElement;
-      this.errorElement = document.getElementById('transcript-error') as HTMLDivElement;
-      this.textElement = document.getElementById('transcript-text') as HTMLDivElement;
+  constructor(subtitleUrl: string) {
+    this.subtitleUrl = subtitleUrl;
+
+      this.toggleButton = document.getElementById(
+        "transcript-toggle",
+      ) as HTMLButtonElement;
+      this.content = document.getElementById(
+        "transcript-content",
+      ) as HTMLDivElement;
+      this.chevron = document.getElementById(
+        "transcript-chevron",
+      ) as HTMLElement;
+      this.toggleText = document.getElementById(
+        "transcript-toggle-text",
+      ) as HTMLSpanElement;
+      this.loadingElement = document.getElementById(
+        "transcript-loading",
+      ) as HTMLDivElement;
+      this.errorElement = document.getElementById(
+        "transcript-error",
+      ) as HTMLDivElement;
+      this.textElement = document.getElementById(
+        "transcript-text",
+      ) as HTMLDivElement;
 
       this.init();
     }
@@ -177,19 +147,17 @@ const t = translations[lang as keyof typeof translations] || translations.en;
     private init(): void {
       if (!this.toggleButton) return;
 
-      this.toggleButton.addEventListener('click', () => {
+      this.toggleButton.addEventListener("click", () => {
         this.toggle();
       });
 
-      // Keyboard support
-      this.toggleButton.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+      this.toggleButton.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           this.toggle();
         }
       });
 
-      // Setup audio synchronization
       this.setupAudioSync();
     }
 
@@ -206,14 +174,15 @@ const t = translations[lang as keyof typeof translations] || translations.en;
 
     private expand(): void {
       this.isExpanded = true;
-      this.content.classList.remove('hidden');
-      this.chevron.style.transform = 'rotate(180deg)';
-      this.toggleText.textContent = this.translations.hideTranscript;
-      this.toggleButton.setAttribute('aria-expanded', 'true');
-      
-      // If transcript is loaded and audio is playing, sync immediately
+      this.content.classList.remove("hidden");
+      this.chevron.style.transform = "rotate(180deg)";
+      this.toggleText.textContent = "Hide Transcript";
+      this.toggleButton.setAttribute("aria-expanded", "true");
+
       if (this.isLoaded) {
-        const audioPlayer = document.getElementById('audio-player') as HTMLAudioElement;
+        const audioPlayer = document.getElementById(
+          "audio-player",
+        ) as HTMLAudioElement;
         if (audioPlayer && !audioPlayer.paused) {
           this.highlightCurrentCue(audioPlayer.currentTime);
         }
@@ -222,64 +191,64 @@ const t = translations[lang as keyof typeof translations] || translations.en;
 
     private collapse(): void {
       this.isExpanded = false;
-      this.content.classList.add('hidden');
-      this.chevron.style.transform = 'rotate(0deg)';
-      this.toggleText.textContent = this.translations.showTranscript;
-      this.toggleButton.setAttribute('aria-expanded', 'false');
+      this.content.classList.add("hidden");
+      this.chevron.style.transform = "rotate(0deg)";
+      this.toggleText.textContent = "Show Transcript";
+      this.toggleButton.setAttribute("aria-expanded", "false");
     }
 
     private async loadTranscript(): Promise<void> {
       try {
         this.showLoading();
-        
+
         const response = await fetch(this.subtitleUrl);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const vttText = await response.text();
         const cues = this.parseVTT(vttText);
-        
+
         this.displayTranscript(cues);
         this.isLoaded = true;
-        
       } catch (error) {
-        console.error('Error loading transcript:', error);
+        console.error("Error loading transcript:", error);
         this.showError();
       }
     }
 
     private parseVTT(vttText: string): TranscriptCue[] {
-      const lines = vttText.split('\n');
+      const lines = vttText.split("\n");
       const cues: TranscriptCue[] = [];
       let i = 0;
 
-      // Skip WEBVTT header and any initial metadata
-      while (i < lines.length && !lines[i].includes('-->')) {
+      while (i < lines.length && !lines[i].includes("-->")) {
         i++;
       }
 
       while (i < lines.length) {
         const line = lines[i].trim();
-        
-        if (line.includes('-->')) {
-          const [startStr, endStr] = line.split('-->').map(s => s.trim());
+
+        if (line.includes("-->")) {
+          const [startStr, endStr] = line.split("-->").map((s) => s.trim());
           const startTime = this.parseTimeString(startStr);
           const endTime = this.parseTimeString(endStr);
-          
+
           i++;
-          let text = '';
-          
-          // Collect all text lines until we hit an empty line or another timestamp
-          while (i < lines.length && lines[i].trim() !== '' && !lines[i].includes('-->')) {
-            if (text) text += ' ';
+          let text = "";
+
+          while (
+            i < lines.length &&
+            lines[i].trim() !== "" &&
+            !lines[i].includes("-->")
+          ) {
+            if (text) text += " ";
             text += lines[i].trim();
             i++;
           }
-          
+
           if (text) {
-            // Clean up VTT formatting tags
-            text = text.replace(/<[^>]*>/g, '').trim();
+            text = text.replace(/<[^>]*>/g, "").trim();
             cues.push({ startTime, endTime, text });
           }
         } else {
@@ -291,10 +260,12 @@ const t = translations[lang as keyof typeof translations] || translations.en;
     }
 
     private parseTimeString(timeStr: string): number {
-      const parts = timeStr.split(':');
+      const parts = timeStr.split(":");
       if (parts.length === 3) {
         const [hours, minutes, seconds] = parts;
-        return parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseFloat(seconds);
+        return (
+          parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseFloat(seconds)
+        );
       } else if (parts.length === 2) {
         const [minutes, seconds] = parts;
         return parseInt(minutes) * 60 + parseFloat(seconds);
@@ -306,23 +277,27 @@ const t = translations[lang as keyof typeof translations] || translations.en;
       const hours = Math.floor(seconds / 3600);
       const minutes = Math.floor((seconds % 3600) / 60);
       const secs = Math.floor(seconds % 60);
-      
+
       if (hours > 0) {
-        return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        return `${hours}:${minutes.toString().padStart(2, "0")}:${secs
+          .toString()
+          .padStart(2, "0")}`;
       } else {
-        return `${minutes}:${secs.toString().padStart(2, '0')}`;
+        return `${minutes}:${secs.toString().padStart(2, "0")}`;
       }
     }
 
     private displayTranscript(cues: TranscriptCue[]): void {
       this.hideLoading();
-      
+
       if (cues.length === 0) {
         this.showError();
         return;
       }
 
-      const html = cues.map((cue, index) => `
+      const html = cues
+        .map(
+          (cue) => `
         <div class="transcript-cue mb-4 p-3 bg-gray-800/50 rounded-lg border-l-4 border-purple-500/30 hover:border-purple-400/50 transition-all duration-300 cursor-pointer" 
              data-start="${cue.startTime}" 
              data-end="${cue.endTime}"
@@ -345,39 +320,38 @@ const t = translations[lang as keyof typeof translations] || translations.en;
                     <path d="M8 5v14l11-7z"/>
                   </svg>
                 </span>
-                <span class="transcript-playing-text hidden text-xs text-purple-300 font-semibold">${this.translations.nowPlaying}</span>
+                <span class="transcript-playing-text hidden text-xs text-purple-300 font-semibold">Now playing</span>
               </div>
               <p class="text-gray-200 leading-relaxed">${cue.text}</p>
             </div>
           </div>
         </div>
-      `).join('');
+      `,
+        )
+        .join("");
 
       this.textElement.innerHTML = html;
-      this.textElement.classList.remove('hidden');
+      this.textElement.classList.remove("hidden");
 
-      // Add click handlers for time navigation (both button and cue)
-      this.textElement.querySelectorAll('.transcript-time-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation(); // Prevent cue click from firing
-          const time = parseFloat((e.target as HTMLElement).dataset.time || '0');
+      this.textElement.querySelectorAll(".transcript-time-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const time = parseFloat((e.target as HTMLElement).dataset.time || "0");
           this.jumpToTime(time);
         });
       });
 
-      // Add click handlers for entire cue divs
-      this.textElement.querySelectorAll('.transcript-cue').forEach(cue => {
-        cue.addEventListener('click', (e) => {
-          const time = parseFloat((e.currentTarget as HTMLElement).dataset.start || '0');
+      this.textElement.querySelectorAll(".transcript-cue").forEach((cue) => {
+        cue.addEventListener("click", (e) => {
+          const time = parseFloat((e.currentTarget as HTMLElement).dataset.start || "0");
           this.jumpToTime(time);
         });
 
-        // Keyboard support for cue navigation
-        cue.addEventListener('keydown', (e) => {
+        cue.addEventListener("keydown", (e) => {
           const keyEvent = e as KeyboardEvent;
-          if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
+          if (keyEvent.key === "Enter" || keyEvent.key === " ") {
             e.preventDefault();
-            const time = parseFloat((e.currentTarget as HTMLElement).dataset.start || '0');
+            const time = parseFloat((e.currentTarget as HTMLElement).dataset.start || "0");
             this.jumpToTime(time);
           }
         });
@@ -385,149 +359,107 @@ const t = translations[lang as keyof typeof translations] || translations.en;
     }
 
     private jumpToTime(time: number): void {
-      const audioPlayer = document.getElementById('audio-player') as HTMLAudioElement;
+      const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
       if (audioPlayer) {
         audioPlayer.currentTime = time;
-        // Trigger play if not already playing
         if (audioPlayer.paused) {
           audioPlayer.play().catch(console.error);
         }
-        // Update the play/pause button states
         this.updatePlayButtonState(false);
       }
     }
 
     private updatePlayButtonState(isPaused: boolean): void {
-      const playButton = document.getElementById('play-button');
-      const pauseButton = document.getElementById('pause-button');
-      
+      const playButton = document.getElementById("play-button");
+      const pauseButton = document.getElementById("pause-button");
+
       if (playButton && pauseButton) {
         if (isPaused) {
-          playButton.classList.remove('hidden');
-          playButton.classList.add('flex');
-          pauseButton.classList.add('hidden');
-          pauseButton.classList.remove('flex');
+          playButton.classList.remove("hidden");
+          playButton.classList.add("flex");
+          pauseButton.classList.add("hidden");
+          pauseButton.classList.remove("flex");
         } else {
-          playButton.classList.add('hidden');
-          playButton.classList.remove('flex');
-          pauseButton.classList.remove('hidden');
-          pauseButton.classList.add('flex');
+          playButton.classList.add("hidden");
+          playButton.classList.remove("flex");
+          pauseButton.classList.remove("hidden");
+          pauseButton.classList.add("flex");
         }
       }
     }
 
     private highlightCurrentCue(currentTime: number): void {
-      const cues = this.textElement.querySelectorAll('.transcript-cue');
+      const cues = this.textElement.querySelectorAll(".transcript-cue");
       cues.forEach((cue) => {
-        const startTime = parseFloat((cue as HTMLElement).dataset.start || '0');
-        const endTime = parseFloat((cue as HTMLElement).dataset.end || '0');
-        const playingIcon = cue.querySelector('.transcript-playing-icon');
-        const playingText = cue.querySelector('.transcript-playing-text');
-        
+        const startTime = parseFloat((cue as HTMLElement).dataset.start || "0");
+        const endTime = parseFloat((cue as HTMLElement).dataset.end || "0");
+        const playingIcon = cue.querySelector(".transcript-playing-icon");
+        const playingText = cue.querySelector(".transcript-playing-text");
+
         if (currentTime >= startTime && currentTime < endTime) {
-          cue.classList.add('transcript-current');
-          if (playingIcon) playingIcon.classList.remove('hidden');
-          if (playingText) playingText.classList.remove('hidden');
-          
-          // Scroll into view if not visible
+          cue.classList.add("transcript-current");
+          if (playingIcon) playingIcon.classList.remove("hidden");
+          if (playingText) playingText.classList.remove("hidden");
+
           if (this.isExpanded) {
             cue.scrollIntoView({
-              behavior: 'smooth',
-              block: 'center'
+              behavior: "smooth",
+              block: "center",
             });
           }
         } else {
-          cue.classList.remove('transcript-current');
-          if (playingIcon) playingIcon.classList.add('hidden');
-          if (playingText) playingText.classList.add('hidden');
+          cue.classList.remove("transcript-current");
+          if (playingIcon) playingIcon.classList.add("hidden");
+          if (playingText) playingText.classList.add("hidden");
         }
       });
     }
 
     private setupAudioSync(): void {
-      const audioPlayer = document.getElementById('audio-player') as HTMLAudioElement;
+      const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
       if (audioPlayer) {
-        audioPlayer.addEventListener('timeupdate', () => {
+        audioPlayer.addEventListener("timeupdate", () => {
           if (this.isLoaded && this.isExpanded) {
             this.highlightCurrentCue(audioPlayer.currentTime);
           }
         });
 
-        audioPlayer.addEventListener('play', () => {
+        audioPlayer.addEventListener("play", () => {
           this.updatePlayButtonState(false);
         });
 
-        audioPlayer.addEventListener('pause', () => {
+        audioPlayer.addEventListener("pause", () => {
           this.updatePlayButtonState(true);
         });
       }
     }
 
     private showLoading(): void {
-      this.loadingElement.classList.remove('hidden');
-      this.errorElement.classList.add('hidden');
-      this.textElement.classList.add('hidden');
+      this.loadingElement.classList.remove("hidden");
+      this.errorElement.classList.add("hidden");
+      this.textElement.classList.add("hidden");
     }
 
     private hideLoading(): void {
-      this.loadingElement.classList.add('hidden');
+      this.loadingElement.classList.add("hidden");
     }
 
     private showError(): void {
-      this.loadingElement.classList.add('hidden');
-      this.errorElement.classList.remove('hidden');
-      this.textElement.classList.add('hidden');
+      this.loadingElement.classList.add("hidden");
+      this.errorElement.classList.remove("hidden");
+      this.textElement.classList.add("hidden");
     }
   }
 
-  // Initialize transcript dropdown when DOM is loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    const transcriptToggle = document.getElementById('transcript-toggle');
+  document.addEventListener("DOMContentLoaded", () => {
+    const transcriptToggle = document.getElementById("transcript-toggle");
     if (transcriptToggle) {
-      // Get subtitle URL from the audio element track
-      const audioPlayer = document.getElementById('audio-player') as HTMLAudioElement;
-      const track = audioPlayer?.querySelector('track');
-      const subtitleUrl = track?.getAttribute('src');
+      const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
+      const track = audioPlayer?.querySelector("track");
+      const subtitleUrl = track?.getAttribute("src");
 
       if (subtitleUrl) {
-        // Get translations from the current page context
-        const lang = document.documentElement.lang || 'en';
-        const translations = {
-          en: {
-            showTranscript: 'Show Transcript',
-            hideTranscript: 'Hide Transcript',
-            loading: 'Loading transcript...',
-            error: 'Error loading transcript'
-          },
-          // de: removed
-          es: {
-            showTranscript: 'Mostrar transcripción',
-            hideTranscript: 'Ocultar transcripción',
-            loading: 'Cargando transcripción...',
-            error: 'Error al cargar la transcripción'
-          },
-          fr: {
-            showTranscript: 'Afficher la transcription',
-            hideTranscript: 'Masquer la transcription',
-            loading: 'Chargement de la transcription...',
-            error: 'Erreur lors du chargement de la transcription'
-          },
-          it: {
-            showTranscript: 'Mostra trascrizione',
-            hideTranscript: 'Nascondi trascrizione',
-            loading: 'Caricamento trascrizione...',
-            error: 'Errore nel caricamento della trascrizione'
-          },
-          pt: {
-            showTranscript: 'Mostrar transcrição',
-            hideTranscript: 'Ocultar transcrição',
-            loading: 'Carregando transcrição...',
-            error: 'Erro ao carregar transcrição'
-          }
-        };
-
-        const t = translations[lang as keyof typeof translations] || translations.en;
-        new TranscriptDropdown(subtitleUrl, t);
+        new TranscriptDropdown(subtitleUrl);
       }
     }
   });
@@ -537,67 +469,68 @@ const t = translations[lang as keyof typeof translations] || translations.en;
   .transcript-cue {
     scroll-margin-top: 2rem;
   }
-  
+
   .transcript-cue:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(147, 51, 234, 0.15);
   }
-  
+
   .transcript-cue.transcript-current {
     border-left-color: rgb(147 51 234);
-    background: linear-gradient(90deg, rgba(147, 51, 234, 0.1) 0%, rgba(79, 70, 229, 0.05) 100%);
+    background: linear-gradient(
+      90deg,
+      rgba(147, 51, 234, 0.1) 0%,
+      rgba(79, 70, 229, 0.05) 100%
+    );
     box-shadow: 0 0 20px rgba(147, 51, 234, 0.2);
     transform: scale(1.02);
   }
-  
+
   .transcript-cue.transcript-current .transcript-time-btn {
     background: rgb(147 51 234);
     color: white;
     font-weight: 600;
   }
-  
+
   .transcript-cue.transcript-current p {
     color: rgb(229 231 235);
     font-weight: 500;
   }
-  
+
   .transcript-time-btn:hover {
     transform: translateY(-1px);
   }
-  
-  /* Smooth scrolling for transcript navigation */
+
   #transcript-text {
     scroll-behavior: smooth;
   }
-  
-  /* Custom scrollbar for transcript */
+
   #transcript-text::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   #transcript-text::-webkit-scrollbar-track {
     background: rgba(55, 65, 81, 0.3);
     border-radius: 4px;
   }
-  
+
   #transcript-text::-webkit-scrollbar-thumb {
     background: rgba(147, 51, 234, 0.5);
     border-radius: 4px;
   }
-  
+
   #transcript-text::-webkit-scrollbar-thumb:hover {
     background: rgba(147, 51, 234, 0.7);
   }
 
-  /* Animation for current transcript highlight */
   .transcript-cue {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  
+
   .transcript-current {
     animation: pulse-highlight 2s ease-in-out;
   }
-  
+
   @keyframes pulse-highlight {
     0% {
       box-shadow: 0 0 20px rgba(147, 51, 234, 0.2);
