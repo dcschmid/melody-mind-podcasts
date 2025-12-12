@@ -16,6 +16,8 @@
  *  --max-bytes=<n> : Max Bytes die für music-metadata gestreamt werden (Default 6_000_000)
  *  --no-cache : Ignoriert vorhandenen Cache
  *  --refresh : Erzwingt erneutes Abrufen (überschreibt Cache Eintrag)
+ *  --available-only : Nur Podcasts mit isAvailable=true bearbeiten
+ *  --ids=a,b,c : Nur diese Podcast-IDs verarbeiten (Komma-getrennt)
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -43,6 +45,9 @@ const maxBytesArg = args.find(a => a.startsWith('--max-bytes='));
 const maxBytes = maxBytesArg ? parseInt(maxBytesArg.split('=')[1], 10) : 6_000_000;
 const noCache = args.includes('--no-cache');
 const refresh = args.includes('--refresh');
+const availableOnly = args.includes('--available-only');
+const idsArg = args.find(a => a.startsWith('--ids='));
+const idFilter = idsArg ? idsArg.split('=')[1].split(',').map(s => s.trim()).filter(Boolean) : null;
 const cacheDir = path.join(root, '.cache');
 const cacheFile = path.join(cacheDir, 'audio-metadata.json');
 let cache = {};
@@ -72,6 +77,31 @@ async function head(url, { timeout } = { timeout: timeoutMs }) {
   try {
     const res = await fetch(url, { method: 'HEAD', signal: controller.signal });
     return res;
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+/** HEAD first, Range-GET fallback if HEAD not allowed (403/405/400) */
+async function headWithFallback(url, { timeout } = { timeout: timeoutMs }) {
+  try {
+    const res = await head(url, { timeout });
+    if (res.ok) return res;
+    if (res.status && ![400, 401, 403, 405].includes(res.status)) return res;
+  } catch (e) {
+    // ignore and try fallback
+  }
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), timeout);
+  try {
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: { Range: 'bytes=0-0' },
+      signal: controller.signal
+    });
+    return res;
+  } catch (e) {
+    return null;
   } finally {
     clearTimeout(t);
   }
@@ -146,6 +176,8 @@ async function processFile(filePath) {
   let durationAdded = 0;
   let errorsCount = 0;
   for (const p of json.podcasts) {
+    if (availableOnly && !p.isAvailable) continue;
+    if (idFilter && !idFilter.includes(p.id)) continue;
     if (!p.audioUrl) continue;
     try {
       const cacheKey = p.audioUrl;
@@ -160,12 +192,17 @@ async function processFile(filePath) {
       }
       if(!canReuse || !p.fileSizeBytes || (wantDuration && !p.durationSeconds)) {
         log('HEAD', p.audioUrl);
-      const res = await head(p.audioUrl);
-      if (!res.ok) {
-        log('WARN status', res.status, 'for', p.audioUrl);
+      const res = await headWithFallback(p.audioUrl);
+      if (!res || !res.ok) {
+        log('WARN status', res?.status, 'for', p.audioUrl);
         continue;
       }
-      const len = res.headers.get('content-length');
+      let len = res.headers.get('content-length');
+      if(!len){
+        const cr = res.headers.get('content-range'); // bytes 0-0/12345
+        const m = cr && cr.match(/\/(\d+)$/);
+        if(m) len = m[1];
+      }
       if (len) {
         const num = parseInt(len, 10);
         if (!Number.isNaN(num)) {
@@ -225,7 +262,7 @@ async function processFile(filePath) {
 
 async function main() {
   await loadCache();
-  log('Start (write mode:', isWrite, ') duration mode:', wantDuration, 'ffprobe:', useFfprobe, 'refresh:', refresh);
+  log('Start (write mode:', isWrite, ') duration mode:', wantDuration, 'ffprobe:', useFfprobe, 'refresh:', refresh, 'available-only:', availableOnly, 'ids:', idFilter || 'all');
   const entries = await fs.readdir(dataDir);
   const files = entries.filter(f => f.endsWith('.json')).map(f => path.join(dataDir, f));
   for (const file of files) {

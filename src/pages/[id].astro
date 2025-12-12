@@ -278,8 +278,8 @@ const t = {
 
   {currentPodcast.showNotesHtml && (
     <section class="mb-12" aria-labelledby="show-notes-heading">
-      <Headline level="h2" textSize="xl" className="mb-4 text-white" id="show-notes-heading">
-        Show Notes
+      <Headline level="h2" textSize="xl" className="mb-4 text-white">
+        <span id="show-notes-heading">Show Notes</span>
       </Headline>
       <article role="region" aria-labelledby="show-notes-heading">
         <Prose html={currentPodcast.showNotesHtml} size="lg" />

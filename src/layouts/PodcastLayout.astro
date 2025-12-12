@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
 export interface Props {
   title: string;
@@ -273,24 +274,7 @@ function toIsoDuration(totalSeconds: number) {
         <slot />
       </main>
 
-      <footer
-        class="mt-16 pt-6 border-t border-slate-700 text-center text-slate-400"
-        role="contentinfo"
-      >
-        <p>
-          &copy; 2025 MelodyMind Podcasts |
-          <a
-            href="https://melody-mind.de"
-            class="text-purple-400 hover:text-purple-300 focus:text-purple-300 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900 rounded px-1"
-            aria-label="Visit MelodyMind game website">Back to Game</a
-          > |
-            <a
-              href="/rss.xml"
-            class="text-orange-400 hover:text-orange-300 focus:text-orange-300 transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-slate-900 rounded px-1"
-            aria-label="Subscribe to RSS feed">RSS Feed</a
-          >
-        </p>
-      </footer>
+      <Footer />
     </div>
 
     <script src="https://cdn.usefathom.com/script.js" data-site="VDTKKBDN" defer></script>

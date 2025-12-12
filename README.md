@@ -1,6 +1,6 @@
 # 🎵 MelodyMind Podcasts
 
-A modern, accessible, and SEO-optimized podcast website built with Astro.js, featuring multi-language support and comprehensive WCAG AAA compliance.
+A modern, accessible, and SEO-optimized podcast website built with Astro.js, featuring comprehensive WCAG AAA compliance.
 
 ## 🌟 Features
 
@@ -11,16 +11,9 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 - **Keyboard shortcuts** (rewind/forward 10 seconds)
 - **Accessible controls** with ARIA labels and screen reader support
 
-### 🌍 Multi-Language Support
-
-- **6 Languages**: English, German, Spanish, French, Italian, Portuguese
-- **Localized content** and interface translations
-- **SEO-optimized** hreflang implementation
-- **Language-specific RSS feeds**
-
 ### ♿ Accessibility (WCAG AAA)
 
-- **Skip-to-content links** in all languages
+- **Skip-to-content links**
 - **Enhanced focus indicators** and keyboard navigation
 - **Screen reader optimization** with ARIA labels
 - **High contrast mode support**
@@ -48,12 +41,10 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 
 ### 🧩 Podcast Operations (Tooling)
 
-- Automatische Audio-Metadaten-Ermittlung (Dateigröße, Dauer, Cache) via `update:audio-metadata` Script
-- Validierung aller Episodenmetadaten (fehlende Felder, Bilddimensionen, zukünftige Publish-Daten) via `validate:podcasts`
-- Bild-Normalisierung zu quadratischen Thumbnails (`normalize:images` mit Pad oder Crop Modus)
-- Podcasting 2.0 Erweiterungen: `<podcast:transcript>` und `<podcast:person>` Tags
-
-
+- Automatic audio metadata (file size, duration, cache) via `update:audio-metadata` script
+- Validate episode metadata (missing fields, image dimensions, future publish dates) via `validate:podcasts`
+- Image normalization to square thumbnails (`normalize:images` with pad or crop)
+- Podcasting 2.0 extensions: `<podcast:transcript>` and `<podcast:person>` tags
 - **Multi-platform links**: RSS, Apple Podcasts, Spotify, Deezer, YouTube
 - **Brand-accurate styling** with platform colors
 - **Accessible buttons** with proper labels
@@ -61,18 +52,18 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 ## 🛠️ Tech Stack
 
 - **Framework**: [Astro.js](https://astro.build/) v5.x
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) mit Typography & Line-Clamp Plugins
-- **TypeScript**: Vollständige Typisierung
-- **Node Version**: 22 (per `.nvmrc` via `nvm use`)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) with Typography & Line-Clamp plugins
+- **TypeScript**: Full typing
+- **Node Version**: 22 (via `.nvmrc` and `nvm use`)
 - **Package Manager**: npm
-- **Deployment**: Geeignet für Netlify, Vercel oder beliebiges Static Hosting
+- **Deployment**: Netlify, Vercel, or any static hosting
 
 ## 📦 Installation
 
-### Voraussetzungen
+### Prerequisites
 
-- Node.js 22 (oder >= 18.20.8 minimal für Astro)
-- Optional: nvm zur Versionsverwaltung
+- Node.js 22 (or >= 18.20.8 minimum for Astro)
+- Optional: nvm for version management
 
 ### Setup
 
@@ -81,18 +72,18 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 git clone https://github.com/dcschmid/melody-mind-podcasts.git
 cd melody-mind-podcasts
 
-# Abhängigkeiten installieren
+# Install dependencies
 npm install
 
-# Entwicklung starten
+# Start dev server
 npm run dev
 
-# Produktion bauen
+# Build
 npm run build
 
-# Vorschau ansehen
+# Preview
 npm run preview
-```text
+```
 
 ## 📁 Project Structure
 
@@ -104,20 +95,13 @@ melody-mind-podcasts/
 │   │   ├── Paragraph.astro
 │   │   └── Prose.astro
 │   ├── data/
-│   │   └── podcasts/        # Multi-language podcast data
-│   │       ├── en.json
-│   │       ├── de.json
-│   │       ├── es.json
-│   │       ├── fr.json
-│   │       ├── it.json
-│   │       └── pt.json
+│   │   └── podcasts/        # Podcast data
+│   │       └── en.json
 │   ├── layouts/
 │   │   └── PodcastLayout.astro  # Main layout with SEO
 │   ├── pages/
-│   │   ├── index.astro          # Homepage redirect
-│   │   └── [lang]/
-│   │       ├── index.astro      # Language-specific homepage
-│   │       ├── [id].astro       # Episode detail pages
+│   │   ├── index.astro          # Homepage
+│   │   └── [id].astro           # Episode detail pages
 │   │       └── rss.xml.ts       # RSS feed generation
 │   ├── styles/
 │   │   └── global.css           # Global styles & accessibility
@@ -140,7 +124,7 @@ melody-mind-podcasts/
 
 ### Adding New Episodes
 
-1. **Add episode data** to the appropriate language file in `src/data/podcasts/`
+1. **Add episode data** to `src/data/podcasts/en.json`
 2. **Include episode artwork** in `public/images/`
 3. **Set `isAvailable: true`** for episodes ready for publication
 4. **Build and deploy** - new episodes will automatically appear
@@ -164,11 +148,11 @@ melody-mind-podcasts/
 }
 ```
 
-Felder wie `fileSizeBytes` und `durationSeconds` werden bevorzugt automatisch gepflegt (siehe Scripts unten). `subtitleUrl` ermöglicht Ausgabe eines `<podcast:transcript>` Tags für Untertitel/Transkripte.
+Fields like `fileSizeBytes` and `durationSeconds` are preferably auto-filled (see scripts below). `subtitleUrl` enables output of `<podcast:transcript>`.
 
-### Personen (Podcasting 2.0)
+### Persons (Podcasting 2.0)
 
-Globale Datei `src/data/persons.json` definiert Personen, die im RSS als `<podcast:person>` erscheinen:
+Global file `src/data/persons.json` defines persons that appear in RSS as `<podcast:person>`:
 
 ```json
 [
@@ -181,13 +165,13 @@ Globale Datei `src/data/persons.json` definiert Personen, die im RSS als `<podca
 ]
 ```
 
-Unterstützte Felder: `name` (Pflicht), `role`, `href`, `img`. Rollen können z.B. `host`, `producer`, `guest` sein.
+Supported fields: `name` (required), `role`, `href`, `img`. Roles can be `host`, `producer`, `guest`, etc.
 
 ## 🔧 Scripts & Tooling
 
-### Audio Metadaten Aktualisieren
+### Update Audio Metadata
 
-Ermittelt Dateigrößen (Content-Length) und optional Dauer (ffprobe oder Fallback music-metadata). Nutzt Cache-Datei `.cache/audio-metadata.json` zur Reduktion von Netzwerkzugriffen.
+Fetches file size (Content-Length) and optional duration (via ffprobe, falling back to music-metadata). Uses `.cache/audio-metadata.json` to minimize repeated network calls.
 
 ```bash
 yarn update:audio-metadata --duration --ffprobe
@@ -195,93 +179,93 @@ yarn update:audio-metadata --duration --ffprobe
 
 Flags:
 
-- `--duration` Dauer extrahieren
-- `--ffprobe` bevorzugt ffprobe (falls installiert)
-- `--max-bytes=10485760` begrenzt Bytes für Fallback-Analyse
-- `--no-cache` Cache nicht lesen
-- `--refresh` Cache ignorieren & neu schreiben
+- `--duration` extract duration
+- `--ffprobe` prefer ffprobe if installed
+- `--max-bytes=10485760` cap bytes for music-metadata fallback
+- `--no-cache` skip reading cache
+- `--refresh` ignore cache and refetch
+- `--available-only` only episodes with `isAvailable=true`
+- `--ids=a,b,c` only process these episode IDs (comma-separated)
 
-### Validierung
+Quick commands:
 
-Prüft Vollständigkeit und Qualität.
+- All available episodes with duration and write-back:  
+  `node scripts/update-audio-metadata.mjs --available-only --duration --ffprobe --write`
+- Only specific IDs (e.g., 1950s/1960s):  
+  `node scripts/update-audio-metadata.mjs --duration --ids=1950s,1960s --write`
+
+### Validation
+
+Checks completeness and quality.
 
 ```bash
 yarn validate:podcasts --strict
 ```
 
-Flags: `--strict`, `--json`, `--no-network`, `--filter=de,en`
+Flags: `--strict`, `--json`, `--no-network`
 
-Zusätzliche Checks: Quadrat-Derivat `*-square.jpg` wenn Originalbild nicht quadratisch.
+Additional checks: square derivative `*-square.jpg` when the source image is not square.
 
-#### Inhaltlicher Styleguide (Version 2.0)
+#### Content Style Guide (v2.0)
 
-Alle Episoden-Metadaten (Titel & Kurzbeschreibung) folgen konsistenten Vorgaben für Branding, SEO & Plattform-Optimierung:
+Episode metadata (title & short description) should follow consistent rules for branding, SEO, and platforms:
 
-- Titel: 55–65 Zeichen (inkl. Leerzeichen) – prägnant
-- Beschreibung: 250–300 Zeichen – verdichteter Überblick
-- Host-Phrase muss vorkommen: `Daniel and Annabelle guide you` (Groß-/Kleinschreibung egal)
-- Call-To-Action beginnt mit: `Press play and ...`
-- Der Validierungsscript führt diese Prüfungen automatisch aus. Mit `--style-strict` werden Style-Verstöße als Fehler statt Warnungen behandelt:
+- Title: 55–65 characters (incl. spaces)
+- Description: 250–300 characters
+- Host phrase must appear: `Daniel and Annabelle guide you` (case-insensitive)
+- CTA starts with: `Press play and ...`
+- The validator enforces these; `--style-strict` turns style warnings into errors:
 
 ```bash
-node scripts/validate-podcasts.mjs --style-strict --filter=en --no-network
+node scripts/validate-podcasts.mjs --style-strict --no-network
 ```
 
-Typische Hinweise bei Verstößen:
+Typical warnings:
 
 - `Style: title length 52 outside 55–65`
 - `Style: missing host phrase`
 - `Style: description contains emoji`
 
-Empfohlener Workflow beim Hinzufügen neuer Episoden:
+Recommended workflow when adding episodes:
 
-1. Rohdaten schreiben
-2. Titel/Description gegen Längenfenster prüfen
-3. Host-Phrase + CTA ergänzen
-4. Emojis entfernen (falls aus Quellen kopiert)
-5. `validate-podcasts.mjs --style-strict` ausführen
-6. Korrekturen anwenden, erneut validieren
+1. Draft data
+2. Check title/description lengths
+3. Add host phrase + CTA
+4. Remove emojis (if copied from sources)
+5. Run `validate-podcasts.mjs --style-strict`
+6. Fix and re-run
 
-### Bild Normalisierung
+### Image Normalization
 
-Erzeugt quadratische Thumbnails mittels Padding (contain) oder Zentrums-Zuschnitt (crop).
+Creates square thumbnails using padding (contain) or center crop.
 
 ```bash
-# Vorschau ohne Schreiben
+# Preview without writing
 yarn normalize:images --dry-run
 
-# Erstellen mit Crop Modus
+# Create with crop mode
 yarn normalize:images --mode=crop
 
-# Original ersetzen & transparenten Hintergrund
+# Replace original & set transparent background
 yarn normalize:images --replace --background=transparent
 ```
 
-Flags: `--filter=<lang>`, `--dry-run`, `--replace`, `--background=<hex|transparent>`, `--mode=<contain|crop>`
+Flags: `--dry-run`, `--replace`, `--background=<hex|transparent>`, `--mode=<contain|crop>`
 
-### Personen Aktualisieren
+### Update Persons
 
-Bearbeite `src/data/persons.json` – bei Build/Abruf des RSS Feeds erscheinen aktualisierte `<podcast:person>` Einträge automatisch.
+Edit `src/data/persons.json` – on build/RSS fetch, updated `<podcast:person>` entries are emitted automatically.
 
-## 🛰 RSS Erweiterungen
+## 🛰 RSS Extensions
 
 - Namespace `xmlns:podcast="https://podcastindex.org/namespace/1.0"`
-- `<podcast:transcript>` bei vorhandenem `subtitleUrl`
-- `<podcast:person>` für jede Person in `persons.json`
-- Dynamische `<itunes:episode>` Nummerierung (Fallback auf Reihenfolge)
-- `<itunes:duration>` aus `durationSeconds`
-- `<enclosure length="fileSizeBytes">` für genaue Größe
+- `<podcast:transcript>` when `subtitleUrl` is present
+- `<podcast:person>` for each person in `persons.json`
+- Dynamic `<itunes:episode>` numbering (fallback to order)
+- `<itunes:duration>` from `durationSeconds`
+- `<enclosure length="fileSizeBytes">` for exact size
 
-Generator Version aktuell: `MelodyMind RSS Generator v1.1.0`
-
-## 🌐 Multi-Language Setup
-
-The site supports automatic language detection and fallbacks:
-
-- **Primary language**: English (fallback for missing translations)
-- **Supported languages**: EN, DE, ES, FR, IT, PT
-- **URL structure**: `/{lang}/{episode-id}`
-- **SEO**: Automatic hreflang tags for all language variants
+Generator version: `MelodyMind RSS Generator v1.1.0`
 
 ## ♿ Accessibility Features
 
@@ -296,17 +280,17 @@ The site supports automatic language detection and fallbacks:
 
 ### Accessible Search
 
-Die Sprach-Indexseiten besitzen eine barrierearme Suchfunktion (`SearchBar.astro`):
+`SearchBar.astro` provides an accessible search:
 
- - `role="search"` mit sprachspezifischem `aria-label`.
- - Screenreader-freundliches verborgenes Label (`.visually-hidden`).
- - Live-Region (`aria-live="polite"`) meldet Trefferanzahl nach Filterung ohne Fokusverlust.
- - Tastaturbedienung: Input & Lösch-Button voll fokussierbar, klare Fokus-Ringe (AAA Kontrast).
- - Hoher Kontrast inkl. `prefers-contrast: high` Medienabfrage.
- - Unterstützt reduzierte Bewegung (`prefers-reduced-motion`).
- - Filterlogik nutzt `hidden` Attribut, erhält semantische Artikel-Struktur.
+ - `role="search"` with clear `aria-label`
+ - Visually hidden label for screen readers
+ - Live region (`aria-live="polite"`) announces result count without focus loss
+ - Fully focusable input & clear button with visible focus rings (AAA contrast)
+ - High contrast support (`prefers-contrast: high`)
+ - Respects reduced motion (`prefers-reduced-motion`)
+ - Uses semantic articles; filtering toggles `hidden`
 
-Benutzung: Ab 2 Zeichen wird nach Titel + Beschreibung gefiltert; „Clear“ setzt zurück. Anpassungen für serverseitige Suche oder Fuzzy-Matching können leicht ergänzt werden.
+Usage: from 2 characters it filters title + description; “Clear” resets. Server-side or fuzzy search can be added easily.
 
 ### Testing Accessibility
 
@@ -323,13 +307,11 @@ lighthouse http://localhost:4321/en/1950s --only-categories=accessibility
 
 ### Sitemap & SEO
 
-- Automatische Generierung via `@astrojs/sitemap` mit vollständigen Locale Codes (en-US, de-DE, es-ES, fr-FR, it-IT, pt-PT).
-- Discovery: `robots.txt` Eintrag + `<link rel="sitemap" href="/sitemap-index.xml">` im Layout (`PodcastLayout.astro`).
-- Dynamische Priorisierung & Changefreq über `serialize` in `astro.config.mjs`.
-- Ausgeschlossene Namespaces: `news`, `video`, `image` (nur `xhtml` für Alternate Links aktiv) zur Reduzierung von XML-Größe.
-- XSL Stylesheet für menschenlesbare Darstellung: `public/sitemap.xsl` eingebunden via `xslURL`.
-- Falls externe Bereiche später hinzukommen: `customSitemaps` Option nutzen.
-
+- Generated via `@astrojs/sitemap`
+- Discovery: `robots.txt` entry + `<link rel="sitemap" href="/sitemap-index.xml">` in `PodcastLayout.astro`
+- Dynamic priority/changefreq via `serialize` in `astro.config.mjs`
+- Namespaces excluded: `news`, `video`, `image` (only `xhtml` for alternate links)
+- XSL stylesheet for readability: `public/sitemap.xsl` via `xslURL`
 
 ### Customization
 
@@ -377,7 +359,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For questions, issues, or feature requests:
 
-- **GitHub Issues**: [Create an issue](https://github.com/dcschmid/melody-mind-podcasts/issues)
+- **GitHub Issues**: [Create an issue](https://github.com/dcschmid/melody-mind/issues)
 - **Documentation**: Check this README and inline code comments
 - **Community**: Astro.js Discord for framework-related questions
 

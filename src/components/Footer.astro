@@ -1,0 +1,101 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer
+  class="mt-16 border-t border-slate-800/70 pt-10 pb-8 text-slate-300"
+  role="contentinfo"
+>
+  <div
+    class="grid gap-10 lg:gap-12 lg:grid-cols-[2fr_1fr_1fr] items-start"
+  >
+    <div class="space-y-4">
+      <h2 class="text-sm uppercase tracking-[0.3em] text-slate-400">
+        Melody Mind
+      </h2>
+      <p class="text-base leading-relaxed text-slate-200">
+        Curated stories, timelines, and playlists to help you listen with intent
+        and discover new sounds.
+      </p>
+    </div>
+
+    <div class="space-y-4">
+      <h2 class="text-sm uppercase tracking-[0.3em] text-slate-400">
+        Explore
+      </h2>
+      <div class="space-y-3">
+        <a
+          href="https://melody-mind.de/"
+          class="text-lg font-medium text-purple-300 hover:text-purple-200 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900 rounded-md px-1"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Melody Mind
+        </a>
+        <div class="flex flex-wrap gap-3 pt-2">
+          <a
+            href="/rss.xml"
+            class="inline-flex items-center gap-2 rounded-full border border-orange-400/40 bg-orange-500/10 px-4 py-2 text-sm font-semibold text-orange-200 transition hover:bg-orange-500/20 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+            aria-label="Subscribe to the RSS feed"
+          >
+            RSS
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <h2 class="text-sm uppercase tracking-[0.3em] text-slate-400">
+        Support
+      </h2>
+      <div class="flex flex-wrap gap-3">
+        <a
+          href="https://www.paypal.me/dcschmid"
+          class="inline-flex items-center justify-center rounded-full border border-slate-600 bg-slate-800/80 px-5 py-2.5 text-base font-semibold text-slate-100 shadow-lg transition hover:-translate-y-0.5 hover:border-slate-500 hover:bg-slate-700/80 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          PayPal
+        </a>
+        <a
+          href="https://www.buymeacoffee.com/dcschmid"
+          class="inline-flex items-center justify-center rounded-full border border-slate-600 bg-slate-800/80 px-5 py-2.5 text-base font-semibold text-slate-100 shadow-lg transition hover:-translate-y-0.5 hover:border-slate-500 hover:bg-slate-700/80 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Buy me a coffee
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-12 grid gap-8 lg:grid-cols-[2fr_1fr] lg:items-start">
+    <div class="space-y-3">
+      <h3 class="text-sm uppercase tracking-[0.3em] text-slate-400">
+        Legal
+      </h3>
+      <div class="flex flex-wrap gap-4 text-base">
+        <a
+          href="https://melody-mind.de/imprint"
+          class="text-slate-200 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900 rounded px-1"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Imprint
+        </a>
+        <a
+          href="https://melody-mind.de/privacy"
+          class="text-slate-200 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900 rounded px-1"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Privacy Policy
+        </a>
+      </div>
+    </div>
+    <div class="flex flex-col gap-3 text-sm text-slate-400 lg:text-right">
+      <span>© {year} MelodyMind. All rights reserved.</span>
+      <span>Optimized for accessibility (WCAG AAA) and responsive on all screens.</span>
+    </div>
+  </div>
+</footer>

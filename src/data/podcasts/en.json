@@ -12,7 +12,7 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1950s.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1950s.vtt",
       "fileSizeBytes": 136834028,
-      "durationSeconds": 4607
+      "durationSeconds": 4276
     },
     {
       "id": "1960s",
@@ -26,7 +26,7 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1960s.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1960s.vtt",
       "fileSizeBytes": 129847422,
-      "durationSeconds": 4581
+      "durationSeconds": 4058
     },
     {
       "id": "1970s",
@@ -40,7 +40,7 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1970s.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1970s.vtt",
       "fileSizeBytes": 110082132,
-      "durationSeconds": 5813
+      "durationSeconds": 3440
     },
     {
       "id": "1980s",
@@ -54,7 +54,7 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1980s.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1980s.vtt",
       "fileSizeBytes": 131036098,
-      "durationSeconds": 5476
+      "durationSeconds": 4095
     },
     {
       "id": "1990s",
@@ -68,7 +68,7 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1990s.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1990s.vtt",
       "fileSizeBytes": 160655194,
-      "durationSeconds": 4548
+      "durationSeconds": 5020
     },
     {
       "id": "2000s",
@@ -82,7 +82,7 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/2000s.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/2000s.vtt",
       "fileSizeBytes": 82676549,
-      "durationSeconds": 4844
+      "durationSeconds": 2584
     },
     {
       "id": "2010s",
@@ -96,7 +96,7 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/2010s.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/2010s.vtt",
       "fileSizeBytes": 86421463,
-      "durationSeconds": 5038
+      "durationSeconds": 2701
     },
     {
       "id": "female-blues-legends",
