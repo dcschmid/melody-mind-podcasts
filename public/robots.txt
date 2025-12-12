@@ -2,16 +2,8 @@
 User-agent: *
 Allow: /
 
-# Sitemaps
+# Sitemap
 Sitemap: https://podcasts.melody-mind.de/sitemap-index.xml
-
-# RSS Feeds
-Sitemap: https://podcasts.melody-mind.de/en/rss.xml
-Sitemap: https://podcasts.melody-mind.de/de/rss.xml
-Sitemap: https://podcasts.melody-mind.de/es/rss.xml
-Sitemap: https://podcasts.melody-mind.de/fr/rss.xml
-Sitemap: https://podcasts.melody-mind.de/it/rss.xml
-Sitemap: https://podcasts.melody-mind.de/pt/rss.xml
 
 # Allow search engines to crawl all content
 # Optimize crawl budget by indicating important sections

@@ -14,7 +14,7 @@ export default defineConfig({
         news: false,
         video: false,
         image: false,
-        xhtml: false
+        xhtml: true
       },
       serialize: (item) => {
         if (item.url.endsWith('/')) {

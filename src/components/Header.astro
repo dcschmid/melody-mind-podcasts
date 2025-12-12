@@ -5,6 +5,7 @@
     <a
       href="/"
       aria-label="MelodyMind Podcasts"
+      aria-current={Astro.url?.pathname === '/' ? 'page' : undefined}
       class="group inline-flex items-center gap-2 font-bold text-lg tracking-tight text-purple-400 hover:text-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-slate-900 rounded px-2 py-1"
     >
       <span class="text-xl transition-transform group-hover:scale-110" aria-hidden="true">🎵</span>

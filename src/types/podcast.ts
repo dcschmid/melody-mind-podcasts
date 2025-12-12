@@ -57,6 +57,8 @@ export interface PodcastData {
   description: string;
   /** Optional rich HTML show notes for the episode */
   showNotesHtml?: string;
+  /** Optional shorter meta description for SEO snippets */
+  metaDescription?: string;
   /** URL to the audio file */
   audioUrl: string;
   /** Optional duration in seconds (if known / precomputed) */

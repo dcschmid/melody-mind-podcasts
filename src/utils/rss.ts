@@ -1,9 +1,3 @@
-/**
- * Simplified RSS Feed Generator for MelodyMind Podcasts
- *
- * Generates a single English RSS feed.
- */
-
 import type { PodcastData } from "../types/podcast";
 
 export async function generatePodcastRSSFeed(
@@ -11,6 +5,7 @@ export async function generatePodcastRSSFeed(
   baseUrl: string = "https://podcasts.melody-mind.de",
 ): Promise<string> {
   const lang = "en";
+  const locale = "en-US";
   const title = "Melody Mind – Journey Through Music History";
   const description =
     "Melody Mind explores the stories behind the music that shaped generations. Annabelle and Daniel guide listeners through decades, genres, and iconic artists—from the 1950s to today. Each episode blends rich history, emotional insights, and immersive storytelling, showing how music connects cultures and defines moments. A podcast for everyone who wants to hear the world through sound.";
@@ -28,7 +23,15 @@ export async function generatePodcastRSSFeed(
 
   const total = sortedEpisodes.length;
   const items = sortedEpisodes
-    .map((episode, index) => generateRSSItem(episode, baseUrl, index, total))
+    .map((episode, index) =>
+      generateRSSItem({
+        episode,
+        baseUrl,
+        index,
+        total,
+        locale,
+      }),
+    )
     .join("\n");
 
   let personsTags = "";
@@ -63,7 +66,7 @@ export async function generatePodcastRSSFeed(
     <title>${escapeXML(title)}</title>
     <description>${escapeXML(description)}</description>
     <link>${channelLink}</link>
-    <language>${lang}</language>
+    <language>${locale}</language>
     <copyright>© ${new Date().getFullYear()} MelodyMind</copyright>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <generator>MelodyMind RSS Generator v1.1.0</generator>
@@ -97,7 +100,7 @@ export async function generatePodcastRSSFeed(
     <itunes:type>episodic</itunes:type>
 
     <!-- Podcasting 2.0 Required/Recommended Channel Tags -->
-    <podcast:guid>urn:podcast:melodymind:en</podcast:guid>
+    <podcast:guid>urn:podcast:melodymind:${lang}</podcast:guid>
     <podcast:locked owner="dcschmid@murena.io">yes</podcast:locked>
 
     <!-- Podcasting 2.0 Persons -->
@@ -109,12 +112,21 @@ ${items}
 </rss>`;
 }
 
-function generateRSSItem(
-  episode: PodcastData,
-  baseUrl: string,
-  index?: number,
-  total?: number,
-): string {
+type GenerateItemArgs = {
+  episode: PodcastData;
+  baseUrl: string;
+  index?: number;
+  total?: number;
+  locale: string;
+};
+
+function generateRSSItem({
+  episode,
+  baseUrl,
+  index,
+  total,
+  locale,
+}: GenerateItemArgs): string {
   const episodeLink = `${baseUrl}/${episode.id}`;
   const pubDate = new Date(episode.publishedAt).toUTCString();
   const guid = `melody-mind-en-${episode.id}`;
@@ -148,7 +160,7 @@ function generateRSSItem(
     : ' length="25000000"';
 
   const transcriptTag = episode.subtitleUrl
-    ? `\n      <podcast:transcript url="${episode.subtitleUrl}" type="text/vtt" language="en" rel="captions"/>`
+    ? `\n      <podcast:transcript url="${episode.subtitleUrl}" type="text/vtt" language="${locale}" rel="captions"/>`
     : "";
 
   return `    <item>

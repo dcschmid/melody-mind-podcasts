@@ -213,17 +213,15 @@ Flags: `--strict`, `--json`, `--no-network`, `--filter=de,en`
 
 Zusätzliche Checks: Quadrat-Derivat `*-square.jpg` wenn Originalbild nicht quadratisch.
 
-#### Inhaltlicher Styleguide (Version 2.0, Emoji-frei)
+#### Inhaltlicher Styleguide (Version 2.0)
 
 Alle Episoden-Metadaten (Titel & Kurzbeschreibung) folgen konsistenten Vorgaben für Branding, SEO & Plattform-Optimierung:
 
-- Titel: 55–65 Zeichen (inkl. Leerzeichen) – prägnant, keine Emojis
-- Beschreibung: 250–300 Zeichen – verdichteter Überblick, keine Emojis
+- Titel: 55–65 Zeichen (inkl. Leerzeichen) – prägnant
+- Beschreibung: 250–300 Zeichen – verdichteter Überblick
 - Host-Phrase muss vorkommen: `Daniel and Annabelle guide you` (Groß-/Kleinschreibung egal)
 - Call-To-Action beginnt mit: `Press play and ...`
-- Keine Emojis in Titel oder Beschreibung (Unicode Extended_Pictographic wird geblockt)
-
-Der Validierungsscript führt diese Prüfungen automatisch aus. Mit `--style-strict` werden Style-Verstöße als Fehler statt Warnungen behandelt:
+- Der Validierungsscript führt diese Prüfungen automatisch aus. Mit `--style-strict` werden Style-Verstöße als Fehler statt Warnungen behandelt:
 
 ```bash
 node scripts/validate-podcasts.mjs --style-strict --filter=en --no-network

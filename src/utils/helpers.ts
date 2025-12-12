@@ -25,3 +25,8 @@ export function extractKeywords(text: string, maxKeywords: number = 10): string[
     .filter(word => word.length > 3 && !commonWords.has(word))
     .slice(0, maxKeywords);
 }
+
+export function buildMetaDescription(text: string, maxLength: number = 160): string {
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, Math.max(0, maxLength - 3))}...`;
+}

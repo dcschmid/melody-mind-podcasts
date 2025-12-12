@@ -23,6 +23,8 @@ export function initSimpleAudioPlayer() {
   const progressBar = safeGetElementById<HTMLElement>("progress-bar");
   const progressFill = safeGetElementById<HTMLElement>("progress-fill");
   const timeDisplay = safeGetElementById<HTMLElement>("time-display");
+  const statusDisplay = safeGetElementById<HTMLElement>("audio-status");
+  const shortcutHint = safeGetElementById<HTMLElement>("shortcut-hint");
   const rewindButton = safeGetElementById<HTMLButtonElement>("rewind-button");
   const forwardButton = safeGetElementById<HTMLButtonElement>("forward-button");
 
@@ -33,14 +35,22 @@ export function initSimpleAudioPlayer() {
   let isPlaying = false;
 
   function updatePlayPauseButtons() {
+    const title = audioElement?.dataset.title || "episode";
     if (playButton && pauseButton) {
       if (isPlaying) {
         playButton.classList.add("hidden");
         pauseButton.classList.remove("hidden");
+        pauseButton.setAttribute("aria-label", `Pause ${title}`);
+        playButton.setAttribute("aria-label", `Play ${title}`);
       } else {
         playButton.classList.remove("hidden");
         pauseButton.classList.add("hidden");
+        playButton.setAttribute("aria-label", `Play ${title}`);
+        pauseButton.setAttribute("aria-label", `Pause ${title}`);
       }
+    }
+    if (statusDisplay) {
+      statusDisplay.textContent = isPlaying ? `Playing ${title}` : `Paused ${title}`;
     }
   }
 
@@ -53,17 +63,27 @@ export function initSimpleAudioPlayer() {
     if (duration) {
       const progress = (currentTime / duration) * 100;
       progressFill.style.width = `${progress}%`;
+      progressBar?.setAttribute("aria-valuenow", progress.toFixed(0));
     }
 
     const currentTimeFormatted = formatTime(currentTime);
     const durationFormatted = duration ? formatTime(duration) : "0:00";
     timeDisplay.textContent = `${currentTimeFormatted} / ${durationFormatted}`;
+    progressBar?.setAttribute(
+      "aria-valuetext",
+      `${currentTimeFormatted} of ${durationFormatted}`,
+    );
+  }
+
+  function setStatusMessage(message: string) {
+    if (statusDisplay) statusDisplay.textContent = message;
   }
 
   // Play button
   playButton?.addEventListener("click", () => {
     audioElement.play();
     isPlaying = true;
+    setStatusMessage(`Playing ${audioElement.dataset.title || "episode"}`);
     updatePlayPauseButtons();
   });
 
@@ -71,6 +91,7 @@ export function initSimpleAudioPlayer() {
   pauseButton?.addEventListener("click", () => {
     audioElement.pause();
     isPlaying = false;
+    setStatusMessage(`Paused ${audioElement.dataset.title || "episode"}`);
     updatePlayPauseButtons();
   });
 
@@ -98,8 +119,50 @@ export function initSimpleAudioPlayer() {
     audioElement.currentTime = seekTime;
   });
 
+  // Progress bar keyboard support
+  progressBar?.addEventListener("keydown", (e) => {
+    if (!audioElement || !audioElement.duration) return;
+    const step = 5; // seconds
+    const largeStep = 15;
+    if (["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) {
+      e.preventDefault();
+      switch (e.key) {
+        case "ArrowLeft":
+          audioElement.currentTime = Math.max(0, audioElement.currentTime - step);
+          break;
+        case "ArrowRight":
+          audioElement.currentTime = Math.min(audioElement.duration, audioElement.currentTime + step);
+          break;
+        case "Home":
+          audioElement.currentTime = 0;
+          break;
+        case "End":
+          audioElement.currentTime = audioElement.duration;
+          break;
+      }
+      updateProgress();
+    } else if (["PageUp", "PageDown"].includes(e.key)) {
+      e.preventDefault();
+      if (e.key === "PageUp") {
+        audioElement.currentTime = Math.min(audioElement.duration, audioElement.currentTime + largeStep);
+      } else {
+        audioElement.currentTime = Math.max(0, audioElement.currentTime - largeStep);
+      }
+      updateProgress();
+    }
+  });
+
   // Audio events
   audioElement.addEventListener("timeupdate", updateProgress);
+  audioElement.addEventListener("waiting", () => {
+    setStatusMessage(`Buffering ${audioElement.dataset.title || "episode"}...`);
+  });
+  audioElement.addEventListener("error", () => {
+    setStatusMessage(`Error loading ${audioElement.dataset.title || "episode"}`);
+  });
+  audioElement.addEventListener("playing", () => {
+    setStatusMessage(`Playing ${audioElement.dataset.title || "episode"}`);
+  });
   audioElement.addEventListener("ended", () => {
     isPlaying = false;
     updatePlayPauseButtons();
@@ -126,6 +189,12 @@ export function initSimpleAudioPlayer() {
       rewindButton?.click();
     } else if (e.code === "ArrowRight") {
       forwardButton?.click();
+    } else if (e.key === "?") {
+      e.preventDefault();
+      if (shortcutHint) {
+        const isHidden = shortcutHint.classList.contains("hidden");
+        shortcutHint.classList.toggle("hidden", !isHidden);
+      }
     }
   });
 

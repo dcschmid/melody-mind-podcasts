@@ -37,7 +37,7 @@ const filter = filterArg ? filterArg.split('=')[1].split(',').map(s => s.trim())
 
 const requiredFields = ['id','title','description','audioUrl','publishedAt','language','isAvailable','imageUrl'];
 const publicImagesDir = path.join(root, 'public', 'images');
-// Content Style Guidelines (Version 2.0, Emoji-frei)
+// Content Style Guidelines (Version 2.0)
 //  - Title length: 55–65 characters (inclusive)
 //  - Description length: 250–300 characters (inclusive)
 //  - Must contain host phrase (sprachabhängig)
@@ -46,13 +46,8 @@ const publicImagesDir = path.join(root, 'public', 'images');
 //  - Must contain CTA phrase beginning with (sprachabhängig)
 //        EN: "Press play and"
 //        DE: "Drück auf Play und" | "Drücke auf Play und" | "Drück Play und"
-//  - Must NOT contain any emoji (Unicode Extended_Pictographic) in title or description
 
 const styleStrict = args.includes('--style-strict');
-
-function hasEmoji(str){
-  return /[\p{Extended_Pictographic}]/u.test(str);
-}
 
 const hostPhraseMap = {
   en: [/Daniel and Annabelle guide you/i],
@@ -80,7 +75,6 @@ function styleCheck(p){
   if(typeof p.title === 'string'){
     const tl = p.title.length;
     if(tl < 55 || tl > 65) warnings.push(`Style: title length ${tl} outside 55–65 ("${p.id}")`);
-    if(hasEmoji(p.title)) warnings.push(`Style: title contains emoji ("${p.id}")`);
   }
   if(typeof p.description === 'string'){
     const dl = p.description.length;
@@ -91,7 +85,6 @@ function styleCheck(p){
     // CTA check
     const ctaFound = ctaPatterns.some(re => re.test(p.description));
     if(!ctaFound) warnings.push(`Style: missing CTA phrase ("${p.id}" lang=${lang})`);
-    if(hasEmoji(p.description)) warnings.push(`Style: description contains emoji ("${p.id}")`);
   }
   return warnings;
 }

@@ -5,7 +5,7 @@ import Headline from "../components/Headline.astro";
 import Prose from "../components/Prose.astro";
 import TranscriptDropdown from "../components/TranscriptDropdown.astro";
 import type { PodcastData } from "../types/podcast";
-import { formatDate } from "../utils/helpers";
+import { formatDate, buildMetaDescription } from "../utils/helpers";
 
 import enPodcasts from "../data/podcasts/en.json";
 
@@ -45,6 +45,9 @@ function getNavigation() {
 
 const { prev, next } = getNavigation();
 const episodeNumber = podcasts.findIndex((podcast) => podcast.id === id) + 1;
+const metaDescription =
+  currentPodcast.metaDescription ||
+  buildMetaDescription(currentPodcast.description, 155);
 
 const t = {
   backToAll: "← Back to all podcasts",
@@ -67,12 +70,12 @@ const t = {
 
 <PodcastLayout
   title={currentPodcast.title}
-  description={`${currentPodcast.description} - Episode ${episodeNumber} of MelodyMind Podcasts exploring ${currentPodcast.title} in music history.`}
+  description={metaDescription}
   type="article"
   publishedTime={currentPodcast.publishedAt}
   modifiedTime={currentPodcast.publishedAt}
-  image={`/images/${currentPodcast.imageUrl}.jpg`}
-  episodeImage={`/images/${currentPodcast.imageUrl}.jpg`}
+  image={`/square/${currentPodcast.imageUrl}.jpg`}
+  episodeImage={`/square/${currentPodcast.imageUrl}.jpg`}
   language="en"
   locale="en-US"
   episodeNumber={episodeNumber}
@@ -158,6 +161,7 @@ const t = {
                 id="play-button"
                 aria-label={`Play ${currentPodcast.title} episode`}
                 aria-describedby="audio-status"
+                title={`Play ${currentPodcast.title}`}
                 class="flex h-12 w-12 items-center justify-center rounded-full bg-purple-600 shadow-lg transition-transform duration-150 hover:scale-105 focus:scale-105 focus:ring-4 focus:ring-purple-400 focus:outline-none md:h-16 md:w-16"
               >
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="white" aria-hidden="true">
@@ -169,6 +173,7 @@ const t = {
                 id="pause-button"
                 aria-label={`Pause ${currentPodcast.title} episode`}
                 aria-describedby="audio-status"
+                title={`Pause ${currentPodcast.title}`}
                 class="hidden h-12 w-12 items-center justify-center rounded-full bg-purple-600 shadow-lg transition-transform duration-150 hover:scale-105 focus:scale-105 focus:ring-4 focus:ring-purple-400 focus:outline-none md:h-16 md:w-16"
               >
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="white" aria-hidden="true">
@@ -178,13 +183,25 @@ const t = {
             </div>
 
             <div class="text-center md:text-left">
-              <div class="text-lg font-semibold text-white" id="audio-status">
+              <div
+                class="text-lg font-semibold text-white"
+                id="audio-status"
+                aria-live="polite"
+                aria-atomic="true"
+              >
                 {currentPodcast.title}
               </div>
             </div>
           </div>
 
-          <audio id="audio-player" preload="metadata" class="hidden" aria-label={`Audio player for ${currentPodcast.title}`}>
+          <audio
+            id="audio-player"
+            preload="metadata"
+            class="hidden"
+            aria-label={`Audio player for ${currentPodcast.title}`}
+            data-title={currentPodcast.title}
+            crossorigin="anonymous"
+          >
             <source src={currentPodcast.audioUrl} type="audio/mpeg" />
             {currentPodcast.subtitleUrl && (
               <track
@@ -208,11 +225,11 @@ const t = {
               aria-valuemax="100"
               aria-valuenow="0"
               tabindex="0"
-              class="relative h-3 w-full cursor-pointer rounded-full bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+              class="relative h-3 w-full cursor-pointer rounded-full bg-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2 focus:ring-offset-gray-900 ring-1 ring-gray-600"
             >
               <div
                 id="progress-fill"
-                class="absolute top-0 left-0 h-3 rounded-full bg-gradient-to-r from-purple-500 to-blue-500"
+                class="absolute top-0 left-0 h-3 rounded-full bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400 shadow-[0_0_0_1px_rgba(255,255,255,0.1)] transition-[width] duration-150 ease-out"
                 style="width:0%"
                 aria-hidden="true"
               />
@@ -221,28 +238,33 @@ const t = {
 
           <div class="mb-4 flex flex-col items-center gap-2 text-sm text-gray-400 md:flex-row md:justify-center md:gap-4">
             <span id="time-display" aria-live="polite" aria-label="Current playback time">0:00 / 0:00</span>
+            <span id="shortcut-hint" class="hidden text-xs text-gray-500 md:inline" aria-live="polite">
+              Press ? for shortcuts (Space, ←/→, Home/End)
+            </span>
           </div>
 
-          <div class="flex items-center justify-center gap-6" role="group" aria-label="Audio player controls">
-            <button
-              class="text-gray-400 transition-colors duration-200 hover:text-white focus:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md p-1"
-              id="rewind-button"
-              aria-label="Rewind 10 seconds"
-            >
-              <svg class="h-5 w-5 md:h-6 md:w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" />
-              </svg>
-            </button>
+            <div class="flex items-center justify-center gap-6" role="group" aria-label="Audio player controls">
+              <button
+                class="text-gray-400 transition-colors duration-200 hover:text-white focus:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md p-1"
+                id="rewind-button"
+                aria-label="Rewind 10 seconds"
+                title="Rewind 10 seconds"
+              >
+                <svg class="h-5 w-5 md:h-6 md:w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" />
+                </svg>
+              </button>
 
-            <button
-              class="text-gray-400 transition-colors duration-200 hover:text-white focus:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md p-1"
-              id="forward-button"
-              aria-label="Forward 10 seconds"
-            >
-              <svg class="h-5 w-5 md:h-6 md:w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z" />
-              </svg>
-            </button>
+              <button
+                class="text-gray-400 transition-colors duration-200 hover:text-white focus:text-white focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md p-1"
+                id="forward-button"
+                aria-label="Forward 10 seconds"
+                title="Forward 10 seconds"
+              >
+                <svg class="h-5 w-5 md:h-6 md:w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z" />
+                </svg>
+              </button>
           </div>
         </div>
       </section>
@@ -256,6 +278,9 @@ const t = {
 
   {currentPodcast.showNotesHtml && (
     <section class="mb-12" aria-labelledby="show-notes-heading">
+      <Headline level="h2" textSize="xl" className="mb-4 text-white" id="show-notes-heading">
+        Show Notes
+      </Headline>
       <article role="region" aria-labelledby="show-notes-heading">
         <Prose html={currentPodcast.showNotesHtml} size="lg" />
       </article>
@@ -303,8 +328,9 @@ const t = {
 
   <script>
     import { initSimpleAudioPlayer } from "../utils/audioPlayer";
-
     document.addEventListener("DOMContentLoaded", () => {
+      const player = document.getElementById("audio-player");
+      if (!player) return;
       initSimpleAudioPlayer();
     });
   </script>
