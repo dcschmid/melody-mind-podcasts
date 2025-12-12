@@ -83,4 +83,6 @@ export interface PodcastData {
   seriesName?: string;
   /** Optional explicit episode number (overrides auto numbering if present) */
   episodeNumber?: number;
+  /** Optional URL to related knowledge article */
+  knowledgeUrl?: string;
 }

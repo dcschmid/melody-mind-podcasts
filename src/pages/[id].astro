@@ -59,6 +59,8 @@ const t = {
   publishedOn: "Published on",
   duration: "Duration",
   musicHistory: "Music History",
+  knowledge: "Knowledge article",
+  readArticle: "Read the knowledge article",
   transcript: "Transcript",
   showTranscript: "Show Transcript",
   hideTranscript: "Hide Transcript",
@@ -147,6 +149,37 @@ const t = {
         </div>
       </div>
     </div>
+
+    {currentPodcast.knowledgeUrl && (
+      <section
+        class="mb-12 rounded-2xl border border-purple-500/30 bg-gradient-to-r from-slate-900/80 via-slate-900 to-slate-900/80 p-6 shadow-lg"
+        aria-labelledby="knowledge-link"
+      >
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div class="space-y-2">
+            <p class="text-xs uppercase tracking-[0.25em] text-purple-300/80" id="knowledge-link">
+              {t.knowledge}
+            </p>
+            <p class="text-lg text-slate-100">
+              Deepen your dive with the related Melody Mind knowledge article.
+            </p>
+          </div>
+          <a
+            href={currentPodcast.knowledgeUrl}
+            class="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-3 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-purple-500 focus:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-offset-2 focus:ring-offset-slate-900"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${t.readArticle}: ${currentPodcast.title}`}
+          >
+            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7" />
+              <path d="M10 7h7v7" />
+            </svg>
+            {t.readArticle}
+          </a>
+        </div>
+      </section>
+    )}
 
     {currentPodcast.audioUrl && (
       <section class="rounded-2xl text-center shadow-xl" aria-labelledby="audio-player-heading">
