@@ -72,6 +72,12 @@ const t = {
   publishedTime={currentPodcast.publishedAt}
   modifiedTime={currentPodcast.publishedAt}
   image={`/images/${currentPodcast.imageUrl}.jpg`}
+  episodeImage={`/images/${currentPodcast.imageUrl}.jpg`}
+  language="en"
+  locale="en-US"
+  episodeNumber={episodeNumber}
+  durationSeconds={currentPodcast.durationSeconds}
+  audioUrl={currentPodcast.audioUrl}
   keywords={[
     currentPodcast.title.toLowerCase(),
     t.musicHistory.toLowerCase(),

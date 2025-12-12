@@ -12,6 +12,13 @@ export interface Props {
   author?: string;
   keywords?: string[];
   canonical?: string;
+  language?: string;
+  locale?: string;
+  episodeNumber?: number;
+  durationSeconds?: number;
+  audioUrl?: string;
+  episodeImage?: string;
+  seriesDescription?: string;
 }
 
 const {
@@ -24,14 +31,30 @@ const {
   author = "MelodyMind Podcasts",
   keywords = [],
   canonical,
+  language = "en",
+  locale = "en-US",
+  episodeNumber,
+  durationSeconds,
+  audioUrl,
+  episodeImage,
+  seriesDescription,
 } = Astro.props;
 
-const lang = "en";
 const siteTitle = "MelodyMind Podcasts";
 const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
 const siteUrl = "https://podcasts.melody-mind.de";
 const currentUrl = canonical || `${siteUrl}${Astro.url.pathname}`;
 const imageUrl = image.startsWith("http") ? image : `${siteUrl}${image}`;
+const episodeImageUrl = episodeImage
+  ? episodeImage.startsWith("http")
+    ? episodeImage
+    : `${siteUrl}${episodeImage}`
+  : imageUrl;
+const podcastFeedUrl = `${siteUrl}/rss.xml`;
+const podcastImage = `${siteUrl}/the-melody-mind-podcast.jpg`;
+const seriesCopy =
+  seriesDescription ||
+  "Melody Mind explores the stories behind the music that shaped generations, hosted by Daniel and Annabelle.";
 const defaultKeywords = [
   "podcast",
   "music history",
@@ -41,10 +64,81 @@ const defaultKeywords = [
 ];
 const allKeywords = [...defaultKeywords, ...keywords].join(", ");
 const skipLinkText = "Skip to main content";
+
+const publisher = {
+  "@type": "Organization",
+  name: "MelodyMind Podcasts",
+  url: siteUrl,
+  logo: {
+    "@type": "ImageObject",
+    url: `${siteUrl}/images/logo.png`,
+  },
+};
+
+const podcastSeriesJson = {
+  "@context": "https://schema.org",
+  "@type": "PodcastSeries",
+  name: siteTitle,
+  description: seriesCopy,
+  url: siteUrl,
+  inLanguage: locale,
+  image: podcastImage,
+  sameAs: [
+    "https://open.spotify.com/show/0AkUiN6Vnd0PsKuGtbp4W7",
+    "https://podcasts.apple.com/us/podcast/melody-mind-–-english/id1847445333",
+  ],
+  publisher,
+  webFeed: podcastFeedUrl,
+};
+
+const episodeDurationIso =
+  typeof durationSeconds === "number" && durationSeconds > 0
+    ? toIsoDuration(durationSeconds)
+    : undefined;
+
+const podcastEpisodeJson =
+  type === "article"
+    ? {
+        "@context": "https://schema.org",
+        "@type": "PodcastEpisode",
+        name: title,
+        description,
+        url: currentUrl,
+        partOfSeries: {
+          "@type": "PodcastSeries",
+          name: siteTitle,
+          url: siteUrl,
+        },
+        episodeNumber,
+        datePublished: publishedTime,
+        dateModified: modifiedTime || publishedTime,
+        inLanguage: locale,
+        image: episodeImageUrl,
+        timeRequired: episodeDurationIso,
+        audio: audioUrl
+          ? {
+              "@type": "AudioObject",
+              url: audioUrl,
+              encodingFormat: "audio/mpeg",
+              duration: episodeDurationIso,
+            }
+          : undefined,
+        publisher,
+      }
+    : undefined;
+
+const jsonLd = [podcastSeriesJson, podcastEpisodeJson].filter(Boolean);
+
+function toIsoDuration(totalSeconds: number) {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+  return `PT${hours > 0 ? `${hours}H` : ""}${minutes > 0 ? `${minutes}M` : ""}${seconds || (!hours && !minutes) ? `${seconds}S` : ""}`;
+}
 ---
 
 <!doctype html>
-<html lang={lang}>
+<html lang={language}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -61,7 +155,7 @@ const skipLinkText = "Skip to main content";
     <meta name="keywords" content={allKeywords} />
     <meta name="author" content={author} />
     <meta name="robots" content="index, follow" />
-    <meta name="language" content={lang} />
+    <meta name="language" content={language} />
     <meta name="revisit-after" content="7 days" />
 
     <link rel="canonical" href={currentUrl} />
@@ -78,7 +172,7 @@ const skipLinkText = "Skip to main content";
     <meta property="og:description" content={description} />
     <meta property="og:image" content={imageUrl} />
     <meta property="og:site_name" content="MelodyMind Podcasts - Music History Through Audio" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={locale.replace("-", "_")} />
     {
       publishedTime && (
         <meta property="article:published_time" content={publishedTime} />
@@ -111,43 +205,19 @@ const skipLinkText = "Skip to main content";
 
     <script
       type="application/ld+json"
-      set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": type === "article" ? "PodcastEpisode" : "WebSite",
-        name: fullTitle,
-        description: description,
-        url: currentUrl,
-        image: imageUrl,
-        inLanguage: lang,
-        publisher: {
-          "@type": "Organization",
-          name: "MelodyMind Podcasts",
-          url: siteUrl,
-          logo: {
-            "@type": "ImageObject",
-            url: `${siteUrl}/images/logo.png`,
-          },
-        },
-        ...(type === "article" && publishedTime
-          ? {
-              datePublished: publishedTime,
-              dateModified: modifiedTime || publishedTime,
-              author: {
-                "@type": "Person",
-                name: author,
-              },
-            }
-          : {}),
-        ...(type === "website"
-          ? {
-              potentialAction: {
-                "@type": "SearchAction",
-                target: `${siteUrl}/?q={search_term_string}`,
-                "query-input": "required name=search_term_string",
-              },
-            }
-          : {}),
-      })}
+      set:html={JSON.stringify(
+        jsonLd.map((entry) => ({
+          ...entry,
+          potentialAction:
+            type === "website"
+              ? {
+                  "@type": "SearchAction",
+                  target: `${siteUrl}/?q={search_term_string}`,
+                  "query-input": "required name=search_term_string",
+                }
+              : undefined,
+        })),
+      )}
     />
 
     <style>
