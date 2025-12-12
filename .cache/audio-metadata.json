@@ -82,5 +82,33 @@
   "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/pt/1980s.mp3": {
     "fileSizeBytes": 143323244,
     "durationSeconds": 4680
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1950s.mp3": {
+    "fileSizeBytes": 136834028,
+    "durationSeconds": 4607
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1960s.mp3": {
+    "fileSizeBytes": 129847422,
+    "durationSeconds": 4581
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1970s.mp3": {
+    "fileSizeBytes": 110082132,
+    "durationSeconds": 5813
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1980s.mp3": {
+    "fileSizeBytes": 131036098,
+    "durationSeconds": 5476
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1990s.mp3": {
+    "fileSizeBytes": 160655194,
+    "durationSeconds": 4548
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/2000s.mp3": {
+    "fileSizeBytes": 82676549,
+    "durationSeconds": 4844
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/2010s.mp3": {
+    "fileSizeBytes": 86421463,
+    "durationSeconds": 5038
   }
 }

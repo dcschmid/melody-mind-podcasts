@@ -11,9 +11,9 @@ export async function generatePodcastRSSFeed(
   baseUrl: string = "https://podcasts.melody-mind.de",
 ): Promise<string> {
   const lang = "en";
-  const title = "Melody Mind – English";
+  const title = "Melody Mind – Journey Through Music History";
   const description =
-    "Join Daniel and Annabelle on a journey through music history — exploring the sounds, stories, and emotions that shaped every decade and genre.";
+    "Melody Mind explores the stories behind the music that shaped generations. Annabelle and Daniel guide listeners through decades, genres, and iconic artists—from the 1950s to today. Each episode blends rich history, emotional insights, and immersive storytelling, showing how music connects cultures and defines moments. A podcast for everyone who wants to hear the world through sound.";
 
   const sortedEpisodes = episodes
     .filter((episode) => episode.isAvailable)
