@@ -102,8 +102,8 @@ const t = {
 
   <section class="mb-12" aria-labelledby="episode-title">
     <div class="mb-8 flex flex-col gap-10 text-center md:text-left lg:flex-row">
-      <div class="relative w-full flex-shrink-0 lg:w-96">
-        <div class="group relative aspect-[3/2] w-full overflow-hidden">
+      <div class="relative w-full shrink-0 lg:w-96">
+        <div class="group relative aspect-3/2 w-full overflow-hidden">
           <Image
             src={`/images/${currentPodcast.imageUrl}.jpg`}
             alt={`Cover artwork for ${currentPodcast.title} podcast episode`}
@@ -121,7 +121,7 @@ const t = {
       <div class="flex-1">
         <div class="mb-6 flex flex-wrap items-center justify-start gap-3 text-sm">
           <span
-            class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 px-4 py-2 text-sm font-bold tracking-wider text-white shadow-lg ring-1 ring-white/10"
+            class="inline-flex items-center justify-center rounded-full bg-linear-to-r from-purple-600 to-indigo-600 px-4 py-2 text-sm font-bold tracking-wider text-white shadow-lg ring-1 ring-white/10"
             aria-label={`${t.episode} number ${episodeNumber}`}
           >
             {t.episode} {episodeNumber}
@@ -229,7 +229,7 @@ const t = {
             >
               <div
                 id="progress-fill"
-                class="absolute top-0 left-0 h-3 rounded-full bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400 shadow-[0_0_0_1px_rgba(255,255,255,0.1)] transition-[width] duration-150 ease-out"
+                class="absolute top-0 left-0 h-3 rounded-full bg-linear-to-r from-purple-400 via-indigo-400 to-blue-400 shadow-[0_0_0_1px_rgba(255,255,255,0.1)] transition-[width] duration-150 ease-out"
                 style="width:0%"
                 aria-hidden="true"
               />
