@@ -1,5 +1,7 @@
 import type { PodcastData } from "../types/podcast";
 
+const EXPLICIT_RATING = "clean";
+
 export async function generatePodcastRSSFeed(
   episodes: PodcastData[],
   baseUrl: string = "https://podcasts.melody-mind.de",
@@ -96,7 +98,7 @@ export async function generatePodcastRSSFeed(
     <itunes:category text="Music">
       <itunes:category text="Music History"/>
     </itunes:category>
-    <itunes:explicit>no</itunes:explicit>
+    <itunes:explicit>${EXPLICIT_RATING}</itunes:explicit>
     <itunes:type>episodic</itunes:type>
 
     <!-- Podcasting 2.0 Required/Recommended Channel Tags -->
@@ -182,7 +184,7 @@ function generateRSSItem({
       <itunes:summary>${escapeXML(episode.description)}</itunes:summary>
       <itunes:image href="${imageUrl}"/>
       ${durationTag}
-      <itunes:explicit>no</itunes:explicit>
+      <itunes:explicit>${EXPLICIT_RATING}</itunes:explicit>
       <itunes:episodeType>full</itunes:episodeType>
       ${itunesEpisodeTag}
       ${transcriptTag}

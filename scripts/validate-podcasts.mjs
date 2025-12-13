@@ -96,6 +96,20 @@ async function head(url){
   return res;
 }
 
+async function rangeProbe(url){
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: { Range: 'bytes=0-1' }
+  });
+  // Ensure the small body is consumed to avoid open handles
+  try { await res.arrayBuffer(); } catch {}
+  return {
+    status: res.status,
+    acceptRanges: res.headers.get('accept-ranges'),
+    contentRange: res.headers.get('content-range')
+  };
+}
+
 async function readFiles(){
   const entries = await fs.readdir(dataDir);
   return entries.filter(f=>f.endsWith('.json'));
@@ -203,6 +217,18 @@ async function validateFile(file){
           const r = await head(p.audioUrl);
           if(!r.ok) warnings.push(`HEAD ${p.id} audioUrl status ${r.status}`);
           else if(!r.headers.get('content-length')) warnings.push(`Audio ${p.id} missing content-length header`);
+          else {
+            try {
+              const rangeInfo = await rangeProbe(p.audioUrl);
+              const accept = (rangeInfo.acceptRanges || '').toLowerCase();
+              const hasBytesRange = accept === 'bytes' || (rangeInfo.contentRange || '').toLowerCase().startsWith('bytes');
+              if(rangeInfo.status !== 206 && !hasBytesRange){
+                warnings.push(`Audio ${p.id} lacks byte-range support (status ${rangeInfo.status}, accept-ranges=${rangeInfo.acceptRanges || 'none'})`);
+              }
+            } catch(e){
+              warnings.push(`Range probe error ${p.id}: ${e.message}`);
+            }
+          }
         } catch(e){ warnings.push(`HEAD error ${p.id}: ${e.message}`); }
       }
     }
