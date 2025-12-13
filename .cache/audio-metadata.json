@@ -1,114 +1,34 @@
 {
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/1950s.mp3": {
-    "fileSizeBytes": 213583149,
-    "durationSeconds": 4607
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1950s.mp3": {
-    "fileSizeBytes": 55793804
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1950s.mp3": {
-    "fileSizeBytes": 155778093
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/de/1950s.mp3": {
-    "fileSizeBytes": 160186221,
-    "durationSeconds": 4607
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/1950s.mp3": {
-    "fileSizeBytes": 173291949,
-    "durationSeconds": 4607
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/pt/1950s.mp3": {
-    "fileSizeBytes": 225643437,
-    "durationSeconds": 4607
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/de/1960s.mp3": {
-    "fileSizeBytes": 150319341,
-    "durationSeconds": 4581
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/1960s.mp3": {
-    "fileSizeBytes": 179491437,
-    "durationSeconds": 4581
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1960s.mp3": {
-    "fileSizeBytes": 157568301
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1960s.mp3": {
-    "fileSizeBytes": 128916909
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/1960s.mp3": {
-    "fileSizeBytes": 137750445,
-    "durationSeconds": 4607
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/pt/1960s.mp3": {
-    "fileSizeBytes": 128354733,
-    "durationSeconds": 4520
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/de/1970s.mp3": {
-    "fileSizeBytes": 131960204,
-    "durationSeconds": 5813
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/1970s.mp3": {
-    "fileSizeBytes": 126564044,
-    "durationSeconds": 5813
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1970s.mp3": {
-    "fileSizeBytes": 106212524
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1970s.mp3": {
-    "fileSizeBytes": 111844844
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/1970s.mp3": {
-    "fileSizeBytes": 133437164,
-    "durationSeconds": 4607
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/pt/1970s.mp3": {
-    "fileSizeBytes": 122934284,
-    "durationSeconds": 4802
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/en/1980s.mp3": {
-    "fileSizeBytes": 137998124,
-    "durationSeconds": 5476
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/es/1980s.mp3": {
-    "fileSizeBytes": 113096684
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/fr/1980s.mp3": {
-    "fileSizeBytes": 114061484
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/it/1980s.mp3": {
-    "fileSizeBytes": 130556684,
-    "durationSeconds": 4607
-  },
-  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/pt/1980s.mp3": {
-    "fileSizeBytes": 143323244,
-    "durationSeconds": 4680
-  },
   "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1950s.mp3": {
     "fileSizeBytes": 136834028,
-    "durationSeconds": 4607
+    "durationSeconds": 4276
   },
   "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1960s.mp3": {
     "fileSizeBytes": 129847422,
-    "durationSeconds": 4581
+    "durationSeconds": 4058
   },
   "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1970s.mp3": {
     "fileSizeBytes": 110082132,
-    "durationSeconds": 5813
+    "durationSeconds": 3440
   },
   "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1980s.mp3": {
     "fileSizeBytes": 131036098,
-    "durationSeconds": 5476
+    "durationSeconds": 4095
   },
   "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/1990s.mp3": {
     "fileSizeBytes": 160655194,
-    "durationSeconds": 4548
+    "durationSeconds": 5020
   },
   "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/2000s.mp3": {
     "fileSizeBytes": 82676549,
-    "durationSeconds": 4844
+    "durationSeconds": 2584
   },
   "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/decades/2010s.mp3": {
     "fileSizeBytes": 86421463,
-    "durationSeconds": 5038
+    "durationSeconds": 2701
+  },
+  "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/female-focused/female-vocal-icons.mp3": {
+    "fileSizeBytes": 81089140,
+    "durationSeconds": 2534
   }
 }
