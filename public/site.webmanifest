@@ -1,5 +1,5 @@
 {
-  "name": "Melody Mind Podcasts",
+  "name": "MelodyMind Podcats",
   "short_name": "Podcasts",
   "icons": [
     {
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#8c8b76",
+  "background_color": "#8c8b76",
   "display": "standalone"
 }

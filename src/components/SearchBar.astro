@@ -31,27 +31,27 @@ const labels = {
         placeholder={labels.placeholder}
         aria-describedby="search-hint"
         aria-live="polite"
-        class="w-full rounded-lg bg-gray-800 border border-purple-500/40 focus:border-purple-400 px-4 py-3 text-base text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-900"
+        class="w-full rounded-lg bg-layer-1 border border-primary-30 focus:border-[var(--color-primary)] px-4 py-3 text-base text-[var(--color-text)] placeholder-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] shadow-[0_12px_30px_rgba(0,0,0,0.35)]"
         oninput="filterEpisodes(this.value)"
       />
       <button
         type="button"
         aria-label={labels.clear}
         onclick="clearSearch()"
-        class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-sm rounded-md text-gray-300 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900"
+        class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-sm rounded-md text-[var(--color-text-muted)] hover:text-[var(--color-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-background)]"
       >
         ×
       </button>
     </div>
   </div>
-  <p id="search-hint" class="mt-2 text-xs text-gray-400" aria-hidden="true">
+  <p id="search-hint" class="mt-2 text-xs text-[var(--color-text-muted)]" aria-hidden="true">
     {labels.hint}
   </p>
   <div
     aria-live="polite"
     aria-atomic="true"
     id="search-status"
-    class="mt-2 text-sm text-purple-300"
+    class="mt-2 text-sm text-[var(--color-primary)]"
     data-total={total}
   >
     {labels.statusTemplate
@@ -61,7 +61,7 @@ const labels = {
   </div>
   <div
     id="search-empty"
-    class="mt-2 text-sm text-red-300 hidden"
+    class="mt-2 text-sm text-[var(--color-error-soft)] hidden"
     role="status"
   >
     {labels.empty}

@@ -136,9 +136,10 @@ function generateRSSItem({
   let imageUrl = `${baseUrl}/the-melody-mind-podcast.jpg`;
   if (episode.imageUrl) {
     const baseName = episode.imageUrl;
-    const squareDir = `${baseUrl}/square/${baseName}.jpg`;
     if (baseName) {
-      imageUrl = squareDir;
+      imageUrl = baseName.startsWith("http")
+        ? baseName
+        : `${baseUrl}/images/${baseName}.jpg`;
     }
   }
 

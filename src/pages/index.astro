@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import PodcastLayout from "../layouts/PodcastLayout.astro";
 import SearchBar from "../components/SearchBar.astro";
 import type { PodcastData } from "../types/podcast";
@@ -12,9 +11,9 @@ const podcasts = (enPodcasts.podcasts as PodcastData[]).filter(
 
 const t = {
   title: "MelodyMind Podcasts",
-  subtitle: "Time‑travel through music with Daniel & Annabelle",
+  subtitle: "Feel-good music journeys with Daniel & Annabelle",
   description:
-    "Your epic journey through music history – guided by Daniel and Annabelle. In each episode we dive deep into the turning points that shaped the sound of generations: from the rebellious birth of rock 'n' roll and the political pulse of folk to the explosion of electronic creativity and today’s streaming revolution. We uncover the stories behind the songs – courageous artists, visionary pioneers, cultural ruptures and technical innovations. Not an archive. A living time‑capsule of goosebump moments, surprising anecdotes and new angles for how you listen. Step in – every episode is a time portal with a soundtrack.",
+    "Settle in, press play, and wander through the stories behind the songs. Daniel & Annabelle take you from vinyl crackle to streaming sheen — meeting rebels, dreamers, and legends along the way. No dusty archive: just warm, human stories, surprising facts, and playlists you’ll want to save.",
   seoDescription:
     "Discover music history through expert podcasts. Explore decades of musical evolution, from 1950s rock 'n' roll to modern streaming. Premium audio content featuring legendary artists, cultural movements, and industry insights.",
   episodes: "Episodes",
@@ -47,169 +46,137 @@ const t = {
   locale="en-US"
   seriesDescription={t.seoDescription}
 >
-  <div class="container mx-auto py-8">
-    <header class="text-center mb-16">
-      <div class="mb-8">
-        <h1
-          class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 bg-linear-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent"
-        >
-          {t.title}
-        </h1>
-        <p
-          class="text-xl sm:text-2xl md:text-3xl font-semibold text-purple-300 mb-6"
-        >
-          {t.subtitle}
-        </p>
-      </div>
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-12">
+    <section class="relative overflow-hidden brand-card rounded-[32px] px-6 sm:px-10 py-10 sm:py-12 lg:py-14 border border-primary-20">
+      <div class="absolute inset-0 opacity-70 bg-[radial-gradient(circle_at_18%_22%,rgba(246,193,119,0.08),transparent_35%),radial-gradient(circle_at_82%_12%,rgba(122,203,191,0.08),transparent_32%),radial-gradient(circle_at_70%_68%,rgba(255,149,128,0.05),transparent_38%)]"></div>
+      <div class="absolute inset-6 rounded-[28px] border border-white/5 pointer-events-none"></div>
+      <div class="flex flex-col gap-8 items-center text-center relative z-10">
+        <div class="flex flex-wrap items-center justify-center gap-3 text-sm text-[var(--color-text-muted)]">
+          <span class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-layer-2 border border-primary-20 text-[var(--color-text)] shadow-inner">
+            🎙️ Sound-rich storytelling
+          </span>
+          <span class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-layer-1 border border-primary-20 text-[var(--color-text)]">
+            Warm studio vibes, hi-fi polish
+          </span>
+        </div>
 
-      <div class="max-w-4xl mx-auto mb-8">
-        <p class="text-lg sm:text-xl text-gray-300 leading-relaxed mb-6">
-          {t.description}
-        </p>
-        <div
-          class="bg-linear-to-r from-purple-900/30 to-indigo-900/30 rounded-xl p-6 border border-purple-500/20"
-        >
-          <p class="text-purple-200 text-base sm:text-lg font-medium mb-2">
-            🎵 {t.featuredContent}
-          </p>
-          <div
-            class="flex items-center justify-center gap-4 text-sm text-gray-400"
+        <div class="space-y-4 max-w-3xl">
+          <h1
+            class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight brand-gradient-text drop-shadow-[0_18px_40px_rgba(0,0,0,0.4)]"
           >
-            <span class="flex items-center gap-2">
-              <svg
-                class="w-4 h-4"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
-                ></path>
-              </svg>
-              <span aria-label={`${podcasts.length} ${t.totalEpisodes}`}>
-                {podcasts.length}
-                {t.totalEpisodes}
-              </span>
-            </span>
-            <span class="hidden sm:flex items-center gap-2">
-              <svg
-                class="w-4 h-4"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-                ></path>
-              </svg>
-              Premium Content
-            </span>
-            <span class="hidden sm:flex items-center gap-2">
-              <svg
-                class="w-4 h-4"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"
-                ></path>
-              </svg>
-              Expert Hosts
-            </span>
+            {t.title}
+          </h1>
+          <p class="text-lg sm:text-xl font-semibold text-[var(--color-text)]">
+            {t.subtitle}
+          </p>
+          <p class="text-base sm:text-lg text-[var(--color-text-muted)] leading-relaxed">
+            {t.description}
+          </p>
+        </div>
+
+        <div class="relative w-full max-w-3xl">
+          <div class="absolute -inset-4 bg-gradient-to-br from-[rgba(246,193,119,0.07)] via-transparent to-[rgba(122,203,191,0.05)] blur-2xl rounded-[32px]"></div>
+          <div class="relative overflow-hidden rounded-[26px] border border-primary-30 bg-layer-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
+            <div class="absolute top-4 right-4 inline-flex items-center gap-2 px-3 py-2 rounded-full bg-black/55 text-xs font-semibold border border-white/10 backdrop-blur">
+              🔆 Analog glow, hi-fi clarity
+            </div>
+            <img
+              src="/the-melody-mind-podcast.jpg"
+              alt="Illustrated cover art"
+              class="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
+        </div>
 
-          <div class="mt-6 pt-4 border-t border-purple-500/20">
-            <p class="text-purple-200 text-sm text-center mb-4">
-              {t.availableOn}
-            </p>
-            <div class="flex items-center justify-center gap-3 flex-wrap">
-              <a
-                href="/rss.xml"
-                class="inline-flex items-center gap-2 px-3 py-2 bg-orange-600 hover:bg-orange-700 focus:bg-orange-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-purple-900"
-                aria-label="Subscribe to RSS feed"
-              >
-                <svg
-                  class="w-4 h-4"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248S0 22.546 0 20.752s1.456-3.248 3.252-3.248 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-3.368c10.58.046 19.152 8.594 19.183 19.188h4.817c-.03-13.231-10.755-23.954-24-24v4.812z"
-                  ></path>
-                </svg>
-                RSS
-              </a>
-              
-              <a
-                href={t.spotifyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 focus:bg-green-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 focus:ring-offset-purple-900"
-                aria-label="Listen on Spotify"
-              >
-                <svg
-                  class="w-4 h-4"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.42 1.56-.299.421-1.02.599-1.559.3z"
-                  ></path>
-                </svg>
-                Spotify
-              </a>
-
-              <a
-                href={t.deezerUrl}
-                target={t.deezerUrl !== "#" ? "_blank" : undefined}
-                rel={t.deezerUrl !== "#" ? "noopener noreferrer" : undefined}
-                class="inline-flex items-center gap-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-purple-900"
-                aria-label="Listen on Deezer"
-              >
-                <svg
-                  class="w-4 h-4"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M18.81 12.74h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm-4.5 6.45h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm0-2.15h3.02v1.52h-3.02zm-4.5 8.6h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm0-2.15h3.02v1.52H9.81zm-4.5 10.75h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm0-2.15h3.02v1.52H5.31zm-4.5 12.9h3.02v1.52H.81zm0-2.15h3.02v1.52H.81zm0-2.15h3.02v1.52H.81z"
-                  ></path>
-                </svg>
-                Deezer
-              </a>
-
-              <a
-                href={t.youtubeUrl}
-                target={t.youtubeUrl !== "#" ? "_blank" : undefined}
-                rel={t.youtubeUrl !== "#" ? "noopener noreferrer" : undefined}
-                class="inline-flex items-center gap-2 px-3 py-2 bg-red-600 hover:bg-red-700 focus:bg-red-700 rounded-lg text-white text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-offset-2 focus:ring-offset-purple-900"
-                aria-label="Listen on YouTube"
-              >
-                <svg
-                  class="w-4 h-4"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
-                  ></path>
-                </svg>
-                YouTube
-              </a>
+        <div class="grid gap-3 sm:grid-cols-2 w-full max-w-4xl">
+          <div class="flex items-start gap-3 rounded-xl bg-layer-1/90 border border-primary-20 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.25)] text-left">
+            <span aria-hidden="true">🎧</span>
+            <div class="text-sm text-[var(--color-text)] leading-snug">
+              New episodes perfect for a walk, commute, or cozy night in.
+            </div>
+          </div>
+          <div class="flex items-start gap-3 rounded-xl bg-layer-1/90 border border-primary-20 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.25)] text-left">
+            <span aria-hidden="true">✨</span>
+            <div class="text-sm text-[var(--color-text)] leading-snug">
+              Stories first, facts second: always warm, curious, and welcoming.
+            </div>
+          </div>
+          <div class="flex items-start gap-3 rounded-xl bg-layer-1/90 border border-primary-20 p-4 sm:col-span-2 shadow-[0_12px_30px_rgba(0,0,0,0.25)] text-left">
+            <span aria-hidden="true">🎶</span>
+            <div class="text-sm text-[var(--color-text)] leading-snug">
+              From rock ’n’ roll sparks to electronic fireworks — hear how music became the soundtrack of our lives.
             </div>
           </div>
         </div>
+
+        <div class="flex flex-wrap justify-center gap-3">
+          <a
+            href="#episodes-heading"
+            class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold bg-[var(--color-primary)] text-ink-dark shadow-[0_12px_28px_rgba(0,0,0,0.4)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] hover:-translate-y-0.5 transition-transform"
+          >
+            Browse episodes
+          </a>
+          <a
+            href="/rss.xml"
+            class="inline-flex items-center gap-2 px-4 py-3 rounded-xl border border-primary-20 bg-layer-1 text-[var(--color-text)] hover:-translate-y-0.5 transition-transform focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)]"
+            aria-label="Subscribe to RSS feed"
+          >
+            <svg
+              class="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248S0 22.546 0 20.752s1.456-3.248 3.252-3.248 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-3.368c10.58.046 19.152 8.594 19.183 19.188h4.817c-.03-13.231-10.755-23.954-24-24v4.812z"
+              ></path>
+            </svg>
+            RSS feed
+          </a>
+        </div>
+
+        <div class="flex flex-wrap justify-center gap-4 text-sm text-[var(--color-text)]">
+          <span class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-layer-2 border border-primary-20 shadow-inner">
+            <svg
+              class="w-4 h-4 text-[var(--color-primary)]"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+              ></path>
+            </svg>
+            <span aria-label={`${podcasts.length} ${t.totalEpisodes}`}>
+              {podcasts.length}
+              {t.totalEpisodes}
+            </span>
+          </span>
+          <span class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-layer-2 border border-primary-20 shadow-inner">
+            <svg
+              class="w-4 h-4 text-[var(--color-secondary)]"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
+              ></path>
+            </svg>
+            {t.featuredContent}
+          </span>
+        </div>
       </div>
-    </header>
+    </section>
 
     <SearchBar total={podcasts.length} />
     <section aria-labelledby="episodes-heading">
-      <h2 id="episodes-heading" class="text-3xl font-bold text-white mb-8">
+      <h2
+        id="episodes-heading"
+        class="text-3xl font-bold brand-gradient-text mb-8 drop-shadow-[0_12px_30px_rgba(0,0,0,0.35)]"
+      >
         {t.episodes}
       </h2>
 
@@ -223,11 +190,11 @@ const t = {
             <article
               data-episode
               data-search={`${podcast.title} ${podcast.description}`}
-              class="bg-gray-800 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl focus-within:shadow-2xl focus-within:-translate-y-1 border border-gray-700/60 card-fade-in"
+              class="brand-card rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-[var(--shadow-strong)] focus-within:shadow-[var(--shadow-strong)] focus-within:-translate-y-1 border border-primary-20 card-fade-in"
               role="listitem"
             >
               <div class="aspect-3/2 overflow-hidden relative">
-                <Image
+                <img
                   src={`/images/${podcast.imageUrl}.jpg`}
                   alt={`Cover image for ${podcast.title} podcast episode`}
                   class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
@@ -235,9 +202,6 @@ const t = {
                   decoding="async"
                   width={600}
                   height={400}
-                  format="webp"
-                  quality={85}
-                  sizes="(min-width: 1280px) 360px, (min-width: 768px) 50vw, 100vw"
                 />
                 {podcast.durationSeconds && (
                   <span class="absolute bottom-3 right-3 rounded-full bg-black/70 px-3 py-1 text-xs font-semibold text-white backdrop-blur ring-1 ring-white/10 shadow-lg">
@@ -246,19 +210,19 @@ const t = {
                 )}
               </div>
               <div class="p-4 sm:p-6 flex flex-col gap-3">
-                <h3 class="text-lg sm:text-xl font-semibold text-purple-400">
+                <h3 class="text-lg sm:text-xl font-semibold text-[var(--color-text)]">
                   {podcast.title}
                 </h3>
-                <p class="text-gray-300 leading-relaxed line-clamp-3">
+                <p class="text-[var(--color-text-muted)] leading-relaxed line-clamp-3">
                   {podcast.description}
                 </p>
                 <a
                   href={`/${podcast.id}`}
-                  class="inline-flex items-center gap-2 bg-purple-600 hover:bg-purple-700 focus:bg-purple-700 text-white px-5 py-3 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2 focus:ring-offset-gray-800 self-start"
+                  class="inline-flex items-center gap-2 brand-button px-5 py-3 rounded-lg font-semibold text-sm transition-transform duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] self-start hover:-translate-y-0.5"
                   aria-label={`Listen to ${podcast.title} podcast episode`}
                 >
                   <svg
-                    class="w-4 h-4"
+                    class="w-4 h-4 text-ink-dark"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                     aria-hidden="true"
