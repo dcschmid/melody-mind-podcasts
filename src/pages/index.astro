@@ -137,6 +137,32 @@ const t = {
           </a>
         </div>
 
+        <div class="flex flex-col items-center gap-3">
+          <span class="text-sm font-semibold text-[var(--color-text-muted)]">
+            {t.availableOn}
+          </span>
+          <div class="flex flex-wrap justify-center gap-3">
+            <a
+              href={t.spotifyUrl}
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary-20 bg-layer-1 text-[var(--color-text)] text-sm font-semibold hover:-translate-y-0.5 transition-transform focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)]"
+              aria-label="Listen on Spotify"
+              target="_blank"
+              rel="noopener"
+            >
+              Spotify
+            </a>
+            <a
+              href={t.deezerUrl}
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary-20 bg-layer-1 text-[var(--color-text)] text-sm font-semibold hover:-translate-y-0.5 transition-transform focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)]"
+              aria-label="Listen on Deezer"
+              target="_blank"
+              rel="noopener"
+            >
+              Deezer
+            </a>
+          </div>
+        </div>
+
         <div class="flex flex-wrap justify-center gap-4 text-sm text-[var(--color-text)]">
           <span class="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-layer-2 border border-primary-20 shadow-inner">
             <svg
