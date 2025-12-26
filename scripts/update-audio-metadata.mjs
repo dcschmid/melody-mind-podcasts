@@ -8,13 +8,18 @@
  * - Optional: Dauer-Ermittlung könnte später ergänzt werden (TODO)
  *
  * Flags:
- *  --write   : Änderungen wirklich zurückschreiben (ansonsten Dry-Run)
+ *  --write   : Änderungen wirklich zurückschreiben (Default ist an)
+ *  --no-write : Deaktiviert Schreiben (Dry-Run)
  *  --filter=<lang> : Nur bestimmte Sprachdatei bearbeiten (z.B. en,de)
  *  --timeout=<ms> : Request Timeout (Standard 8000)
  *  --duration : Versucht Dauer zu bestimmen (music-metadata). Lädt Datei (kann Traffic erzeugen)
  *  --ffprobe : Nutzt lokales ffprobe (falls installiert) für exaktere Dauer (überschreibt music-metadata)
+ *  --no-duration : Deaktiviert Dauer-Ermittlung (Default ist an)
+ *  --no-ffprobe : Deaktiviert ffprobe Nutzung (Default ist an)
+ *  --no-refresh : Deaktiviert erzwungenes Refresh (Default ist an)
  *  --max-bytes=<n> : Max Bytes die für music-metadata gestreamt werden (Default 6_000_000)
- *  --no-cache : Ignoriert vorhandenen Cache
+ *  --no-cache : Ignoriert vorhandenen Cache (Default ist an)
+ *  --use-cache : Aktiviert Cache Nutzung (Default ist aus)
  *  --refresh : Erzwingt erneutes Abrufen (überschreibt Cache Eintrag)
  *  --available-only : Nur Podcasts mit isAvailable=true bearbeiten
  *  --ids=a,b,c : Nur diese Podcast-IDs verarbeiten (Komma-getrennt)
@@ -34,17 +39,17 @@ const root = path.join(__dirname, '..');
 const dataDir = path.join(root, 'src', 'data', 'podcasts');
 
 const args = process.argv.slice(2);
-const isWrite = args.includes('--write');
+const isWrite = !args.includes('--no-write');
 const filterArg = args.find(a => a.startsWith('--filter='));
 const filter = filterArg ? filterArg.split('=')[1].split(',').map(s => s.trim()) : null;
 const timeoutArg = args.find(a => a.startsWith('--timeout='));
 const timeoutMs = timeoutArg ? parseInt(timeoutArg.split('=')[1], 10) : 8000;
-const wantDuration = args.includes('--duration');
-const useFfprobe = args.includes('--ffprobe');
+const wantDuration = !args.includes('--no-duration');
+const useFfprobe = !args.includes('--no-ffprobe');
 const maxBytesArg = args.find(a => a.startsWith('--max-bytes='));
 const maxBytes = maxBytesArg ? parseInt(maxBytesArg.split('=')[1], 10) : 6_000_000;
-const noCache = args.includes('--no-cache');
-const refresh = args.includes('--refresh');
+const noCache = !args.includes('--use-cache');
+const refresh = !args.includes('--no-refresh');
 const availableOnly = args.includes('--available-only');
 const idsArg = args.find(a => a.startsWith('--ids='));
 const idFilter = idsArg ? idsArg.split('=')[1].split(',').map(s => s.trim()).filter(Boolean) : null;
@@ -215,12 +220,12 @@ async function processFile(filePath) {
       } else {
         log('  (no content-length header)');
       }
-        if (wantDuration && !p.durationSeconds) {
+        if (wantDuration && (refresh || !p.durationSeconds)) {
           log('  derive duration...');
           const dur = await deriveDuration(p.audioUrl);
           if (dur && !Number.isNaN(dur)) {
             const seconds = Math.round(dur);
-            if(p.durationSeconds !== seconds){
+            if (p.durationSeconds !== seconds) {
               p.durationSeconds = seconds;
               changed = true;
               durationAdded++;
