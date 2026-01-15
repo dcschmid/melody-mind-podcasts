@@ -180,7 +180,7 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
 <style>
   .transcript {
     margin-top: 2rem;
-    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
     border-radius: 1rem;
     background: var(--color-layer-4);
     box-shadow: var(--shadow-soft);
@@ -193,6 +193,8 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
     padding: 1rem 1.25rem;
     cursor: pointer;
     list-style: none;
+    background: var(--color-layer-3);
+    border-radius: 1rem 1rem 0 0;
   }
 
   .transcript__summary::-webkit-details-marker {
@@ -217,7 +219,7 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
 
   .transcript__body {
     padding: 1rem 1.25rem 1.25rem;
-    border-top: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
   }
 
   .transcript__status {
@@ -241,8 +243,8 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
     margin: 0;
     padding: 0.85rem 1rem;
     border-radius: 0.85rem;
-    background: var(--color-layer-1);
-    border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
     color: var(--color-text);
     line-height: 1.65;
     display: grid;
