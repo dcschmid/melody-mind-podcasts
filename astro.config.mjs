@@ -6,6 +6,20 @@ import minifyHtml from 'astro-minify-html-swc';
 export default defineConfig({
   site: 'https://podcasts.melody-mind.de',
   output: 'static',
+  redirects: {
+    '/de': '/',
+    '/de/': '/',
+    '/de/[...slug]': '/[...slug]',
+    '/es': '/',
+    '/es/': '/',
+    '/es/[...slug]': '/[...slug]',
+    '/fr': '/',
+    '/fr/': '/',
+    '/fr/[...slug]': '/[...slug]',
+    '/it': '/',
+    '/it/': '/',
+    '/it/[...slug]': '/[...slug]',
+  },
   integrations: [
     sitemap({
       xslURL: '/sitemap.xsl',
