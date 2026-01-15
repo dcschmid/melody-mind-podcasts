@@ -47,7 +47,11 @@ const { prev, next } = getNavigation();
 const episodeNumber = podcasts.findIndex((podcast) => podcast.id === id) + 1;
 const metaDescription =
   currentPodcast.metaDescription ||
-  buildMetaDescription(currentPodcast.description, 155);
+  buildMetaDescription(
+    currentPodcast.description,
+    155,
+    "MelodyMind Podcasts",
+  );
 
 const t = {
   backToAll: "← Back to all podcasts",

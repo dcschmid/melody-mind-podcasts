@@ -13,15 +13,16 @@ const podcasts = (enPodcasts.podcasts as PodcastData[]).filter(
 
 const t = {
   title: "MelodyMind Podcasts",
-  subtitle: "Feel-good music journeys with Daniel & Annabelle",
+  seoTitle: "MelodyMind Podcasts — Music History Podcast with Daniel & Annabelle",
+  subtitle: "A music history podcast with Daniel & Annabelle",
   description:
-    "Settle in, press play, and wander through the stories behind the songs. Daniel & Annabelle take you from vinyl crackle to streaming sheen — meeting rebels, dreamers, and legends along the way. No dusty archive: just warm, human stories, surprising facts, and playlists you’ll want to save.",
+    "Welcome to MelodyMind Podcasts — a music history podcast that traces the stories, scenes, and artists shaping each decade. Daniel & Annabelle guide you from 1950s rock 'n' roll to modern streaming with thoughtful listening and cultural context.",
   seoDescription:
-    "Discover music history through expert podcasts. Explore decades of musical evolution, from 1950s rock 'n' roll to modern streaming. Premium audio content featuring legendary artists, cultural movements, and industry insights.",
+    "Official site of MelodyMind Podcasts, a music history podcast with Daniel & Annabelle. Explore decade-by-decade episodes from 1950s rock 'n' roll to today.",
   episodes: "Episodes",
   listen: "Listen Now",
   featuredContent:
-    "Discover the voices, rhythms, and revolutions that defined generations",
+    "Discover the voices, rhythms, and revolutions that defined each decade of music",
   totalEpisodes: " episodes available",
   availableOn: "Available on your favorite platforms:",
   spotifyUrl: "https://open.spotify.com/show/6iLbxIzJ4x5nMuuK5qySOQ",
@@ -29,7 +30,10 @@ const t = {
   youtubeUrl:
     "https://www.youtube.com/playlist?list=PLioOQ4LuNFxtx2d70QKywiPC8WVBxgXN0",
   keywords: [
+    "melodymind podcasts",
     "music history podcast",
+    "daniel and annabelle",
+    "music decades",
     "rock and roll",
     "music culture",
     "vintage music",
@@ -40,7 +44,7 @@ const t = {
 ---
 
 <PodcastLayout
-  title={t.title}
+  title={t.seoTitle}
   description={t.seoDescription}
   keywords={t.keywords}
   type="website"

@@ -41,7 +41,12 @@ const {
 } = Astro.props;
 
 const siteTitle = "MelodyMind Podcasts";
-const fullTitle = title === siteTitle ? title : `${title} | ${siteTitle}`;
+const normalizedTitle = normalizeMetaText(title);
+const fullTitle = normalizedTitle
+  .toLowerCase()
+  .includes(siteTitle.toLowerCase())
+  ? normalizedTitle
+  : `${normalizedTitle} | ${siteTitle}`;
 const siteUrl = "https://podcasts.melody-mind.de";
 const currentPath = canonical
   ? canonical.replace(siteUrl, "")
@@ -68,6 +73,11 @@ const defaultKeywords = [
 ];
 const allKeywords = [...defaultKeywords, ...keywords].join(", ");
 const skipLinkText = "Skip to main content";
+const normalizedDescription = normalizeMetaText(description);
+const imageAlt =
+  type === "article"
+    ? `Cover artwork for ${normalizedTitle}`
+    : `Cover artwork for ${siteTitle}`;
 
 const publisher = {
   "@type": "Organization",
@@ -109,7 +119,7 @@ const podcastEpisodeJson =
         "@context": "https://schema.org",
         "@type": "PodcastEpisode",
         name: title,
-        description,
+        description: normalizedDescription,
         url: currentUrl,
         partOfSeries: {
           "@type": "PodcastSeries",
@@ -154,6 +164,10 @@ function ensureTrailingSlash(pathname: string) {
   return pathname.endsWith("/") ? pathname : `${pathname}/`;
 }
 
+function normalizeMetaText(value: string) {
+  return value.replace(/\s+/g, " ").trim();
+}
+
 function toIsoDuration(totalSeconds: number) {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
@@ -178,10 +192,13 @@ function toIsoDuration(totalSeconds: number) {
 
     <title>{fullTitle}</title>
     <meta name="title" content={fullTitle} />
-    <meta name="description" content={description} />
+    <meta name="description" content={normalizedDescription} />
     <meta name="keywords" content={allKeywords} />
     <meta name="author" content={author} />
-    <meta name="robots" content="index, follow" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
     <meta name="language" content={language} />
     <meta name="revisit-after" content="7 days" />
 
@@ -196,9 +213,10 @@ function toIsoDuration(totalSeconds: number) {
     <meta property="og:type" content={type} />
     <meta property="og:url" content={currentUrl} />
     <meta property="og:title" content={fullTitle} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={normalizedDescription} />
     <meta property="og:image" content={imageUrl} />
-    <meta property="og:site_name" content="MelodyMind Podcasts - Music History Through Audio" />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta property="og:site_name" content={siteTitle} />
     <meta property="og:locale" content={locale.replace("-", "_")} />
     {
       publishedTime && (
@@ -215,8 +233,9 @@ function toIsoDuration(totalSeconds: number) {
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={currentUrl} />
     <meta property="twitter:title" content={fullTitle} />
-    <meta property="twitter:description" content={description} />
+    <meta property="twitter:description" content={normalizedDescription} />
     <meta property="twitter:image" content={imageUrl} />
+    <meta name="twitter:image:alt" content={imageAlt} />
     <meta property="twitter:creator" content="@melodymind" />
     <meta property="twitter:site" content="@melodymind" />
     <link
