@@ -37,3 +37,18 @@ if (indexPage.includes("home__episode-card")) {
 }
 
 console.log("EpisodeCard extraction check passed.");
+
+const homeHeroComponent = resolve("src/components/HomeHero.astro");
+if (!existsSync(homeHeroComponent)) {
+  fail("HomeHero component missing: src/components/HomeHero.astro");
+}
+
+if (!indexPage.includes("HomeHero")) {
+  fail("HomeHero not used in src/pages/index.astro");
+}
+
+if (indexPage.includes("home__hero")) {
+  fail("Home hero markup still present in src/pages/index.astro");
+}
+
+console.log("HomeHero extraction check passed.");

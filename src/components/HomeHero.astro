@@ -1,0 +1,334 @@
+---
+interface Props {
+  title: string;
+  subtitle: string;
+  description: string;
+  totalEpisodes: number;
+  featuredContent: string;
+  availableOn: string;
+  spotifyUrl: string;
+  deezerUrl: string;
+}
+
+const {
+  title,
+  subtitle,
+  description,
+  totalEpisodes,
+  featuredContent,
+  availableOn,
+  spotifyUrl,
+  deezerUrl,
+} = Astro.props as Props;
+---
+
+<section class="home-hero">
+  <div class="home-hero__inner">
+    <div class="home-hero__badges">
+      <span class="home-hero__badge">🎙️ Sound-rich storytelling</span>
+      <span class="home-hero__badge">Warm studio vibes, hi-fi polish</span>
+    </div>
+
+    <div class="home-hero__intro">
+      <h1 class="home-hero__title">{title}</h1>
+      <p class="home-hero__subtitle">{subtitle}</p>
+      <p class="home-hero__description">{description}</p>
+    </div>
+
+    <div class="home-hero__media">
+      <img
+        src="/the-melody-mind-podcast.jpg"
+        alt="Illustrated cover art"
+        class="home-hero__image"
+        loading="lazy"
+        decoding="async"
+      />
+      <span class="home-hero__media-label">🔆 Analog glow, hi-fi clarity</span>
+    </div>
+
+    <div class="home-hero__highlights">
+      <div class="home-hero__highlight">
+        <span aria-hidden="true">🎧</span>
+        <span>
+          New episodes perfect for a walk, commute, or cozy night in.
+        </span>
+      </div>
+      <div class="home-hero__highlight">
+        <span aria-hidden="true">✨</span>
+        <span>
+          Stories first, facts second: always warm, curious, and welcoming.
+        </span>
+      </div>
+      <div class="home-hero__highlight home-hero__highlight--wide">
+        <span aria-hidden="true">🎶</span>
+        <span>
+          From rock ’n’ roll sparks to electronic fireworks — hear how music became the soundtrack of our lives.
+        </span>
+      </div>
+    </div>
+
+    <div class="home-hero__cta-row">
+      <a href="#episodes-heading" class="home-hero__cta home-hero__cta--primary">
+        Browse episodes
+      </a>
+      <a href="/rss.xml" class="home-hero__cta home-hero__cta--secondary" aria-label="Subscribe to RSS feed">
+        RSS feed
+      </a>
+    </div>
+
+    <div class="home-hero__platforms">
+      <span class="home-hero__platforms-label">{availableOn}</span>
+      <div class="home-hero__platforms-row">
+        <a
+          href={spotifyUrl}
+          class="home-hero__platform-link"
+          aria-label="Listen on Spotify"
+          target="_blank"
+          rel="noopener"
+        >
+          Spotify
+        </a>
+        <a
+          href={deezerUrl}
+          class="home-hero__platform-link"
+          aria-label="Listen on Deezer"
+          target="_blank"
+          rel="noopener"
+        >
+          Deezer
+        </a>
+      </div>
+    </div>
+
+    <div class="home-hero__meta">
+      <span class="home-hero__meta-item">
+        {totalEpisodes} episodes available
+      </span>
+      <span class="home-hero__meta-item">
+        {featuredContent}
+      </span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .home-hero {
+    position: relative;
+    padding: 3rem 2rem;
+    border-radius: 2rem;
+    background: var(--color-surface);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+  }
+
+  .home-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 18% 22%, rgba(246, 193, 119, 0.08), transparent 35%),
+      radial-gradient(circle at 82% 12%, rgba(122, 203, 191, 0.08), transparent 32%),
+      radial-gradient(circle at 70% 68%, rgba(255, 149, 128, 0.05), transparent 38%);
+    opacity: 0.8;
+  }
+
+  .home-hero__inner {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+    align-items: center;
+  }
+
+  .home-hero__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .home-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    color: var(--color-text);
+    font-size: 0.9rem;
+  }
+
+  .home-hero__intro {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 48rem;
+  }
+
+  .home-hero__title {
+    margin: 0;
+    font-size: 2.6rem;
+    font-weight: 800;
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .home-hero__subtitle {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .home-hero__description {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  .home-hero__media {
+    position: relative;
+    width: 100%;
+    max-width: 40rem;
+  }
+
+  .home-hero__image {
+    width: 100%;
+    height: auto;
+    border-radius: 1.6rem;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    box-shadow: var(--shadow-strong);
+    display: block;
+  }
+
+  .home-hero__media-label {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    font-size: 0.75rem;
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .home-hero__highlights {
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    max-width: 48rem;
+  }
+
+  .home-hero__highlight {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 1rem 1.1rem;
+    border-radius: 1rem;
+    background: var(--color-layer-1);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    color: var(--color-text);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .home-hero__highlight--wide {
+    grid-column: 1 / -1;
+  }
+
+  .home-hero__cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .home-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.4rem;
+    border-radius: 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .home-hero__cta--primary {
+    background: var(--color-primary);
+    color: var(--color-background);
+    box-shadow: var(--shadow-strong);
+  }
+
+  .home-hero__cta--secondary {
+    background: var(--color-layer-1);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    color: var(--color-text);
+  }
+
+  .home-hero__cta:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .home-hero__platforms {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: center;
+  }
+
+  .home-hero__platforms-label {
+    color: var(--color-text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .home-hero__platforms-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .home-hero__platform-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: var(--color-layer-1);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .home-hero__platform-link:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .home-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    color: var(--color-text);
+    font-size: 0.9rem;
+  }
+
+  .home-hero__meta-item {
+    padding: 0.5rem 0.9rem;
+    border-radius: 0.9rem;
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    box-shadow: var(--shadow-soft);
+  }
+</style>
