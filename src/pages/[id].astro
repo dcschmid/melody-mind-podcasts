@@ -3,6 +3,7 @@ import PodcastLayout from "../layouts/PodcastLayout.astro";
 import Headline from "../components/Headline.astro";
 import Prose from "../components/Prose.astro";
 import TranscriptDropdown from "../components/TranscriptDropdown.astro";
+import AudioPlayer from "../components/AudioPlayer.astro";
 import type { PodcastData } from "../types/podcast";
 import { formatDate, buildMetaDescription } from "../utils/helpers";
 
@@ -171,26 +172,11 @@ const t = {
           <span id="audio-player-heading">{t.listenToEpisode}</span>
         </Headline>
 
-        <audio
-          class="episode__audio-player"
-          controls
-          preload="metadata"
-          aria-label={`Audio player for ${currentPodcast.title}`}
-          data-title={currentPodcast.title}
-          crossorigin="anonymous"
-        >
-          <source src={currentPodcast.audioUrl} type="audio/mpeg" />
-          {currentPodcast.subtitleUrl && (
-            <track
-              kind="captions"
-              src={currentPodcast.subtitleUrl}
-              srclang="en"
-              label="English"
-              default
-            />
-          )}
-          Your browser does not support the audio element.
-        </audio>
+        <AudioPlayer
+          title={currentPodcast.title}
+          audioUrl={currentPodcast.audioUrl}
+          subtitleUrl={currentPodcast.subtitleUrl}
+        />
       </section>
     )}
 
@@ -249,6 +235,7 @@ const t = {
       </nav>
     )}
   </div>
+
 </PodcastLayout>
 
 <style>
@@ -391,10 +378,6 @@ const t = {
     border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
     display: grid;
     gap: 1rem;
-  }
-
-  .episode__audio-player {
-    width: 100%;
   }
 
   .episode__notes {
