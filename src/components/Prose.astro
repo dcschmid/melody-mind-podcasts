@@ -61,6 +61,12 @@ const classes = `prose prose--${size}`;
     text-underline-offset: 3px;
   }
 
+  .prose a:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: 0.3rem;
+  }
+
   .prose ul,
   .prose ol {
     margin: 0 0 1rem 1.25rem;
