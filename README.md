@@ -33,7 +33,7 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 
 - **Dark theme** with purple/indigo gradient accents
 - **Responsive design** for all device sizes
-- **Tailwind CSS** with Typography plugin
+- **Scoped component styles** with BEM class naming
 - **Custom animations** and hover effects
 - **Professional typography** with Atkinson Hyperlegible font
 
@@ -52,7 +52,7 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 ## 🛠️ Tech Stack
 
 - **Framework**: [Astro.js](https://astro.build/) v5.x
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) with Typography & Line-Clamp plugins
+- **Styling**: Scoped `<style>` blocks in `.astro` components (BEM classes)
 - **TypeScript**: Full typing
 - **Node Version**: 22 (via `.nvmrc` and `nvm use`)
 - **Package Manager**: npm
@@ -108,7 +108,6 @@ melody-mind-podcasts/
 │   ├── types/
 │   │   └── podcast.ts           # TypeScript definitions
 │   └── utils/
-│       ├── audioPlayer.ts       # Audio player functionality
 │       ├── helpers.ts           # Utility functions
 │       └── rss.ts               # RSS generation utilities
 ├── public/
@@ -116,7 +115,6 @@ melody-mind-podcasts/
 │   ├── robots.txt               # SEO configuration
 │   └── site.webmanifest         # PWA manifest
 ├── astro.config.mjs             # Astro configuration
-├── tailwind.config.mjs          # Tailwind configuration
 └── tsconfig.json                # TypeScript configuration
 ```
 
@@ -315,8 +313,8 @@ lighthouse http://localhost:4321/en/1950s --only-categories=accessibility
 
 ### Customization
 
-- **Colors**: Modify `tailwind.config.mjs` and CSS variables in `global.css`
-- **Fonts**: Update font family in Tailwind config
+- **Colors**: Update CSS variables in `src/layouts/PodcastLayout.astro`
+- **Fonts**: Update the font family in `src/layouts/PodcastLayout.astro`
 - **SEO**: Adjust meta tags in `PodcastLayout.astro`
 - **Streaming platforms**: Add/remove platforms in homepage template
 
@@ -351,7 +349,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - **Astro.js** team for the excellent static site generator
-- **Tailwind CSS** for the utility-first CSS framework
+- **BEM methodology** for consistent CSS naming
 - **Atkinson Hyperlegible** font for enhanced readability
 - **WCAG** guidelines for accessibility standards
 

@@ -9,537 +9,250 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
 
 {subtitleUrl && (
   <section
-    class="mt-6 rounded-xl border border-primary-30 bg-layer-4 shadow-inner"
-    aria-labelledby="transcript-heading"
+    class="transcript"
+    aria-labelledby="transcript-title"
+    data-subtitle-url={subtitleUrl}
+    data-podcast-title={podcastTitle}
   >
-    <div class="border-b border-primary-30 p-4">
-      <button
-        id="transcript-toggle"
-        class="flex w-full items-center justify-between text-left focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] rounded-md p-2"
-        aria-expanded="false"
-        aria-controls="transcript-content"
-        aria-describedby="transcript-description"
-      >
-        <h3 id="transcript-heading" class="text-lg font-semibold text-[var(--color-text)]">
-          📄 Transcript
-        </h3>
-        <div class="flex items-center gap-2">
-          <span id="transcript-toggle-text" class="text-sm text-[var(--color-text-muted)]">
-            Show Transcript
-          </span>
-          <svg
-            id="transcript-chevron"
-            class="h-5 w-5 text-[var(--color-text-muted)] transition-transform duration-200"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </div>
-      </button>
-      <p id="transcript-description" class="mt-1 text-xs text-[var(--color-text-muted)]">
-        Transcript for "{podcastTitle}"
-      </p>
-    </div>
-
-    <div
-      id="transcript-content"
-      class="hidden overflow-hidden"
-      aria-labelledby="transcript-heading"
-      role="region"
-    >
-      <div class="p-4">
-        <div id="transcript-loading" class="text-center text-[var(--color-text-muted)] py-8">
-          <div class="inline-flex items-center gap-2">
-            <svg class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-              <circle
-                class="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                stroke-width="4"
-              ></circle>
-              <path
-                class="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-            Loading transcript...
-          </div>
-        </div>
-
-        <div id="transcript-error" class="hidden text-center text-[var(--color-error-soft)] py-8">
-          <div class="inline-flex items-center gap-2">
-            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2L2 7v10c0 5.55 3.84 9.95 9 9.95s9-4.4 9-9.95V7l-10-5zm0 2.18L19 8v9c0 4.42-3.13 7.95-7 7.95S5 21.42 5 17V8l7-3.82z" />
-              <path d="M11 14h2v2h-2zm0-6h2v4h-2z" />
-            </svg>
-            Error loading transcript
-          </div>
-        </div>
-
-        <div id="transcript-text" class="hidden max-h-96 overflow-y-auto">
-          <div class="prose prose-sm prose-invert max-w-none text-[var(--color-text)]">
-            <!-- VTT content will be loaded here -->
-          </div>
-        </div>
+    <details class="transcript__details">
+      <summary class="transcript__summary">
+        <span class="transcript__summary-title" id="transcript-title">📄 Transcript</span>
+        <span class="transcript__summary-hint">Show Transcript</span>
+      </summary>
+      <div class="transcript__body">
+        <p class="transcript__status transcript__status--loading" hidden>
+          Loading transcript...
+        </p>
+        <p class="transcript__status transcript__status--error" hidden>
+          Error loading transcript
+        </p>
+        <div class="transcript__content" hidden></div>
       </div>
-    </div>
+    </details>
   </section>
 )}
 
-<script>
-  interface TranscriptCue {
-    startTime: number;
-    endTime: number;
-    text: string;
-  }
+<script is:inline>
+  (() => {
+    const roots = document.querySelectorAll(".transcript");
+    roots.forEach((root) => {
+      const subtitleUrl = root.getAttribute("data-subtitle-url");
+      if (!subtitleUrl) return;
 
-  class TranscriptDropdown {
-    private toggleButton: HTMLButtonElement;
-    private content: HTMLDivElement;
-    private chevron: HTMLElement;
-    private toggleText: HTMLSpanElement;
-    private loadingElement: HTMLDivElement;
-    private errorElement: HTMLDivElement;
-  private textElement: HTMLDivElement;
-  private isExpanded = false;
-  private isLoaded = false;
-  private subtitleUrl: string;
+      const details = root.querySelector(".transcript__details");
+      const hint = root.querySelector(".transcript__summary-hint");
+      const loading = root.querySelector(".transcript__status--loading");
+      const error = root.querySelector(".transcript__status--error");
+      const content = root.querySelector(".transcript__content");
 
-  constructor(subtitleUrl: string) {
-    this.subtitleUrl = subtitleUrl;
+      if (!details || !content || !loading || !error || !hint) return;
 
-      this.toggleButton = document.getElementById(
-        "transcript-toggle",
-      ) as HTMLButtonElement;
-      this.content = document.getElementById(
-        "transcript-content",
-      ) as HTMLDivElement;
-      this.chevron = document.getElementById(
-        "transcript-chevron",
-      ) as HTMLElement;
-      this.toggleText = document.getElementById(
-        "transcript-toggle-text",
-      ) as HTMLSpanElement;
-      this.loadingElement = document.getElementById(
-        "transcript-loading",
-      ) as HTMLDivElement;
-      this.errorElement = document.getElementById(
-        "transcript-error",
-      ) as HTMLDivElement;
-      this.textElement = document.getElementById(
-        "transcript-text",
-      ) as HTMLDivElement;
+      let loaded = false;
+      let loadingInProgress = false;
 
-      this.init();
-    }
+      const updateHint = () => {
+        hint.textContent = details.open ? "Hide Transcript" : "Show Transcript";
+      };
 
-    private init(): void {
-      if (!this.toggleButton) return;
-
-      this.toggleButton.addEventListener("click", () => {
-        this.toggle();
-      });
-
-      this.toggleButton.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          this.toggle();
+      const parseTimeToSeconds = (timeStr) => {
+        const clean = timeStr.split(/[ \t]/)[0];
+        const parts = clean.split(":").map((part) => part.trim());
+        if (parts.length === 3) {
+          const [hours, minutes, seconds] = parts;
+          return (
+            parseInt(hours, 10) * 3600 +
+            parseInt(minutes, 10) * 60 +
+            parseFloat(seconds)
+          );
         }
-      });
-
-      this.setupAudioSync();
-    }
-
-    private async toggle(): Promise<void> {
-      if (this.isExpanded) {
-        this.collapse();
-      } else {
-        this.expand();
-        if (!this.isLoaded) {
-          await this.loadTranscript();
+        if (parts.length === 2) {
+          const [minutes, seconds] = parts;
+          return parseInt(minutes, 10) * 60 + parseFloat(seconds);
         }
-      }
-    }
+        return 0;
+      };
 
-    private expand(): void {
-      this.isExpanded = true;
-      this.content.classList.remove("hidden");
-      this.chevron.style.transform = "rotate(180deg)";
-      this.toggleText.textContent = "Hide Transcript";
-      this.toggleButton.setAttribute("aria-expanded", "true");
+      const formatTime = (totalSeconds) => {
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = Math.floor(totalSeconds % 60);
+        return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+      };
 
-      if (this.isLoaded) {
-        const audioPlayer = document.getElementById(
-          "audio-player",
-        ) as HTMLAudioElement;
-        if (audioPlayer && !audioPlayer.paused) {
-          this.highlightCurrentCue(audioPlayer.currentTime);
-        }
-      }
-    }
+      const parseVTT = (vttText) => {
+        const lines = vttText.split("\n");
+        const cues = [];
+        let i = 0;
 
-    private collapse(): void {
-      this.isExpanded = false;
-      this.content.classList.add("hidden");
-      this.chevron.style.transform = "rotate(0deg)";
-      this.toggleText.textContent = "Show Transcript";
-      this.toggleButton.setAttribute("aria-expanded", "false");
-    }
-
-    private async loadTranscript(): Promise<void> {
-      try {
-        this.showLoading();
-
-        const response = await fetch(this.subtitleUrl);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const vttText = await response.text();
-        const cues = this.parseVTT(vttText);
-
-        this.displayTranscript(cues);
-        this.isLoaded = true;
-      } catch (error) {
-        console.error("Error loading transcript:", error);
-        this.showError();
-      }
-    }
-
-    private parseVTT(vttText: string): TranscriptCue[] {
-      const lines = vttText.split("\n");
-      const cues: TranscriptCue[] = [];
-      let i = 0;
-
-      while (i < lines.length && !lines[i].includes("-->")) {
-        i++;
-      }
-
-      while (i < lines.length) {
-        const line = lines[i].trim();
-
-        if (line.includes("-->")) {
-          const [startStr, endStr] = line.split("-->").map((s) => s.trim());
-          const startTime = this.parseTimeString(startStr);
-          const endTime = this.parseTimeString(endStr);
-
+        while (i < lines.length && !lines[i].includes("-->")) {
           i++;
-          let text = "";
+        }
 
-          while (
-            i < lines.length &&
-            lines[i].trim() !== "" &&
-            !lines[i].includes("-->")
-          ) {
-            if (text) text += " ";
-            text += lines[i].trim();
+        while (i < lines.length) {
+          const line = lines[i].trim();
+          if (line.includes("-->")) {
+            const [startStr] = line.split("-->").map((part) => part.trim());
+            i++;
+            let cueText = "";
+
+            while (
+              i < lines.length &&
+              lines[i].trim() !== "" &&
+              !lines[i].includes("-->")
+            ) {
+              cueText += (cueText ? " " : "") + lines[i].trim();
+              i++;
+            }
+
+            cueText = cueText.replace(/<[^>]*>/g, "").trim();
+            if (cueText) {
+              cues.push({ start: startStr, text: cueText });
+            }
+          } else {
             i++;
           }
-
-          if (text) {
-            text = text.replace(/<[^>]*>/g, "").trim();
-            cues.push({ startTime, endTime, text });
-          }
-        } else {
-          i++;
         }
-      }
 
-      return cues;
-    }
+        return cues;
+      };
 
-    private parseTimeString(timeStr: string): number {
-      const parts = timeStr.split(":");
-      if (parts.length === 3) {
-        const [hours, minutes, seconds] = parts;
-        return (
-          parseInt(hours) * 3600 + parseInt(minutes) * 60 + parseFloat(seconds)
-        );
-      } else if (parts.length === 2) {
-        const [minutes, seconds] = parts;
-        return parseInt(minutes) * 60 + parseFloat(seconds);
-      }
-      return 0;
-    }
+      const renderCues = (cues) => {
+        content.innerHTML = "";
+        cues.forEach((cue) => {
+          const cueRow = document.createElement("p");
+          cueRow.className = "transcript__cue";
 
-    private formatTime(seconds: number): string {
-      const hours = Math.floor(seconds / 3600);
-      const minutes = Math.floor((seconds % 3600) / 60);
-      const secs = Math.floor(seconds % 60);
+          const time = document.createElement("span");
+          time.className = "transcript__time";
+          time.textContent = formatTime(parseTimeToSeconds(cue.start));
 
-      if (hours > 0) {
-        return `${hours}:${minutes.toString().padStart(2, "0")}:${secs
-          .toString()
-          .padStart(2, "0")}`;
-      } else {
-        return `${minutes}:${secs.toString().padStart(2, "0")}`;
-      }
-    }
+          const text = document.createElement("span");
+          text.className = "transcript__text";
+          text.textContent = cue.text;
 
-    private displayTranscript(cues: TranscriptCue[]): void {
-      this.hideLoading();
-
-      if (cues.length === 0) {
-        this.showError();
-        return;
-      }
-
-      const html = cues
-        .map(
-          (cue) => `
-        <div class="transcript-cue mb-4 p-3 bg-layer-1 rounded-lg border-l-4 border-[var(--color-primary)]/35 hover:border-[var(--color-primary)]/55 transition-all duration-300 cursor-pointer" 
-             data-start="${cue.startTime}" 
-             data-end="${cue.endTime}"
-             role="button"
-             tabindex="0"
-             aria-label="Jump to ${this.formatTime(cue.startTime)} and play">
-          <div class="flex items-start gap-3">
-            <button 
-              class="transcript-time-btn flex-shrink-0 text-xs text-[var(--color-primary)] hover:text-[var(--color-secondary)] font-mono bg-layer-3 px-2 py-1 rounded transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)]"
-              data-time="${cue.startTime}"
-              aria-label="Jump to ${this.formatTime(cue.startTime)}"
-              title="Jump to ${this.formatTime(cue.startTime)}"
-            >
-              ${this.formatTime(cue.startTime)}
-            </button>
-            <div class="flex-1">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="transcript-playing-icon hidden text-[var(--color-primary)] animate-pulse" aria-label="Currently playing">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
-                </span>
-                <span class="transcript-playing-text hidden text-xs text-[var(--color-primary)] font-semibold">Now playing</span>
-              </div>
-              <p class="text-[var(--color-text)] leading-relaxed">${cue.text}</p>
-            </div>
-          </div>
-        </div>
-      `,
-        )
-        .join("");
-
-      this.textElement.innerHTML = html;
-      this.textElement.classList.remove("hidden");
-
-      this.textElement.querySelectorAll(".transcript-time-btn").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const time = parseFloat((e.target as HTMLElement).dataset.time || "0");
-          this.jumpToTime(time);
+          cueRow.appendChild(time);
+          cueRow.appendChild(text);
+          content.appendChild(cueRow);
         });
-      });
+      };
 
-      this.textElement.querySelectorAll(".transcript-cue").forEach((cue) => {
-        cue.addEventListener("click", (e) => {
-          const time = parseFloat((e.currentTarget as HTMLElement).dataset.start || "0");
-          this.jumpToTime(time);
-        });
+      const loadTranscript = async () => {
+        if (loaded || loadingInProgress) return;
+        loadingInProgress = true;
+        loading.hidden = false;
+        error.hidden = true;
+        content.hidden = true;
 
-        cue.addEventListener("keydown", (e) => {
-          const keyEvent = e as KeyboardEvent;
-          if (keyEvent.key === "Enter" || keyEvent.key === " ") {
-            e.preventDefault();
-            const time = parseFloat((e.currentTarget as HTMLElement).dataset.start || "0");
-            this.jumpToTime(time);
+        try {
+          const response = await fetch(subtitleUrl);
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
           }
-        });
-      });
-    }
+          const vttText = await response.text();
+          const cues = parseVTT(vttText);
 
-    private jumpToTime(time: number): void {
-      const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
-      if (audioPlayer) {
-        audioPlayer.currentTime = time;
-        if (audioPlayer.paused) {
-          audioPlayer.play().catch(console.error);
-        }
-        this.updatePlayButtonState(false);
-      }
-    }
-
-    private updatePlayButtonState(isPaused: boolean): void {
-      const playButton = document.getElementById("play-button");
-      const pauseButton = document.getElementById("pause-button");
-
-      if (playButton && pauseButton) {
-        if (isPaused) {
-          playButton.classList.remove("hidden");
-          playButton.classList.add("flex");
-          pauseButton.classList.add("hidden");
-          pauseButton.classList.remove("flex");
-        } else {
-          playButton.classList.add("hidden");
-          playButton.classList.remove("flex");
-          pauseButton.classList.remove("hidden");
-          pauseButton.classList.add("flex");
-        }
-      }
-    }
-
-    private highlightCurrentCue(currentTime: number): void {
-      const cues = this.textElement.querySelectorAll(".transcript-cue");
-      cues.forEach((cue) => {
-        const startTime = parseFloat((cue as HTMLElement).dataset.start || "0");
-        const endTime = parseFloat((cue as HTMLElement).dataset.end || "0");
-        const playingIcon = cue.querySelector(".transcript-playing-icon");
-        const playingText = cue.querySelector(".transcript-playing-text");
-
-        if (currentTime >= startTime && currentTime < endTime) {
-          cue.classList.add("transcript-current");
-          if (playingIcon) playingIcon.classList.remove("hidden");
-          if (playingText) playingText.classList.remove("hidden");
-
-          if (this.isExpanded) {
-            cue.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-            });
+          if (cues.length === 0) {
+            throw new Error("No cues found.");
           }
-        } else {
-          cue.classList.remove("transcript-current");
-          if (playingIcon) playingIcon.classList.add("hidden");
-          if (playingText) playingText.classList.add("hidden");
+
+          renderCues(cues);
+          content.hidden = false;
+          loaded = true;
+        } catch (err) {
+          error.hidden = false;
+        } finally {
+          loading.hidden = true;
+          loadingInProgress = false;
+        }
+      };
+
+      details.addEventListener("toggle", () => {
+        updateHint();
+        if (details.open) {
+          loadTranscript();
         }
       });
-    }
 
-    private setupAudioSync(): void {
-      const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
-      if (audioPlayer) {
-        audioPlayer.addEventListener("timeupdate", () => {
-          if (this.isLoaded && this.isExpanded) {
-            this.highlightCurrentCue(audioPlayer.currentTime);
-          }
-        });
-
-        audioPlayer.addEventListener("play", () => {
-          this.updatePlayButtonState(false);
-        });
-
-        audioPlayer.addEventListener("pause", () => {
-          this.updatePlayButtonState(true);
-        });
-      }
-    }
-
-    private showLoading(): void {
-      this.loadingElement.classList.remove("hidden");
-      this.errorElement.classList.add("hidden");
-      this.textElement.classList.add("hidden");
-    }
-
-    private hideLoading(): void {
-      this.loadingElement.classList.add("hidden");
-    }
-
-    private showError(): void {
-      this.loadingElement.classList.add("hidden");
-      this.errorElement.classList.remove("hidden");
-      this.textElement.classList.add("hidden");
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const transcriptToggle = document.getElementById("transcript-toggle");
-    if (transcriptToggle) {
-      const audioPlayer = document.getElementById("audio-player") as HTMLAudioElement;
-      const track = audioPlayer?.querySelector("track");
-      const subtitleUrl = track?.getAttribute("src");
-
-      if (subtitleUrl) {
-        new TranscriptDropdown(subtitleUrl);
-      }
-    }
-  });
+      updateHint();
+    });
+  })();
 </script>
 
 <style>
-  .transcript-cue {
-    scroll-margin-top: 2rem;
+  .transcript {
+    margin-top: 2rem;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    border-radius: 1rem;
+    background: var(--color-layer-4);
+    box-shadow: var(--shadow-soft);
   }
 
-  .transcript-cue:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  .transcript__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    list-style: none;
   }
 
-  .transcript-cue.transcript-current {
-    border-left-color: var(--color-primary);
-    background: linear-gradient(
-      90deg,
-      rgba(246, 193, 119, 0.14) 0%,
-      rgba(122, 203, 191, 0.08) 100%
-    );
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
-    transform: scale(1.02);
+  .transcript__summary::-webkit-details-marker {
+    display: none;
   }
 
-  .transcript-cue.transcript-current .transcript-time-btn {
-    background: var(--brand-gradient);
-    color: var(--color-background);
-    font-weight: 600;
+  .transcript__summary:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-radius: 0.5rem;
   }
 
-  .transcript-cue.transcript-current p {
+  .transcript__summary-title {
+    font-weight: 700;
     color: var(--color-text);
-    font-weight: 500;
   }
 
-  .transcript-time-btn:hover {
-    transform: translateY(-1px);
+  .transcript__summary-hint {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
   }
 
-  #transcript-text {
-    scroll-behavior: smooth;
+  .transcript__body {
+    padding: 1rem 1.25rem 1.25rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
   }
 
-  #transcript-text::-webkit-scrollbar {
-    width: 8px;
+  .transcript__status {
+    margin: 0 0 0.75rem;
+    color: var(--color-text-muted);
   }
 
-  #transcript-text::-webkit-scrollbar-track {
-    background: rgba(31, 25, 19, 0.8);
-    border-radius: 4px;
+  .transcript__status--error {
+    color: var(--color-error-soft);
   }
 
-  #transcript-text::-webkit-scrollbar-thumb {
-    background: rgba(246, 193, 119, 0.6);
-    border-radius: 4px;
+  .transcript__content {
+    display: grid;
+    gap: 0.75rem;
+    max-height: 24rem;
+    overflow-y: auto;
+    padding-right: 0.25rem;
   }
 
-  #transcript-text::-webkit-scrollbar-thumb:hover {
-    background: rgba(147, 51, 234, 0.7);
+  .transcript__cue {
+    margin: 0;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background: var(--color-layer-1);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+    color: var(--color-text);
+    line-height: 1.6;
   }
 
-  .transcript-cue {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .transcript-current {
-    animation: pulse-highlight 2s ease-in-out;
-  }
-
-  @keyframes pulse-highlight {
-    0% {
-      box-shadow: 0 0 20px rgba(147, 51, 234, 0.2);
-    }
-    50% {
-      box-shadow: 0 0 30px rgba(147, 51, 234, 0.4);
-    }
-    100% {
-      box-shadow: 0 0 20px rgba(147, 51, 234, 0.2);
-    }
+  .transcript__time {
+    display: inline-block;
+    min-width: 3rem;
+    margin-right: 0.5rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    font-variant-numeric: tabular-nums;
   }
 </style>

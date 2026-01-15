@@ -1,25 +1,25 @@
 ---
 ---
-<header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-[color-mix(in_srgb,var(--color-background)_85%,transparent)] bg-[color-mix(in_srgb,var(--color-background)_90%,transparent)] border-b border-primary-20 shadow-[0_10px_40px_rgba(0,0,0,0.45)]">
-  <nav class="max-w-6xl mx-auto flex items-center justify-between px-3 sm:px-4 lg:px-6 h-16">
+<header class="site-header">
+  <nav class="site-header__nav">
     <a
       href="/"
       aria-label="MelodyMind Podcasts"
       aria-current={Astro.url?.pathname === '/' ? 'page' : undefined}
-      class="group inline-flex items-center gap-2 font-semibold text-lg tracking-tight text-[var(--color-text)] hover:text-white focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] rounded px-2 py-1"
+      class="site-header__brand"
     >
-      <span class="text-xl transition-transform group-hover:scale-110" aria-hidden="true">🎵</span>
-      <span class="brand-gradient-text font-bold uppercase tracking-[0.05em]">
+      <span class="site-header__brand-icon" aria-hidden="true">🎵</span>
+      <span class="site-header__brand-text">
         Melody Mind Podcasts
       </span>
     </a>
-    <div class="flex items-center gap-3">
+    <div class="site-header__actions">
       <a
         href="/rss.xml"
-        class="inline-flex items-center gap-2 px-3 py-2 brand-button rounded-lg text-sm font-semibold transition-transform duration-150 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] hover:-translate-y-0.5"
+        class="site-header__rss-link"
         aria-label="Subscribe to RSS feed"
       >
-        <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+        <svg class="site-header__rss-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
           <path
             d="M6.503 20.752c0 1.794-1.456 3.248-3.251 3.248S0 22.546 0 20.752s1.456-3.248 3.252-3.248 3.251 1.454 3.251 3.248zm-6.503-12.572v4.811c6.05.062 10.96 4.966 11.022 11.009h4.817c-.062-8.71-7.118-15.758-15.839-15.82zm0-3.368c10.58.046 19.152 8.594 19.183 19.188h4.817c-.03-13.231-10.755-23.954-24-24v4.812z"
           ></path>
@@ -29,3 +29,93 @@
     </div>
   </nav>
 </header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    background: rgba(15, 12, 9, 0.86);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+  }
+
+  @supports not (backdrop-filter: blur(12px)) {
+    .site-header {
+      background: rgba(15, 12, 9, 0.92);
+    }
+  }
+
+  .site-header__nav {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .site-header__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+
+  .site-header__brand:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .site-header__brand-icon {
+    font-size: 1.25rem;
+    transition: transform 0.15s ease;
+  }
+
+  .site-header__brand:hover .site-header__brand-icon {
+    transform: scale(1.1);
+  }
+
+  .site-header__brand-text {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .site-header__rss-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: var(--color-background);
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .site-header__rss-link:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .site-header__rss-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+</style>

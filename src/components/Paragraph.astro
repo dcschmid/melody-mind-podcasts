@@ -1,22 +1,60 @@
 ---
 export interface Props {
-  textSize?: 'sm' | 'base' | 'lg' | 'xl';
+  textSize?: "sm" | "base" | "lg" | "xl";
+  tone?: "default" | "muted";
   className?: string;
 }
 
-const { textSize = 'base', className = '' } = Astro.props;
+const { textSize = "base", tone = "muted", className = "" } = Astro.props;
 
 const sizeClasses = {
-  sm: 'text-sm',
-  base: 'text-base', 
-  lg: 'text-lg',
-  xl: 'text-xl'
+  sm: "paragraph--sm",
+  base: "paragraph--base",
+  lg: "paragraph--lg",
+  xl: "paragraph--xl",
 };
 
-const baseClasses = 'text-[var(--color-text-muted)] leading-relaxed';
-const classes = `${baseClasses} ${sizeClasses[textSize]} ${className}`.trim();
+const toneClasses = {
+  default: "paragraph--default",
+  muted: "paragraph--muted",
+};
+
+const classes = ["paragraph", sizeClasses[textSize], toneClasses[tone], className]
+  .filter(Boolean)
+  .join(" ");
 ---
 
 <p class={classes}>
   <slot />
 </p>
+
+<style>
+  .paragraph {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .paragraph--default {
+    color: var(--color-text);
+  }
+
+  .paragraph--muted {
+    color: var(--color-text-muted);
+  }
+
+  .paragraph--sm {
+    font-size: 0.9rem;
+  }
+
+  .paragraph--base {
+    font-size: 1rem;
+  }
+
+  .paragraph--lg {
+    font-size: 1.125rem;
+  }
+
+  .paragraph--xl {
+    font-size: 1.25rem;
+  }
+</style>

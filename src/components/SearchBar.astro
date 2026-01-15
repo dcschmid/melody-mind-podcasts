@@ -14,14 +14,15 @@ const labels = {
 ---
 <form
   role="search"
-  class="search-bar mb-10 max-w-3xl mx-auto"
+  class="search-bar"
   aria-label={labels.label}
-  onsubmit="event.preventDefault()"
   aria-controls="episodes-list"
 >
-  <div class="flex gap-3 items-stretch">
-    <div class="relative flex-1">
-      <label for="episode-search" class="visually-hidden">{labels.label}</label>
+  <div class="search-bar__row">
+    <div class="search-bar__field">
+      <label for="episode-search" class="search-bar__label search-bar__label--visually-hidden">
+        {labels.label}
+      </label>
       <input
         id="episode-search"
         name="q"
@@ -31,27 +32,25 @@ const labels = {
         placeholder={labels.placeholder}
         aria-describedby="search-hint"
         aria-live="polite"
-        class="w-full rounded-lg bg-layer-1 border border-primary-30 focus:border-[var(--color-primary)] px-4 py-3 text-base text-[var(--color-text)] placeholder-[var(--color-text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] shadow-[0_12px_30px_rgba(0,0,0,0.35)]"
-        oninput="filterEpisodes(this.value)"
+        class="search-bar__input"
       />
       <button
         type="button"
         aria-label={labels.clear}
-        onclick="clearSearch()"
-        class="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-sm rounded-md text-[var(--color-text-muted)] hover:text-[var(--color-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-background)]"
+        class="search-bar__clear"
       >
         ×
       </button>
     </div>
   </div>
-  <p id="search-hint" class="mt-2 text-xs text-[var(--color-text-muted)]" aria-hidden="true">
+  <p id="search-hint" class="search-bar__hint" aria-hidden="true">
     {labels.hint}
   </p>
   <div
     aria-live="polite"
     aria-atomic="true"
     id="search-status"
-    class="mt-2 text-sm text-[var(--color-primary)]"
+    class="search-bar__status"
     data-total={total}
   >
     {labels.statusTemplate
@@ -61,75 +60,30 @@ const labels = {
   </div>
   <div
     id="search-empty"
-    class="mt-2 text-sm text-[var(--color-error-soft)] hidden"
+    class="search-bar__empty"
     role="status"
+    hidden
   >
     {labels.empty}
   </div>
 </form>
-<script>
-  const minChars = 1;
-  function normalizeText(str) {
-    return str.trim().toLowerCase();
-  }
-  function filterEpisodes(query) {
-    const q = normalizeText(query);
-    const items = Array.from(document.querySelectorAll("[data-episode]"));
-    let shown = 0;
-    if (q.length < minChars) {
-      items.forEach((el) => {
-        if (el instanceof HTMLElement) {
-          el.hidden = false;
-          el.setAttribute("tabindex", "0");
-        }
-      });
-      shown = items.length;
-    } else {
-      items.forEach((el) => {
-        const hay = normalizeText(el.getAttribute("data-search") || "");
-        const match = hay.indexOf(q) !== -1;
-        if (el instanceof HTMLElement) {
-          el.hidden = !match;
-          if (match) {
-            shown++;
-            el.setAttribute("tabindex", "0");
-          } else {
-            el.removeAttribute("tabindex");
-          }
-        }
-      });
-    }
-    updateStatus(shown);
-  }
-  function updateStatus(count) {
-    const status = document.getElementById("search-status");
-    const empty = document.getElementById("search-empty");
-    if (status) {
-      const total = status.getAttribute("data-total") || "0";
-      const word = count === 1 ? "result" : "results";
-      status.textContent = `Found: ${count} of ${total} ${word}`;
-    }
-    if (empty) {
-      empty.classList.toggle("hidden", count !== 0);
-    }
-  }
-  function clearSearch() {
-    const input = document.getElementById("episode-search");
-    if (input instanceof HTMLInputElement) {
-      input.value = "";
-      input.focus();
-      filterEpisodes("");
-    }
-  }
-  document.addEventListener("DOMContentLoaded", () => {
-    const total = document.querySelectorAll("[data-episode]").length;
-    updateStatus(total);
-  });
-  (window as any).filterEpisodes = filterEpisodes;
-  (window as any).clearSearch = clearSearch;
-</script>
+
 <style>
-  .visually-hidden {
+  .search-bar {
+    max-width: 40rem;
+    margin: 0 auto 2.5rem;
+  }
+
+  .search-bar__row {
+    display: flex;
+  }
+
+  .search-bar__field {
+    position: relative;
+    width: 100%;
+  }
+
+  .search-bar__label--visually-hidden {
     position: absolute !important;
     width: 1px !important;
     height: 1px !important;
@@ -139,5 +93,64 @@ const labels = {
     clip: rect(0 0 0 0) !important;
     white-space: nowrap !important;
     border: 0 !important;
+  }
+
+  .search-bar__input {
+    width: 100%;
+    padding: 0.85rem 2.5rem 0.85rem 1rem;
+    border-radius: 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    background: var(--color-layer-1);
+    color: var(--color-text);
+    font-size: 1rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .search-bar__input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .search-bar__input:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+    border-color: var(--color-primary);
+  }
+
+  .search-bar__clear {
+    position: absolute;
+    right: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-size: 1.25rem;
+    line-height: 1;
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.35rem;
+    cursor: pointer;
+  }
+
+  .search-bar__clear:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .search-bar__hint {
+    margin: 0.6rem 0 0;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .search-bar__status {
+    margin: 0.6rem 0 0;
+    font-size: 0.95rem;
+    color: var(--color-primary);
+  }
+
+  .search-bar__empty {
+    margin: 0.6rem 0 0;
+    font-size: 0.95rem;
+    color: var(--color-error-soft);
   }
 </style>

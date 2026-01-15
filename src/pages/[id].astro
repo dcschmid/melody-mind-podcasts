@@ -91,212 +91,106 @@ const t = {
   ]}
   canonical={`https://podcasts.melody-mind.de/${currentPodcast.id}`}
 >
-  <nav class="mb-8" aria-label="Breadcrumb navigation">
-    <a
-      href="/"
-      class="inline-flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold text-[var(--color-text)] transition-all duration-300 hover:-translate-x-1 hover:bg-layer-3 hover:text-white focus:bg-layer-3 focus:text-white border border-primary-30 hover:border-[var(--color-primary)]/50 focus:border-[var(--color-primary)]/50 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] bg-layer-1"
-      aria-label="Go back to all podcasts"
-    >
-      {t.backToAll}
-    </a>
-  </nav>
+  <div class="episode">
+    <nav class="episode__breadcrumb" aria-label="Breadcrumb navigation">
+      <a
+        href="/"
+        class="episode__breadcrumb-link"
+        aria-label="Go back to all podcasts"
+      >
+        {t.backToAll}
+      </a>
+    </nav>
 
-  <section class="mb-12" aria-labelledby="episode-title">
-    <div class="mb-8 flex flex-col gap-10 text-center md:text-left lg:flex-row">
-      <div class="relative w-full shrink-0 lg:w-96">
-        <div class="group relative aspect-3/2 w-full overflow-hidden">
-          <img
-            src={`/images/${currentPodcast.imageUrl}.jpg`}
-            alt={`Cover artwork for ${currentPodcast.title} podcast episode`}
-            width="400"
-            height="267"
-            loading="eager"
-            class="absolute inset-0 h-full w-full overflow-hidden rounded-2xl object-cover transition-transform duration-300 group-hover:scale-105"
-            decoding="async"
-          />
-        </div>
+    <section class="episode__hero" aria-labelledby="episode-title">
+      <div class="episode__hero-media">
+        <img
+          src={`/images/${currentPodcast.imageUrl}.jpg`}
+          alt={`Cover artwork for ${currentPodcast.title} podcast episode`}
+          width="400"
+          height="267"
+          loading="eager"
+          class="episode__hero-image"
+          decoding="async"
+        />
       </div>
 
-      <div class="flex-1">
-        <div class="mb-6 flex flex-wrap items-center justify-start gap-3 text-sm">
+      <div class="episode__hero-body">
+        <div class="episode__meta">
           <span
-            class="inline-flex items-center justify-center rounded-full px-4 py-2 text-sm font-bold tracking-wider text-[var(--color-text)] bg-layer-2 border border-[var(--color-primary)]/40 shadow-lg"
+            class="episode__pill"
             aria-label={`${t.episode} number ${episodeNumber}`}
           >
             {t.episode} {episodeNumber}
           </span>
           <time
-            class="inline-flex items-center gap-2 rounded-full bg-layer-1 border border-primary-30 px-3 py-1 text-[var(--color-text-muted)]"
+            class="episode__date"
             datetime={currentPodcast.publishedAt}
             aria-label={`${t.publishedOn} ${formatDate(currentPodcast.publishedAt)}`}
           >
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
             {t.publishedOn} {formatDate(currentPodcast.publishedAt)}
           </time>
         </div>
 
-        <Headline level="h1" textSize="2xl" className="mb-4">
+        <Headline level="h1" textSize="2xl" className="episode__title">
           <span id="episode-title">{currentPodcast.title}</span>
         </Headline>
 
-        <div class="prose prose-lg prose-invert max-w-none mb-6 text-[var(--color-text)] prose-headings:text-[var(--color-text)] prose-a:text-[var(--color-primary)]">
-          <p>{currentPodcast.description}</p>
-        </div>
+        <p class="episode__description">{currentPodcast.description}</p>
       </div>
-    </div>
+    </section>
 
     {currentPodcast.knowledgeUrl && (
       <section
-        class="mb-12 rounded-2xl border border-primary-30 bg-layer-1 p-6 shadow-[var(--shadow-soft)]"
+        class="episode__knowledge"
         aria-labelledby="knowledge-link"
       >
-        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div class="space-y-2">
-            <p class="text-xs uppercase tracking-[0.25em] text-[var(--color-text-muted)]" id="knowledge-link">
-              {t.knowledge}
-            </p>
-            <p class="text-lg text-[var(--color-text)]">
-              Deepen your dive with the related Melody Mind knowledge article.
-            </p>
-          </div>
-          <a
-            href={currentPodcast.knowledgeUrl}
-            class="inline-flex items-center gap-2 rounded-lg brand-button px-4 py-3 text-sm font-semibold shadow-lg transition hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)]"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${t.readArticle}: ${currentPodcast.title}`}
-          >
-            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M7 17L17 7" />
-              <path d="M10 7h7v7" />
-            </svg>
-            {t.readArticle}
-          </a>
+        <div class="episode__knowledge-body">
+          <p class="episode__kicker" id="knowledge-link">
+            {t.knowledge}
+          </p>
+          <p class="episode__knowledge-text">
+            Deepen your dive with the related Melody Mind knowledge article.
+          </p>
         </div>
+        <a
+          href={currentPodcast.knowledgeUrl}
+          class="episode__knowledge-link"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${t.readArticle}: ${currentPodcast.title}`}
+        >
+          {t.readArticle}
+        </a>
       </section>
     )}
 
     {currentPodcast.audioUrl && (
-      <section class="rounded-2xl text-center shadow-xl" aria-labelledby="audio-player-heading">
-        <div class="mb-6 rounded-xl border border-primary-30 bg-layer-4 p-6 shadow-inner">
-          <Headline level="h2" textSize="lg" className="mb-6 text-center text-[var(--color-text)]">
-            <span id="audio-player-heading">{t.listenToEpisode}</span>
-          </Headline>
+      <section class="episode__audio" aria-labelledby="audio-player-heading">
+        <Headline level="h2" textSize="lg" className="episode__section-title">
+          <span id="audio-player-heading">{t.listenToEpisode}</span>
+        </Headline>
 
-          <div class="mb-4 flex flex-col items-center justify-center gap-4 md:flex-row md:items-center">
-            <div class="relative">
-              <button
-                id="play-button"
-                aria-label={`Play ${currentPodcast.title} episode`}
-                aria-describedby="audio-status"
-                title={`Play ${currentPodcast.title}`}
-                class="flex h-12 w-12 items-center justify-center rounded-full brand-button shadow-lg transition-transform duration-150 hover:scale-105 focus:scale-105 focus:ring-4 focus:ring-[var(--color-primary)] focus:outline-none md:h-16 md:w-16"
-              >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </button>
-
-              <button
-                id="pause-button"
-                aria-label={`Pause ${currentPodcast.title} episode`}
-                aria-describedby="audio-status"
-                title={`Pause ${currentPodcast.title}`}
-                class="hidden h-12 w-12 items-center justify-center rounded-full brand-button shadow-lg transition-transform duration-150 hover:scale-105 focus:scale-105 focus:ring-4 focus:ring-[var(--color-primary)] focus:outline-none md:h-16 md:w-16"
-              >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="white" aria-hidden="true">
-                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-                </svg>
-              </button>
-            </div>
-
-            <div class="text-center md:text-left">
-              <div
-                class="text-lg font-semibold text-[var(--color-text)]"
-                id="audio-status"
-                aria-live="polite"
-                aria-atomic="true"
-              >
-                {currentPodcast.title}
-              </div>
-            </div>
-          </div>
-
-          <audio
-            id="audio-player"
-            preload="metadata"
-            class="hidden"
-            aria-label={`Audio player for ${currentPodcast.title}`}
-            data-title={currentPodcast.title}
-            crossorigin="anonymous"
-          >
-            <source src={currentPodcast.audioUrl} type="audio/mpeg" />
-            {currentPodcast.subtitleUrl && (
-              <track
-                kind="captions"
-                src={currentPodcast.subtitleUrl}
-                srclang="en"
-                label="English"
-                default
-              />
-            )}
-            Your browser does not support the audio element.
-          </audio>
-
-          <div class="mb-4 w-full">
-            <label for="progress-bar" class="sr-only">Audio progress</label>
-            <div
-              id="progress-bar"
-              role="slider"
-              aria-label="Audio progress"
-              aria-valuemin="0"
-              aria-valuemax="100"
-              aria-valuenow="0"
-              tabindex="0"
-              class="relative h-3 w-full cursor-pointer rounded-full bg-[color-mix(in_srgb,var(--color-layer-2)_80%,var(--color-primary)_20%)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] ring-1 ring-[color-mix(in_srgb,var(--color-primary)_20%,transparent)]"
-            >
-              <div
-                id="progress-fill"
-                class="absolute top-0 left-0 h-3 rounded-full bg-[var(--brand-gradient)] shadow-[0_0_0_1px_rgba(255,255,255,0.1)] transition-[width] duration-150 ease-out"
-                style="width:0%"
-                aria-hidden="true"
-              />
-            </div>
-          </div>
-
-          <div class="mb-4 flex flex-col items-center gap-2 text-sm text-[var(--color-text-muted)] md:flex-row md:justify-center md:gap-4">
-            <span id="time-display" aria-live="polite" aria-label="Current playback time">0:00 / 0:00</span>
-            <span id="shortcut-hint" class="hidden text-xs text-[var(--color-text-muted)] md:inline" aria-live="polite">
-              Press ? for shortcuts (Space, ←/→, Home/End)
-            </span>
-          </div>
-
-            <div class="flex items-center justify-center gap-6" role="group" aria-label="Audio player controls">
-              <button
-                class="text-[var(--color-text-muted)] transition-colors duration-200 hover:text-[var(--color-text)] focus:text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] rounded-md p-1"
-                id="rewind-button"
-                aria-label="Rewind 10 seconds"
-                title="Rewind 10 seconds"
-              >
-                <svg class="h-5 w-5 md:h-6 md:w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z" />
-                </svg>
-              </button>
-
-              <button
-                class="text-[var(--color-text-muted)] transition-colors duration-200 hover:text-[var(--color-text)] focus:text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] rounded-md p-1"
-                id="forward-button"
-                aria-label="Forward 10 seconds"
-                title="Forward 10 seconds"
-              >
-                <svg class="h-5 w-5 md:h-6 md:w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z" />
-                </svg>
-              </button>
-          </div>
-        </div>
+        <audio
+          class="episode__audio-player"
+          controls
+          preload="metadata"
+          aria-label={`Audio player for ${currentPodcast.title}`}
+          data-title={currentPodcast.title}
+          crossorigin="anonymous"
+        >
+          <source src={currentPodcast.audioUrl} type="audio/mpeg" />
+          {currentPodcast.subtitleUrl && (
+            <track
+              kind="captions"
+              src={currentPodcast.subtitleUrl}
+              srclang="en"
+              label="English"
+              default
+            />
+          )}
+          Your browser does not support the audio element.
+        </audio>
       </section>
     )}
 
@@ -304,64 +198,292 @@ const t = {
       subtitleUrl={currentPodcast.subtitleUrl}
       podcastTitle={currentPodcast.title}
     />
-  </section>
 
-  {currentPodcast.showNotesHtml && (
-    <section class="mb-12" aria-labelledby="show-notes-heading">
-      <Headline level="h2" textSize="xl" className="mb-4 text-[var(--color-text)]">
-        <span id="show-notes-heading">Show Notes</span>
-      </Headline>
-      <article role="region" aria-labelledby="show-notes-heading">
-        <Prose html={currentPodcast.showNotesHtml} size="lg" />
-      </article>
-    </section>
-  )}
+    {currentPodcast.showNotesHtml && (
+      <section class="episode__notes" aria-labelledby="show-notes-heading">
+        <Headline level="h2" textSize="xl" className="episode__section-title">
+          <span id="show-notes-heading">Show Notes</span>
+        </Headline>
+        <article role="region" aria-labelledby="show-notes-heading">
+          <Prose html={currentPodcast.showNotesHtml} size="lg" />
+        </article>
+      </section>
+    )}
 
-  {(prev || next) && (
-    <nav class="mb-12" aria-labelledby="episode-nav-heading">
-      <h2 id="episode-nav-heading" class="sr-only">{t.episodeNavigation}</h2>
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {prev && (
-          <a
-            href={`/${prev.id}`}
-            class="flex items-center gap-4 rounded-xl border border-primary-30 bg-layer-1 p-6 text-[var(--color-text)] shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-primary)]/50 hover:bg-layer-3 hover:shadow-xl focus:-translate-y-1 focus:border-[var(--color-primary)]/50 focus:bg-layer-3 focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)]"
-            aria-label={`Go to previous episode: ${prev.title}`}
-          >
-            <span class="text-2xl text-[var(--color-primary)]" aria-hidden="true">←</span>
-            <div class="flex-1">
-              <span class="mb-1 block text-xs tracking-wide text-[var(--color-text-muted)] uppercase">
-                {t.previousEpisode}
-              </span>
-              <span class="block text-base leading-tight font-semibold">{prev.title}</span>
-            </div>
-          </a>
-        )}
+    {(prev || next) && (
+      <nav class="episode__nav" aria-labelledby="episode-nav-heading">
+        <h2 id="episode-nav-heading" class="episode__sr-only">{t.episodeNavigation}</h2>
+        <div class="episode__nav-grid">
+          {prev && (
+            <a
+              href={`/${prev.id}`}
+              class="episode__nav-card"
+              aria-label={`Go to previous episode: ${prev.title}`}
+            >
+              <span class="episode__nav-direction" aria-hidden="true">←</span>
+              <div class="episode__nav-body">
+                <span class="episode__nav-label">
+                  {t.previousEpisode}
+                </span>
+                <span class="episode__nav-title">{prev.title}</span>
+              </div>
+            </a>
+          )}
 
-        {next && (
-          <a
-            href={`/${next.id}`}
-            class="flex items-center gap-4 rounded-xl border border-primary-30 bg-layer-1 p-6 text-[var(--color-text)] shadow-lg transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-primary)]/50 hover:bg-layer-3 hover:shadow-xl focus:-translate-y-1 focus:border-[var(--color-primary)]/50 focus:bg-layer-3 focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] md:col-start-2"
-            aria-label={`Go to next episode: ${next.title}`}
-          >
-            <div class="flex-1 text-right">
-              <span class="mb-1 block text-xs tracking-wide text-[var(--color-text-muted)] uppercase">
-                {t.nextEpisode}
-              </span>
-              <span class="block text-base leading-tight font-semibold">{next.title}</span>
-            </div>
-            <span class="text-2xl text-[var(--color-primary)]" aria-hidden="true">→</span>
-          </a>
-        )}
-      </div>
-    </nav>
-  )}
-
-  <script>
-    import { initSimpleAudioPlayer } from "../utils/audioPlayer";
-    document.addEventListener("DOMContentLoaded", () => {
-      const player = document.getElementById("audio-player");
-      if (!player) return;
-      initSimpleAudioPlayer();
-    });
-  </script>
+          {next && (
+            <a
+              href={`/${next.id}`}
+              class="episode__nav-card episode__nav-card--next"
+              aria-label={`Go to next episode: ${next.title}`}
+            >
+              <div class="episode__nav-body">
+                <span class="episode__nav-label">
+                  {t.nextEpisode}
+                </span>
+                <span class="episode__nav-title">{next.title}</span>
+              </div>
+              <span class="episode__nav-direction" aria-hidden="true">→</span>
+            </a>
+          )}
+        </div>
+      </nav>
+    )}
+  </div>
 </PodcastLayout>
+
+<style>
+  .episode {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .episode__breadcrumb {
+    margin-top: 0.25rem;
+  }
+
+  .episode__breadcrumb-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    border-radius: 0.8rem;
+    background: var(--color-layer-1);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    color: var(--color-text);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .episode__breadcrumb-link:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .episode__hero {
+    display: grid;
+    gap: 2rem;
+  }
+
+  .episode__hero-media {
+    width: 100%;
+  }
+
+  .episode__hero-image {
+    width: 100%;
+    height: auto;
+    border-radius: 1.5rem;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    box-shadow: var(--shadow-soft);
+    display: block;
+  }
+
+  .episode__hero-body {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .episode__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .episode__pill {
+    padding: 0.4rem 0.9rem;
+    border-radius: 999px;
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+    color: var(--color-text);
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .episode__date {
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: var(--color-layer-1);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+  }
+
+  .episode__title {
+    margin-top: 0.25rem;
+  }
+
+  .episode__description {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+
+  .episode__knowledge {
+    padding: 1.5rem;
+    border-radius: 1.25rem;
+    background: var(--color-layer-1);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    display: grid;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .episode__knowledge-body {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .episode__kicker {
+    margin: 0;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--color-text-muted);
+  }
+
+  .episode__knowledge-text {
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .episode__knowledge-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1rem;
+    border-radius: 0.75rem;
+    background: var(--color-primary);
+    color: var(--color-background);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .episode__knowledge-link:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .episode__audio {
+    padding: 1.5rem;
+    border-radius: 1.25rem;
+    background: var(--color-layer-4);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    display: grid;
+    gap: 1rem;
+  }
+
+  .episode__audio-player {
+    width: 100%;
+  }
+
+  .episode__notes {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .episode__section-title {
+    margin: 0;
+  }
+
+  .episode__nav {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .episode__sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  .episode__nav-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .episode__nav-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    padding: 1.1rem 1.25rem;
+    border-radius: 1rem;
+    background: var(--color-layer-1);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    color: var(--color-text);
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .episode__nav-card--next {
+    grid-template-columns: 1fr auto;
+    text-align: right;
+  }
+
+  .episode__nav-card:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .episode__nav-direction {
+    font-size: 1.6rem;
+    color: var(--color-primary);
+  }
+
+  .episode__nav-body {
+    display: grid;
+    gap: 0.25rem;
+  }
+
+  .episode__nav-label {
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-size: 0.7rem;
+    color: var(--color-text-muted);
+  }
+
+  .episode__nav-title {
+    font-weight: 700;
+  }
+
+  @media (min-width: 960px) {
+    .episode__hero {
+      grid-template-columns: 1fr 1.4fr;
+      align-items: center;
+    }
+
+    .episode__knowledge {
+      grid-template-columns: 1fr auto;
+    }
+
+    .episode__nav-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

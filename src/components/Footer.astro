@@ -2,40 +2,31 @@
 const year = new Date().getFullYear();
 ---
 
-<footer
-  class="mt-16 border-t border-primary-20 pt-12 pb-10 text-[var(--color-text-muted)]"
-  role="contentinfo"
->
-  <div
-    class="grid gap-10 lg:gap-12 lg:grid-cols-[2fr_1fr_1fr] items-start"
-  >
-    <div class="space-y-4">
-      <h2 class="text-sm uppercase tracking-[0.3em] text-[var(--color-text-muted)]">
-        Melody Mind
-      </h2>
-      <p class="text-base leading-relaxed text-[var(--color-text)]">
+<footer class="site-footer" role="contentinfo">
+  <div class="site-footer__grid">
+    <div class="site-footer__section">
+      <h2 class="site-footer__title">Melody Mind</h2>
+      <p class="site-footer__text">
         Curated stories, timelines, and playlists to help you listen with intent
         and discover new sounds.
       </p>
     </div>
 
-    <div class="space-y-4">
-      <h2 class="text-sm uppercase tracking-[0.3em] text-[var(--color-text-muted)]">
-        Explore
-      </h2>
-      <div class="space-y-3">
+    <div class="site-footer__section">
+      <h2 class="site-footer__title">Explore</h2>
+      <div class="site-footer__stack">
         <a
           href="https://melody-mind.de/"
-          class="text-lg font-medium brand-gradient-text transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] rounded-md px-1"
+          class="site-footer__link site-footer__link--brand"
           rel="noopener noreferrer"
           target="_blank"
         >
           Melody Mind
         </a>
-        <div class="flex flex-wrap gap-3 pt-2">
+        <div class="site-footer__pill-row">
           <a
             href="/rss.xml"
-            class="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-ink-dark transition hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] brand-button"
+            class="site-footer__pill"
             aria-label="Subscribe to the RSS feed"
           >
             RSS
@@ -44,14 +35,12 @@ const year = new Date().getFullYear();
       </div>
     </div>
 
-    <div class="space-y-4">
-      <h2 class="text-sm uppercase tracking-[0.3em] text-[var(--color-text-muted)]">
-        Support
-      </h2>
-      <div class="flex flex-wrap gap-3">
+    <div class="site-footer__section">
+      <h2 class="site-footer__title">Support</h2>
+      <div class="site-footer__button-row">
         <a
           href="https://www.paypal.me/dcschmid"
-          class="inline-flex items-center justify-center rounded-full border border-primary-30 bg-layer-2 px-5 py-2.5 text-base font-semibold text-[var(--color-text)] shadow-lg transition hover:-translate-y-0.5 hover:border-[var(--color-primary)]/60 hover:bg-layer-3 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)]"
+          class="site-footer__button"
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -59,7 +48,7 @@ const year = new Date().getFullYear();
         </a>
         <a
           href="https://www.buymeacoffee.com/dcschmid"
-          class="inline-flex items-center justify-center rounded-full border border-primary-30 bg-layer-2 px-5 py-2.5 text-base font-semibold text-[var(--color-text)] shadow-lg transition hover:-translate-y-0.5 hover:border-[var(--color-primary)]/60 hover:bg-layer-3 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)]"
+          class="site-footer__button"
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -69,15 +58,13 @@ const year = new Date().getFullYear();
     </div>
   </div>
 
-  <div class="mt-12 grid gap-8 lg:grid-cols-[2fr_1fr] lg:items-start">
-    <div class="space-y-3">
-      <h3 class="text-sm uppercase tracking-[0.3em] text-[var(--color-text-muted)]">
-        Legal
-      </h3>
-      <div class="flex flex-wrap gap-4 text-base">
+  <div class="site-footer__legal">
+    <div class="site-footer__legal-group">
+      <h3 class="site-footer__subtitle">Legal</h3>
+      <div class="site-footer__legal-links">
         <a
           href="https://melody-mind.de/imprint"
-          class="text-[var(--color-text)] hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] rounded px-1"
+          class="site-footer__link"
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -85,7 +72,7 @@ const year = new Date().getFullYear();
         </a>
         <a
           href="https://melody-mind.de/privacy"
-          class="text-[var(--color-text)] hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 focus:ring-offset-[var(--color-background)] rounded px-1"
+          class="site-footer__link"
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -93,9 +80,160 @@ const year = new Date().getFullYear();
         </a>
       </div>
     </div>
-    <div class="flex flex-col gap-3 text-sm text-[var(--color-text-muted)] lg:text-right">
+    <div class="site-footer__meta">
       <span>© {year} MelodyMind. All rights reserved.</span>
       <span>Optimized for accessibility (WCAG AAA) and responsive on all screens.</span>
     </div>
   </div>
 </footer>
+
+<style>
+  .site-footer {
+    margin-top: 4rem;
+    padding: 3rem 0 2.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    color: var(--color-text-muted);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .site-footer__section {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .site-footer__title {
+    margin: 0;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--color-text-muted);
+  }
+
+  .site-footer__text {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--color-text);
+  }
+
+  .site-footer__stack {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .site-footer__link {
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: 600;
+    padding: 0.2rem 0.1rem;
+    border-radius: 0.35rem;
+  }
+
+  .site-footer__link:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .site-footer__link--brand {
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-size: 1.05rem;
+  }
+
+  .site-footer__pill-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .site-footer__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    background: var(--color-primary);
+    color: var(--color-background);
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .site-footer__pill:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .site-footer__button-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .site-footer__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    color: var(--color-text);
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .site-footer__button:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .site-footer__legal {
+    margin-top: 2.5rem;
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .site-footer__subtitle {
+    margin: 0;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: var(--color-text-muted);
+  }
+
+  .site-footer__legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .site-footer__meta {
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 1024px) {
+    .site-footer__grid {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+
+    .site-footer__legal {
+      grid-template-columns: 2fr 1fr;
+      align-items: start;
+    }
+
+    .site-footer__meta {
+      text-align: right;
+    }
+  }
+</style>

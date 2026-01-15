@@ -1,27 +1,94 @@
 ---
 export interface Props {
   html: string;
-  size?: 'sm' | 'base' | 'lg';
+  size?: "sm" | "base" | "lg";
 }
 
-const { html, size = 'base' } = Astro.props;
+const { html, size = "base" } = Astro.props;
 
-const sizeClasses = {
-  sm: 'text-sm',
-  base: 'text-base',
-  lg: 'text-lg'
-};
-
-const classes = `${sizeClasses[size]} text-[var(--color-text)] prose prose-invert max-w-none
-  prose-headings:text-[var(--color-text)] prose-headings:font-semibold prose-headings:mt-6 prose-headings:mb-3
-  prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg
-  prose-p:mb-4 prose-p:leading-relaxed
-  prose-a:text-[var(--color-primary)] prose-a:no-underline hover:prose-a:text-[var(--color-secondary)] hover:prose-a:underline
-  prose-strong:text-[var(--color-text)] prose-strong:font-semibold
-  prose-ul:my-4 prose-ul:pl-6 prose-ol:my-4 prose-ol:pl-6
-  prose-li:mb-2
-  prose-code:bg-[var(--color-layer-2)] prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-sm prose-code:text-[var(--color-text)]
-  prose-blockquote:border-l-4 prose-blockquote:border-[color-mix(in_srgb,var(--color-primary)_40%,transparent)] prose-blockquote:pl-4 prose-blockquote:my-6 prose-blockquote:italic`;
+const classes = `prose prose--${size}`;
 ---
 
 <div class={classes} set:html={html} />
+
+<style>
+  .prose {
+    color: var(--color-text);
+  }
+
+  .prose--sm {
+    font-size: 0.95rem;
+  }
+
+  .prose--base {
+    font-size: 1rem;
+  }
+
+  .prose--lg {
+    font-size: 1.1rem;
+  }
+
+  .prose p {
+    margin: 0 0 1rem;
+    line-height: 1.7;
+  }
+
+  .prose h1,
+  .prose h2,
+  .prose h3 {
+    margin: 1.5rem 0 0.75rem;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.3;
+  }
+
+  .prose h1 {
+    font-size: 1.6rem;
+  }
+
+  .prose h2 {
+    font-size: 1.4rem;
+  }
+
+  .prose h3 {
+    font-size: 1.2rem;
+  }
+
+  .prose a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+  }
+
+  .prose ul,
+  .prose ol {
+    margin: 0 0 1rem 1.25rem;
+    padding: 0;
+  }
+
+  .prose li {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose strong {
+    color: var(--color-text);
+  }
+
+  .prose code {
+    background: var(--color-layer-2);
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      "Liberation Mono", "Courier New", monospace;
+  }
+
+  .prose blockquote {
+    margin: 1.5rem 0;
+    padding-left: 1rem;
+    border-left: 4px solid color-mix(in srgb, var(--color-primary) 40%, transparent);
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+</style>

@@ -1,6 +1,5 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
-import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 import minifyHtml from 'astro-minify-html-swc';
 
@@ -41,7 +40,6 @@ export default defineConfig({
   },
   compressHTML: true,
   vite: {
-    plugins: [tailwindcss()],
     resolve: {
       alias: {
         '@components': path.resolve('./src/components'),
