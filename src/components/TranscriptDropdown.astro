@@ -237,22 +237,30 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
     padding-right: 0.25rem;
   }
 
-  .transcript__cue {
+  :global(.transcript .transcript__cue) {
     margin: 0;
-    padding: 0.75rem;
-    border-radius: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-radius: 0.85rem;
     background: var(--color-layer-1);
     border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
     color: var(--color-text);
-    line-height: 1.6;
+    line-height: 1.65;
+    display: grid;
+    grid-template-columns: minmax(3.5rem, auto) 1fr;
+    gap: 0.75rem;
+    align-items: start;
   }
 
-  .transcript__time {
+  :global(.transcript .transcript__time) {
     display: inline-block;
-    min-width: 3rem;
-    margin-right: 0.5rem;
+    min-width: 3.5rem;
     font-weight: 600;
     color: var(--color-primary);
     font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  :global(.transcript .transcript__text) {
+    color: var(--color-text);
   }
 </style>
