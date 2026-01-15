@@ -21,3 +21,19 @@ if (episodePage.includes("episode-player__")) {
 }
 
 console.log("AudioPlayer extraction check passed.");
+
+const episodeCardComponent = resolve("src/components/EpisodeCard.astro");
+if (!existsSync(episodeCardComponent)) {
+  fail("EpisodeCard component missing: src/components/EpisodeCard.astro");
+}
+
+const indexPage = readFileSync(resolve("src/pages/index.astro"), "utf8");
+if (!indexPage.includes("EpisodeCard")) {
+  fail("EpisodeCard not used in src/pages/index.astro");
+}
+
+if (indexPage.includes("home__episode-card")) {
+  fail("Episode card markup still present in src/pages/index.astro");
+}
+
+console.log("EpisodeCard extraction check passed.");

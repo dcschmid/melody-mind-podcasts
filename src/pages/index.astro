@@ -1,6 +1,7 @@
 ---
 import PodcastLayout from "../layouts/PodcastLayout.astro";
 import SearchBar from "../components/SearchBar.astro";
+import EpisodeCard from "../components/EpisodeCard.astro";
 import type { PodcastData } from "../types/podcast";
 
 import enPodcasts from "../data/podcasts/en.json";
@@ -151,44 +152,14 @@ const t = {
       >
         {
           podcasts.map((podcast) => (
-            <article
-              data-episode
-              data-search={`${podcast.title} ${podcast.description}`}
-              class="home__episode-card"
-              role="listitem"
-            >
-              <div class="home__episode-media">
-                <img
-                  src={`/images/${podcast.imageUrl}.jpg`}
-                  alt={`Cover image for ${podcast.title} podcast episode`}
-                  class="home__episode-image"
-                  loading="lazy"
-                  decoding="async"
-                  width={600}
-                  height={400}
-                />
-                {podcast.durationSeconds && (
-                  <span class="home__episode-duration">
-                    {Math.floor(podcast.durationSeconds / 60)} min
-                  </span>
-                )}
-              </div>
-              <div class="home__episode-body">
-                <h3 class="home__episode-title">
-                  {podcast.title}
-                </h3>
-                <p class="home__episode-description">
-                  {podcast.description}
-                </p>
-                <a
-                  href={`/${podcast.id}`}
-                  class="home__episode-link"
-                  aria-label={`Listen to ${podcast.title} podcast episode`}
-                >
-                  {t.listen}
-                </a>
-              </div>
-            </article>
+            <EpisodeCard
+              id={podcast.id}
+              title={podcast.title}
+              description={podcast.description}
+              imageUrl={podcast.imageUrl}
+              durationSeconds={podcast.durationSeconds}
+              searchText={`${podcast.title} ${podcast.description}`}
+            />
           ))
         }
       </div>
@@ -228,6 +199,7 @@ const t = {
             if (el instanceof HTMLElement) {
               el.hidden = false;
               el.setAttribute("tabindex", "0");
+              el.setAttribute("aria-hidden", "false");
             }
           });
           shown = items.length;
@@ -240,8 +212,10 @@ const t = {
               if (match) {
                 shown += 1;
                 el.setAttribute("tabindex", "0");
+                el.setAttribute("aria-hidden", "false");
               } else {
                 el.removeAttribute("tabindex");
+                el.setAttribute("aria-hidden", "true");
               }
             }
           });
@@ -514,73 +488,6 @@ const t = {
   .home__episodes-grid {
     display: grid;
     gap: 1.25rem;
-  }
-
-  .home__episode-card {
-    display: grid;
-    background: var(--color-surface);
-    border-radius: 1.4rem;
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
-    box-shadow: var(--shadow-soft);
-  }
-
-  .home__episode-media {
-    position: relative;
-  }
-
-  .home__episode-image {
-    width: 100%;
-    height: auto;
-    display: block;
-  }
-
-  .home__episode-duration {
-    position: absolute;
-    right: 0.75rem;
-    bottom: 0.75rem;
-    padding: 0.2rem 0.6rem;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 600;
-  }
-
-  .home__episode-body {
-    padding: 1rem 1.25rem 1.5rem;
-    display: grid;
-    gap: 0.6rem;
-  }
-
-  .home__episode-title {
-    margin: 0;
-    font-size: 1.1rem;
-    color: var(--color-text);
-  }
-
-  .home__episode-description {
-    margin: 0;
-    color: var(--color-text-muted);
-    line-height: 1.6;
-  }
-
-  .home__episode-link {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.6rem 1rem;
-    border-radius: 0.75rem;
-    background: var(--color-primary);
-    color: var(--color-background);
-    font-weight: 700;
-    text-decoration: none;
-    width: fit-content;
-  }
-
-  .home__episode-link:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
   }
 
   @media (min-width: 768px) {
