@@ -30,20 +30,11 @@
   </nav>
 </header>
 
-<style>
+  <style>
   .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    backdrop-filter: blur(12px);
-    background: rgba(15, 12, 9, 0.86);
-    border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
-  }
-
-  @supports not (backdrop-filter: blur(12px)) {
-    .site-header {
-      background: rgba(15, 12, 9, 0.92);
-    }
+    position: relative;
+    background: var(--color-surface);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
   }
 
   .site-header__nav {
