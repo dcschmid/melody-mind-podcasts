@@ -90,9 +90,11 @@ const year = new Date().getFullYear();
 <style>
   .site-footer {
     margin-top: 4rem;
-    padding: 3rem 0 2.5rem;
+    padding: 2.75rem 1.5rem 2.5rem;
     background: var(--color-surface);
     border-top: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-soft);
     color: var(--color-text-muted);
   }
 
@@ -200,6 +202,8 @@ const year = new Date().getFullYear();
     margin-top: 2.5rem;
     display: grid;
     gap: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
   }
 
   .site-footer__subtitle {
@@ -235,6 +239,12 @@ const year = new Date().getFullYear();
 
     .site-footer__meta {
       text-align: right;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .site-footer {
+      padding: 3rem 2rem 2.75rem;
     }
   }
 </style>

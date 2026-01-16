@@ -6,6 +6,9 @@ interface Props {
   imageUrl: string;
   durationSeconds?: number;
   searchText: string;
+  publishedAt: string;
+  publishedLabel: string;
+  isLatest: boolean;
 }
 
 const {
@@ -15,6 +18,9 @@ const {
   imageUrl,
   durationSeconds,
   searchText,
+  publishedAt,
+  publishedLabel,
+  isLatest,
 } = Astro.props as Props;
 ---
 
@@ -34,13 +40,19 @@ const {
       width={600}
       height={400}
     />
-    {durationSeconds && (
-      <span class="episode-card__duration">
-        {Math.floor(durationSeconds / 60)} min
-      </span>
-    )}
   </div>
   <div class="episode-card__body">
+    <div class="episode-card__meta">
+      <time class="episode-card__date" datetime={publishedAt}>
+        {publishedLabel}
+      </time>
+      {isLatest && <span class="episode-card__badge">Latest</span>}
+      {durationSeconds && (
+        <span class="episode-card__duration">
+          {Math.floor(durationSeconds / 60)} min
+        </span>
+      )}
+    </div>
     <h3 class="episode-card__title">
       {title}
     </h3>
@@ -57,14 +69,13 @@ const {
   </div>
 </article>
 
-<style>
+  <style>
   .episode-card {
-    display: grid;
-    background: var(--color-surface);
-    border-radius: 1.4rem;
-    overflow: hidden;
-    border: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
-    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
   }
 
   .episode-card[hidden] {
@@ -73,35 +84,55 @@ const {
 
   .episode-card__media {
     position: relative;
+    width: 100%;
   }
 
   .episode-card__image {
     width: 100%;
     height: auto;
+    border-radius: 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
     display: block;
   }
 
+  .episode-card__body {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .episode-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+  }
+
+  .episode-card__date {
+    font-weight: 600;
+    color: var(--color-text-muted);
+  }
+
+  .episode-card__badge,
   .episode-card__duration {
-    position: absolute;
-    right: 0.75rem;
-    bottom: 0.75rem;
     padding: 0.2rem 0.6rem;
     border-radius: 999px;
-    background: rgba(11, 17, 25, 0.85);
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
     color: var(--color-text);
     font-size: 0.75rem;
     font-weight: 600;
   }
 
-  .episode-card__body {
-    padding: 1rem 1.25rem 1.5rem;
-    display: grid;
-    gap: 0.6rem;
+  .episode-card__badge {
+    background: color-mix(in srgb, var(--color-primary) 16%, var(--color-layer-2));
+    color: var(--color-text);
   }
 
   .episode-card__title {
     margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: var(--color-text);
   }
 
@@ -127,5 +158,39 @@ const {
   .episode-card__link:focus-visible {
     outline: none;
     box-shadow: var(--focus-ring);
+  }
+
+  @media (min-width: 760px) {
+    .episode-card {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+    }
+
+    .episode-card__media {
+      flex: 0 0 10.5rem;
+      align-self: flex-start;
+    }
+
+    .episode-card__image {
+      width: 100%;
+      height: 6rem;
+      object-fit: cover;
+    }
+
+    .episode-card__body {
+      flex: 1;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .episode-card__media {
+      flex: 0 0 12rem;
+    }
+
+    .episode-card__image {
+      height: 6.75rem;
+    }
   }
 </style>

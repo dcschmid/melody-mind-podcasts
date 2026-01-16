@@ -4,12 +4,37 @@ import SearchBar from "../components/SearchBar.astro";
 import EpisodeCard from "../components/EpisodeCard.astro";
 import HomeHero from "../components/HomeHero.astro";
 import type { PodcastData } from "../types/podcast";
+import { formatDate } from "../utils/helpers";
 
 import enPodcasts from "../data/podcasts/en.json";
 
 const podcasts = (enPodcasts.podcasts as PodcastData[]).filter(
   (podcast) => podcast.isAvailable,
 );
+const sortedPodcasts = [...podcasts].sort(
+  (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
+);
+const normalizeSearchText = (value: string) =>
+  value.toLowerCase().replace(/\s+/g, " ").trim();
+const pageSize = 5;
+const episodeEntries = sortedPodcasts.map((podcast, index) => ({
+  id: podcast.id,
+  title: podcast.title,
+  description: podcast.description,
+  imageUrl: podcast.imageUrl,
+  durationSeconds: podcast.durationSeconds,
+  publishedAt: podcast.publishedAt,
+  publishedLabel: formatDate(podcast.publishedAt),
+  isLatest: index === 0,
+  searchText: normalizeSearchText(`${podcast.title} ${podcast.description}`),
+}));
+const initialEpisodes = episodeEntries.slice(0, pageSize);
+const templateEpisode = episodeEntries[0];
+const serializedEpisodes = JSON.stringify(episodeEntries).replace(
+  /</g,
+  "\\u003c",
+);
+const encodedEpisodes = Buffer.from(serializedEpisodes, "utf8").toString("base64");
 
 const t = {
   title: "MelodyMind Podcasts",
@@ -28,7 +53,7 @@ const t = {
   spotifyUrl: "https://open.spotify.com/show/6iLbxIzJ4x5nMuuK5qySOQ",
   deezerUrl: "https://www.deezer.com/en/show/1002446242",
   youtubeUrl:
-    "https://www.youtube.com/playlist?list=PLioOQ4LuNFxtx2d70QKywiPC8WVBxgXN0",
+    "https://www.youtube.com/channel/UCD7MQkWw4P5Pd5xA_o6McLg",
   keywords: [
     "melodymind podcasts",
     "music history podcast",
@@ -78,23 +103,69 @@ const t = {
         id="episodes-list"
       >
         {
-          podcasts.map((podcast) => (
+          initialEpisodes.map((podcast) => (
             <EpisodeCard
               id={podcast.id}
               title={podcast.title}
               description={podcast.description}
               imageUrl={podcast.imageUrl}
               durationSeconds={podcast.durationSeconds}
-              searchText={`${podcast.title} ${podcast.description}`}
+              searchText={podcast.searchText}
+              publishedAt={podcast.publishedAt}
+              publishedLabel={podcast.publishedLabel}
+              isLatest={podcast.isLatest}
             />
           ))
         }
+      </div>
+      <div id="episodes-data" data-episodes={encodedEpisodes} hidden></div>
+      {
+        templateEpisode && (
+          <div id="episode-template" hidden>
+            <EpisodeCard
+              id={templateEpisode.id}
+              title={templateEpisode.title}
+              description={templateEpisode.description}
+              imageUrl={templateEpisode.imageUrl}
+              durationSeconds={templateEpisode.durationSeconds}
+              searchText={templateEpisode.searchText}
+              publishedAt={templateEpisode.publishedAt}
+              publishedLabel={templateEpisode.publishedLabel}
+              isLatest={templateEpisode.isLatest}
+            />
+          </div>
+        )
+      }
+      <div class="home__load-more" id="episodes-load-more" hidden>
+        <div class="home__load-more-panel" role="group" aria-label="Load more episodes">
+          <p class="home__load-more-status" id="episodes-load-more-status" aria-live="polite">
+            Showing {Math.min(pageSize, podcasts.length)} of {podcasts.length} episodes.
+          </p>
+          <button
+            class="home__load-more-button"
+            id="episodes-load-more-button"
+            type="button"
+            aria-controls="episodes-list"
+          >
+            Load more
+          </button>
+        </div>
       </div>
     </section>
   </div>
 
   <script is:inline>
     (() => {
+      const pageSize = 5;
+      const dataEl = document.querySelector("#episodes-data");
+      const encoded = dataEl?.getAttribute("data-episodes") || "";
+      const decoded = encoded
+        ? new TextDecoder().decode(
+            Uint8Array.from(atob(encoded), (char) => char.charCodeAt(0)),
+          )
+        : "[]";
+      const episodes = JSON.parse(decoded);
+
       const form = document.querySelector(".search-bar");
       if (!form) return;
 
@@ -102,70 +173,163 @@ const t = {
       const clearButton = form.querySelector(".search-bar__clear");
       const status = form.querySelector("#search-status");
       const empty = form.querySelector("#search-empty");
-      const items = Array.from(document.querySelectorAll("[data-episode]"));
+      const list = document.querySelector("#episodes-list");
+      const templateWrapper = document.querySelector("#episode-template");
+      const loadMore = document.querySelector("#episodes-load-more");
+      const loadMoreStatus = document.querySelector("#episodes-load-more-status");
+      const loadMoreButton = document.querySelector("#episodes-load-more-button");
+
+      if (
+        !(input instanceof HTMLInputElement) ||
+        !(list instanceof HTMLElement) ||
+        !(templateWrapper instanceof HTMLElement) ||
+        !(loadMore instanceof HTMLElement) ||
+        !(loadMoreStatus instanceof HTMLElement) ||
+        !(loadMoreButton instanceof HTMLButtonElement)
+      ) {
+        return;
+      }
+
+      let debounceId;
+      let query = "";
+      let visibleCount = pageSize;
 
       const normalize = (value) => value.trim().toLowerCase();
 
-      const updateStatus = (count) => {
-        if (status) {
-          const total = status.getAttribute("data-total") || "0";
-          const word = count === 1 ? "result" : "results";
-          status.textContent = `Found: ${count} of ${total} ${word}`;
+      const buildEpisode = (episode) => {
+        const source = templateWrapper.firstElementChild;
+        if (!(source instanceof HTMLElement)) return null;
+        const node = source.cloneNode(true);
+        if (!(node instanceof HTMLElement)) return null;
+
+        node.setAttribute("data-search", episode.searchText || "");
+
+        const image = node.querySelector(".episode-card__image");
+        if (image instanceof HTMLImageElement) {
+          image.src = `/images/${episode.imageUrl}.jpg`;
+          image.alt = `Cover image for ${episode.title} podcast episode`;
         }
-        if (empty) {
-          empty.hidden = count !== 0;
+
+        const time = node.querySelector(".episode-card__date");
+        if (time instanceof HTMLTimeElement) {
+          time.dateTime = episode.publishedAt;
+          time.textContent = episode.publishedLabel;
+        }
+
+        const badge = node.querySelector(".episode-card__badge");
+        if (!episode.isLatest && badge) {
+          badge.remove();
+        }
+
+        const duration = node.querySelector(".episode-card__duration");
+        if (duration instanceof HTMLElement) {
+          if (typeof episode.durationSeconds === "number" && episode.durationSeconds > 0) {
+            duration.textContent = `${Math.floor(episode.durationSeconds / 60)} min`;
+          } else {
+            duration.remove();
+          }
+        }
+
+        const title = node.querySelector(".episode-card__title");
+        if (title instanceof HTMLElement) {
+          title.textContent = episode.title;
+        }
+
+        const description = node.querySelector(".episode-card__description");
+        if (description instanceof HTMLElement) {
+          description.textContent = episode.description;
+        }
+
+        const link = node.querySelector(".episode-card__link");
+        if (link instanceof HTMLAnchorElement) {
+          link.href = `/${episode.id}`;
+          link.setAttribute(
+            "aria-label",
+            `Listen to ${episode.title} podcast episode`,
+          );
+        }
+
+        return node;
+      };
+
+      const updateStatus = (found, total) => {
+        if (!status) return;
+        const word = found === 1 ? "result" : "results";
+        const showing = Math.min(visibleCount, found);
+        status.textContent = `Found: ${found} of ${total} ${word}. Showing ${showing}.`;
+      };
+
+      const updateUrl = (currentQuery) => {
+        const params = new URLSearchParams();
+        if (currentQuery) params.set("q", currentQuery);
+        const queryString = params.toString();
+        const nextUrl = `${window.location.pathname}${queryString ? `?${queryString}` : ""}`;
+        window.history.replaceState(null, "", nextUrl);
+      };
+
+      const render = () => {
+        const normalized = normalize(query);
+        const filtered = normalized
+          ? episodes.filter((episode) =>
+              (episode.searchText || "").includes(normalized),
+            )
+          : episodes;
+        const total = episodes.length;
+        const found = filtered.length;
+        const visible = filtered.slice(0, visibleCount);
+
+        list.innerHTML = "";
+        visible.forEach((episode) => {
+          const node = buildEpisode(episode);
+          if (node) list.appendChild(node);
+        });
+
+        updateStatus(found, total);
+        updateUrl(query);
+
+        const showing = Math.min(visibleCount, found);
+        loadMoreStatus.textContent = `Showing ${showing} of ${found} episodes.`;
+        loadMore.hidden = found <= pageSize;
+        loadMoreButton.disabled = showing >= found;
+
+        if (empty instanceof HTMLElement) {
+          empty.hidden = found !== 0;
         }
       };
 
-      const filter = (value) => {
-        const query = normalize(value);
-        let shown = 0;
-
-        if (!query) {
-          items.forEach((el) => {
-            if (el instanceof HTMLElement) {
-              el.hidden = false;
-              el.setAttribute("tabindex", "0");
-              el.setAttribute("aria-hidden", "false");
-            }
-          });
-          shown = items.length;
-        } else {
-          items.forEach((el) => {
-            const hay = normalize(el.getAttribute("data-search") || "");
-            const match = hay.includes(query);
-            if (el instanceof HTMLElement) {
-              el.hidden = !match;
-              if (match) {
-                shown += 1;
-                el.setAttribute("tabindex", "0");
-                el.setAttribute("aria-hidden", "false");
-              } else {
-                el.removeAttribute("tabindex");
-                el.setAttribute("aria-hidden", "true");
-              }
-            }
-          });
-        }
-
-        updateStatus(shown);
+      const initFromUrl = () => {
+        const params = new URLSearchParams(window.location.search);
+        query = params.get("q") || "";
+        input.value = query;
       };
 
       form.addEventListener("submit", (event) => event.preventDefault());
 
-      input?.addEventListener("input", (event) => {
-        filter(event.target.value);
+      input.addEventListener("input", (event) => {
+        const value = event.target.value;
+        window.clearTimeout(debounceId);
+        debounceId = window.setTimeout(() => {
+          query = value;
+          visibleCount = pageSize;
+          render();
+        }, 180);
       });
 
       clearButton?.addEventListener("click", () => {
-        if (input instanceof HTMLInputElement) {
-          input.value = "";
-          input.focus();
-          filter("");
-        }
+        input.value = "";
+        input.focus();
+        query = "";
+        visibleCount = pageSize;
+        render();
       });
 
-      updateStatus(items.length);
+      loadMoreButton.addEventListener("click", () => {
+        visibleCount += pageSize;
+        render();
+      });
+
+      initFromUrl();
+      render();
     })();
   </script>
 </PodcastLayout>
@@ -195,18 +359,72 @@ const t = {
 
   .home__episodes-grid {
     display: grid;
-    gap: 1.25rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--card-divider);
   }
 
-  @media (min-width: 768px) {
-    .home__episodes-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  .home__load-more {
+    margin-top: 1.5rem;
+    display: grid;
+    justify-items: center;
   }
 
-  @media (min-width: 1200px) {
-    .home__episodes-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+  .home__load-more-panel {
+    width: min(28rem, 100%);
+    display: grid;
+    gap: 0.85rem;
+    justify-items: center;
+    padding: 1.1rem 1.5rem;
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
+    background: linear-gradient(
+      150deg,
+      color-mix(in srgb, var(--color-layer-2) 92%, transparent),
+      color-mix(in srgb, var(--color-layer-1) 95%, transparent)
+    );
+    box-shadow:
+      0 22px 50px rgba(2, 8, 18, 0.45),
+      0 0 0 1px rgba(120, 200, 255, 0.08);
+  }
+
+  .home__load-more-status {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .home__load-more-button {
+    border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--color-primary) 35%, var(--color-layer-1)),
+      color-mix(in srgb, var(--color-primary) 22%, var(--color-layer-2))
+    );
+    color: var(--color-text);
+    padding: 0.65rem 1.35rem;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .home__load-more-button:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  .home__load-more-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba(2, 8, 18, 0.4);
+    border-color: color-mix(in srgb, var(--color-primary) 50%, transparent);
+  }
+
+  .home__load-more-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+    transform: none;
+    box-shadow: none;
   }
 </style>
