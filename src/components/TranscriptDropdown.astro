@@ -13,6 +13,7 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
     aria-labelledby="transcript-title"
     data-subtitle-url={subtitleUrl}
     data-podcast-title={podcastTitle}
+    data-player-id={subtitleUrl}
   >
     <details class="transcript__details">
       <summary class="transcript__summary">
@@ -39,6 +40,7 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
       const subtitleUrl = root.getAttribute("data-subtitle-url");
       if (!subtitleUrl) return;
 
+      const playerId = root.getAttribute("data-player-id") || "";
       const details = root.querySelector(".transcript__details");
       const hint = root.querySelector(".transcript__summary-hint");
       const loading = root.querySelector(".transcript__status--loading");
@@ -49,6 +51,10 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
 
       let loaded = false;
       let loadingInProgress = false;
+      let cues = [];
+      let cueButtons = [];
+      let activeCueIndex = -1;
+      let lastAudioTime = null;
 
       const updateHint = () => {
         hint.textContent = details.open ? "Hide Transcript" : "Show Transcript";
@@ -105,7 +111,11 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
 
             cueText = cueText.replace(/<[^>]*>/g, "").trim();
             if (cueText) {
-              cues.push({ start: startStr, text: cueText });
+              cues.push({
+                start: startStr,
+                startSeconds: parseTimeToSeconds(startStr),
+                text: cueText,
+              });
             }
           } else {
             i++;
@@ -117,13 +127,21 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
 
       const renderCues = (cues) => {
         content.innerHTML = "";
+        cueButtons = [];
+        activeCueIndex = -1;
         cues.forEach((cue) => {
-          const cueRow = document.createElement("p");
+          const cueRow = document.createElement("button");
+          cueRow.type = "button";
           cueRow.className = "transcript__cue";
+          cueRow.dataset.start = cue.startSeconds.toString();
+          cueRow.setAttribute(
+            "aria-label",
+            `Jump to ${formatTime(cue.startSeconds)}`,
+          );
 
           const time = document.createElement("span");
           time.className = "transcript__time";
-          time.textContent = formatTime(parseTimeToSeconds(cue.start));
+          time.textContent = formatTime(cue.startSeconds);
 
           const text = document.createElement("span");
           text.className = "transcript__text";
@@ -132,7 +150,50 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
           cueRow.appendChild(time);
           cueRow.appendChild(text);
           content.appendChild(cueRow);
+          cueButtons.push(cueRow);
         });
+      };
+
+      const getActiveCueIndex = (currentTime) => {
+        if (!Number.isFinite(currentTime)) return -1;
+        let index = -1;
+        for (let i = 0; i < cues.length; i += 1) {
+          if (currentTime >= cues[i].startSeconds) {
+            index = i;
+          } else {
+            break;
+          }
+        }
+        return index;
+      };
+
+      const setActiveCue = (nextIndex) => {
+        if (nextIndex === activeCueIndex) return;
+        if (activeCueIndex >= 0 && cueButtons[activeCueIndex]) {
+          const previousButton = cueButtons[activeCueIndex];
+          previousButton.classList.remove("transcript__cue--active");
+          previousButton.removeAttribute("aria-current");
+        }
+        activeCueIndex = nextIndex;
+        if (activeCueIndex >= 0 && cueButtons[activeCueIndex]) {
+          const nextButton = cueButtons[activeCueIndex];
+          nextButton.classList.add("transcript__cue--active");
+          nextButton.setAttribute("aria-current", "true");
+          nextButton.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        }
+      };
+
+      const dispatchSeekEvent = (timeSeconds) => {
+        if (!playerId || !Number.isFinite(timeSeconds)) return;
+        window.dispatchEvent(
+          new CustomEvent("transcript:seek", {
+            detail: {
+              playerId,
+              time: timeSeconds,
+              autoplay: true,
+            },
+          }),
+        );
       };
 
       const loadTranscript = async () => {
@@ -148,13 +209,17 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
             throw new Error(`HTTP ${response.status}`);
           }
           const vttText = await response.text();
-          const cues = parseVTT(vttText);
+          const parsedCues = parseVTT(vttText);
 
-          if (cues.length === 0) {
+          if (parsedCues.length === 0) {
             throw new Error("No cues found.");
           }
 
+          cues = parsedCues;
           renderCues(cues);
+          if (Number.isFinite(lastAudioTime)) {
+            setActiveCue(getActiveCueIndex(lastAudioTime));
+          }
           content.hidden = false;
           loaded = true;
         } catch (err) {
@@ -165,10 +230,32 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
         }
       };
 
+      content.addEventListener("click", (event) => {
+        if (!(event.target instanceof Element)) return;
+        const cueButton = event.target.closest(".transcript__cue");
+        if (!(cueButton instanceof HTMLButtonElement)) return;
+        const startSeconds = Number(cueButton.dataset.start);
+        dispatchSeekEvent(startSeconds);
+      });
+
+      window.addEventListener("audio:time", (event) => {
+        if (!(event instanceof CustomEvent)) return;
+        const detail = event.detail;
+        if (!detail || detail.playerId !== playerId) return;
+        const currentTime = Number(detail.currentTime);
+        if (!Number.isFinite(currentTime)) return;
+        lastAudioTime = currentTime;
+        if (!loaded || content.hidden || !details.open) return;
+        setActiveCue(getActiveCueIndex(currentTime));
+      });
+
       details.addEventListener("toggle", () => {
         updateHint();
         if (details.open) {
           loadTranscript();
+          if (loaded && Number.isFinite(lastAudioTime)) {
+            setActiveCue(getActiveCueIndex(lastAudioTime));
+          }
         }
       });
 
@@ -240,6 +327,9 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
   }
 
   :global(.transcript .transcript__cue) {
+    width: 100%;
+    text-align: left;
+    font: inherit;
     margin: 0;
     padding: 0.85rem 1rem;
     border-radius: 0.85rem;
@@ -251,6 +341,18 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
     grid-template-columns: minmax(3.5rem, auto) 1fr;
     gap: 0.75rem;
     align-items: start;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  :global(.transcript .transcript__cue:focus-visible) {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  :global(.transcript .transcript__cue--active) {
+    background: color-mix(in srgb, var(--color-primary) 18%, var(--color-layer-2));
+    border-color: color-mix(in srgb, var(--color-primary) 55%, transparent);
   }
 
   :global(.transcript .transcript__time) {

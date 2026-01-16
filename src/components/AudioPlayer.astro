@@ -6,35 +6,40 @@ interface Props {
 }
 
 const { title, audioUrl, subtitleUrl } = Astro.props as Props;
+const playerId = subtitleUrl ?? audioUrl;
 ---
 
 <div
   class="episode-player"
   data-episode-player
+  data-player-id={playerId}
   tabindex="0"
   aria-label={`${title} audio player`}
 >
   <div class="episode-player__controls">
     <button
-      class="episode-player__control episode-player__control--play"
+      class="episode-player__control"
       type="button"
-      data-action="play"
+      data-action="toggle"
       aria-label={`Play ${title}`}
+      aria-pressed="false"
       aria-describedby="episode-player-status"
     >
-      <svg class="episode-player__control-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg
+        class="episode-player__control-icon episode-player__control-icon--play"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+      >
         <path d="M8 5v14l11-7z" />
       </svg>
-    </button>
-    <button
-      class="episode-player__control episode-player__control--pause"
-      type="button"
-      data-action="pause"
-      aria-label={`Pause ${title}`}
-      aria-describedby="episode-player-status"
-      hidden
-    >
-      <svg class="episode-player__control-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg
+        class="episode-player__control-icon episode-player__control-icon--pause"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        aria-hidden="true"
+        hidden
+      >
         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
       </svg>
     </button>
@@ -151,10 +156,12 @@ const { title, audioUrl, subtitleUrl } = Astro.props as Props;
       const audio = player.querySelector(".episode-player__audio");
       if (!(audio instanceof HTMLAudioElement)) return;
 
-      const playButton = player.querySelector('[data-action="play"]');
-      const pauseButton = player.querySelector('[data-action="pause"]');
+      const playerId = player.getAttribute("data-player-id") || "";
+      const toggleButton = player.querySelector('[data-action="toggle"]');
       const rewindButton = player.querySelector('[data-action="rewind"]');
       const forwardButton = player.querySelector('[data-action="forward"]');
+      const playIcon = toggleButton?.querySelector(".episode-player__control-icon--play");
+      const pauseIcon = toggleButton?.querySelector(".episode-player__control-icon--pause");
       const progress = player.querySelector(".episode-player__progress");
       const progressFill = player.querySelector(".episode-player__progress-fill");
       const timeDisplay = player.querySelector(".episode-player__time");
@@ -164,14 +171,37 @@ const { title, audioUrl, subtitleUrl } = Astro.props as Props;
       let isPlaying = false;
       const title = audio.dataset.title || "episode";
 
+      const dispatchTimeEvent = () => {
+        if (!playerId) return;
+        const duration = Number.isFinite(audio.duration) ? audio.duration : 0;
+        const currentTime = Number.isFinite(audio.currentTime) ? audio.currentTime : 0;
+        window.dispatchEvent(
+          new CustomEvent("audio:time", {
+            detail: {
+              playerId,
+              currentTime,
+              duration,
+              isPlaying,
+            },
+          }),
+        );
+      };
+
       const setStatus = (message) => {
         if (status) status.textContent = message;
       };
 
-      const updateButtons = () => {
-        if (!(playButton instanceof HTMLElement) || !(pauseButton instanceof HTMLElement)) return;
-        playButton.hidden = isPlaying;
-        pauseButton.hidden = !isPlaying;
+      const updateToggleButton = () => {
+        if (!(toggleButton instanceof HTMLButtonElement)) return;
+        toggleButton.dataset.state = isPlaying ? "playing" : "paused";
+        toggleButton.setAttribute("aria-pressed", isPlaying ? "true" : "false");
+        toggleButton.setAttribute("aria-label", `${isPlaying ? "Pause" : "Play"} ${title}`);
+        if (playIcon instanceof SVGElement) {
+          playIcon.style.display = isPlaying ? "none" : "block";
+        }
+        if (pauseIcon instanceof SVGElement) {
+          pauseIcon.style.display = isPlaying ? "block" : "none";
+        }
       };
 
       const updateProgress = () => {
@@ -195,6 +225,24 @@ const { title, audioUrl, subtitleUrl } = Astro.props as Props;
         );
       };
 
+      const applySeek = (timeSeconds, autoplay) => {
+        if (!Number.isFinite(timeSeconds)) return;
+        const duration = Number.isFinite(audio.duration) ? audio.duration : null;
+        const clampedTime =
+          duration === null
+            ? Math.max(0, timeSeconds)
+            : Math.min(Math.max(0, timeSeconds), duration);
+        audio.currentTime = clampedTime;
+        if (autoplay) {
+          const playPromise = audio.play();
+          if (playPromise && typeof playPromise.catch === "function") {
+            playPromise.catch(() => {});
+          }
+        }
+        updateProgress();
+        dispatchTimeEvent();
+      };
+
       const seekToPosition = (clientX) => {
         if (!(progress instanceof HTMLElement) || !Number.isFinite(audio.duration)) return;
         const rect = progress.getBoundingClientRect();
@@ -202,29 +250,25 @@ const { title, audioUrl, subtitleUrl } = Astro.props as Props;
         audio.currentTime = percent * audio.duration;
       };
 
-      playButton?.addEventListener("click", () => {
-        audio.play();
-        isPlaying = true;
-        setStatus(`Playing ${title}`);
-        updateButtons();
-      });
-
-      pauseButton?.addEventListener("click", () => {
-        audio.pause();
-        isPlaying = false;
-        setStatus(`Paused ${title}`);
-        updateButtons();
+      toggleButton?.addEventListener("click", () => {
+        if (audio.paused || audio.ended) {
+          audio.play();
+        } else {
+          audio.pause();
+        }
       });
 
       rewindButton?.addEventListener("click", () => {
         audio.currentTime = Math.max(0, audio.currentTime - 10);
         updateProgress();
+        dispatchTimeEvent();
       });
 
       forwardButton?.addEventListener("click", () => {
         if (Number.isFinite(audio.duration)) {
           audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
           updateProgress();
+          dispatchTimeEvent();
         }
       });
 
@@ -232,6 +276,7 @@ const { title, audioUrl, subtitleUrl } = Astro.props as Props;
         if (event instanceof MouseEvent) {
           seekToPosition(event.clientX);
           updateProgress();
+          dispatchTimeEvent();
         }
       });
 
@@ -263,6 +308,7 @@ const { title, audioUrl, subtitleUrl } = Astro.props as Props;
               break;
           }
           updateProgress();
+          dispatchTimeEvent();
         }
       });
 
@@ -274,11 +320,7 @@ const { title, audioUrl, subtitleUrl } = Astro.props as Props;
 
         if (event.code === "Space") {
           event.preventDefault();
-          if (isPlaying) {
-            pauseButton?.click();
-          } else {
-            playButton?.click();
-          }
+          toggleButton?.click();
         } else if (event.code === "ArrowLeft") {
           rewindButton?.click();
         } else if (event.code === "ArrowRight") {
@@ -291,8 +333,22 @@ const { title, audioUrl, subtitleUrl } = Astro.props as Props;
         }
       });
 
-      audio.addEventListener("loadedmetadata", updateProgress);
-      audio.addEventListener("timeupdate", updateProgress);
+      window.addEventListener("transcript:seek", (event) => {
+        if (!(event instanceof CustomEvent)) return;
+        const detail = event.detail;
+        if (!detail || detail.playerId !== playerId) return;
+        const targetTime = Number(detail.time);
+        applySeek(targetTime, Boolean(detail.autoplay));
+      });
+
+      audio.addEventListener("loadedmetadata", () => {
+        updateProgress();
+        dispatchTimeEvent();
+      });
+      audio.addEventListener("timeupdate", () => {
+        updateProgress();
+        dispatchTimeEvent();
+      });
       audio.addEventListener("waiting", () => {
         setStatus(`Buffering ${title}...`);
       });
@@ -301,26 +357,29 @@ const { title, audioUrl, subtitleUrl } = Astro.props as Props;
       });
       audio.addEventListener("playing", () => {
         isPlaying = true;
-        updateButtons();
+        updateToggleButton();
         setStatus(`Playing ${title}`);
+        dispatchTimeEvent();
       });
       audio.addEventListener("pause", () => {
         if (audio.ended) return;
         isPlaying = false;
-        updateButtons();
+        updateToggleButton();
         setStatus(`Paused ${title}`);
+        dispatchTimeEvent();
       });
       audio.addEventListener("ended", () => {
         isPlaying = false;
-        updateButtons();
+        updateToggleButton();
         if (progressFill instanceof HTMLElement) progressFill.style.width = "0%";
         updateProgress();
         setStatus(`Finished ${title}`);
+        dispatchTimeEvent();
       });
 
       setStatus(`Paused ${title}`);
       updateProgress();
-      updateButtons();
+      updateToggleButton();
     });
   })();
 </script>
@@ -359,6 +418,10 @@ const { title, audioUrl, subtitleUrl } = Astro.props as Props;
     transition: transform 0.15s ease, box-shadow 0.15s ease;
   }
 
+  .episode-player__control[data-state="playing"] {
+    background: var(--color-secondary);
+  }
+
   .episode-player__control:focus-visible {
     outline: none;
     box-shadow: var(--focus-ring);
@@ -368,13 +431,22 @@ const { title, audioUrl, subtitleUrl } = Astro.props as Props;
     transform: translateY(-1px) scale(1.02);
   }
 
-  .episode-player__control--pause {
-    background: var(--color-secondary);
-  }
-
   .episode-player__control-icon {
+    display: block;
     width: 1.8rem;
     height: 1.8rem;
+  }
+
+  .episode-player__control-icon--pause {
+    display: none;
+  }
+
+  .episode-player__control[data-state="playing"] .episode-player__control-icon--play {
+    display: none;
+  }
+
+  .episode-player__control[data-state="playing"] .episode-player__control-icon--pause {
+    display: block;
   }
 
   .episode-player__status {
