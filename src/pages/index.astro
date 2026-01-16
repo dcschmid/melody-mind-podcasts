@@ -16,7 +16,7 @@ const sortedPodcasts = [...podcasts].sort(
 );
 const normalizeSearchText = (value: string) =>
   value.toLowerCase().replace(/\s+/g, " ").trim();
-const pageSize = 5;
+const pageSize = 30;
 const episodeEntries = sortedPodcasts.map((podcast, index) => ({
   id: podcast.id,
   title: podcast.title,
@@ -156,7 +156,7 @@ const t = {
 
   <script is:inline>
     (() => {
-      const pageSize = 5;
+      const pageSize = 30;
       const dataEl = document.querySelector("#episodes-data");
       const encoded = dataEl?.getAttribute("data-episodes") || "";
       const decoded = encoded

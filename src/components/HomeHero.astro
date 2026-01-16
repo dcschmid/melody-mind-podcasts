@@ -1,10 +1,14 @@
 ---
+import Deezer from '../assets/deezer.svg';
+import YouTube from '../assets/youtube.svg';
+import Spotify from '../assets/spotify.svg';
+
 interface Props {
   title: string;
   subtitle: string;
   description: string;
   totalEpisodes: number;
-  featuredContent: string;
+  featuredContent: string;  
   availableOn: string;
   spotifyUrl: string;
   deezerUrl: string;
@@ -88,29 +92,7 @@ const {
             rel="noopener"
           >
             <span class="home-hero__platform-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18" role="presentation">
-                <path
-                  d="M6.6 9.6c3.5-1.1 7.4-.7 10.9 1.1"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-width="2.4"
-                />
-                <path
-                  d="M7.6 13c2.7-.8 5.6-.5 8.1.9"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-width="2.4"
-                />
-                <path
-                  d="M8.6 16.2c2-.6 4.1-.3 6 0.7"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-width="2.4"
-                />
-              </svg>
+              <Spotify />
             </span>
             Spotify
           </a>
@@ -122,12 +104,7 @@ const {
             rel="noopener"
           >
             <span class="home-hero__platform-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18" role="presentation">
-                <rect x="4" y="10" width="3" height="8" fill="currentColor" />
-                <rect x="9" y="8" width="3" height="10" fill="currentColor" />
-                <rect x="14" y="6" width="3" height="12" fill="currentColor" />
-                <rect x="19" y="9" width="3" height="9" fill="currentColor" />
-              </svg>
+              <Deezer />
             </span>
             Deezer
           </a>
@@ -139,20 +116,7 @@ const {
             rel="noopener"
           >
             <span class="home-hero__platform-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" width="18" height="18" role="presentation">
-                <rect
-                  x="3"
-                  y="7"
-                  width="18"
-                  height="10"
-                  rx="3"
-                  ry="3"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                />
-                <path d="M11 10.5l4 2.5-4 2.5z" fill="currentColor" />
-              </svg>
+              <YouTube />
             </span>
             YouTube
           </a>
