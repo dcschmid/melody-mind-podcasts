@@ -117,7 +117,8 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/female-focused/female-vocal-icons.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/female-focused/female-vocal-icons.vtt",
       "fileSizeBytes": 98591600,
-      "durationSeconds": 3081
+      "durationSeconds": 3081,
+      "knowledgeUrl": "https://melody-mind.de/knowledge/female-vocal-icons"
     },
     {
       "id": "female-rock-metal-vocalists",
@@ -131,7 +132,8 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/female-focused/female-rock-metal-vocalists.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/female-focused/female-rock-metal-vocalists.vtt",
       "fileSizeBytes": 151073897,
-      "durationSeconds": 4721
+      "durationSeconds": 4721,
+      "knowledgeUrl": "https://melody-mind.de/knowledge/female-rock-metal-vocalists"
     },
     {
       "id": "female-pop-superstars",
@@ -145,7 +147,8 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/female-focused/female-pop-superstars.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/female-focused/female-pop-superstars.vtt",
       "fileSizeBytes": 96600442,
-      "durationSeconds": 3019
+      "durationSeconds": 3019,
+      "knowledgeUrl": "https://melody-mind.de/knowledge/female-pop-superstars"
     },
         {
       "id": "female-soul-legends",
@@ -159,7 +162,8 @@
       "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/female-focused/female-pop-superstars.mp3",
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/female-focused/female-pop-superstars.vtt",
       "fileSizeBytes": 96600442,
-      "durationSeconds": 3019
+      "durationSeconds": 3019,
+      "knowledgeUrl": "https://melody-mind.de/knowledge/female-soul-legends"
     }
   ]
 }
