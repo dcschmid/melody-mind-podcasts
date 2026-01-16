@@ -14,6 +14,8 @@ const classes = `prose prose--${size}`;
 <style>
   .prose {
     color: var(--color-text);
+    line-height: 1.9;
+    max-width: 70ch;
   }
 
   .prose--sm {
@@ -29,14 +31,13 @@ const classes = `prose prose--${size}`;
   }
 
   .prose p {
-    margin: 0 0 1rem;
-    line-height: 1.7;
+    margin: 0 0 1.6rem;
   }
 
   .prose h1,
   .prose h2,
   .prose h3 {
-    margin: 1.5rem 0 0.75rem;
+    margin: 1.8rem 0 0.9rem;
     font-weight: 700;
     color: var(--color-text);
     line-height: 1.3;
@@ -69,12 +70,20 @@ const classes = `prose prose--${size}`;
 
   .prose ul,
   .prose ol {
-    margin: 0 0 1rem 1.25rem;
+    margin: 0 0 1.8rem;
     padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 1.75rem;
   }
 
   .prose li {
-    margin-bottom: 0.5rem;
+    margin: 0;
+    line-height: 1.9;
+  }
+
+  .prose li::marker {
+    content: "";
   }
 
   .prose strong {
