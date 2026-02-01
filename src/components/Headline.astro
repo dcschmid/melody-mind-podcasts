@@ -1,26 +1,24 @@
 ---
 export interface Props {
-  level?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  textSize?: "sm" | "base" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
+  level?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  textSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
   className?: string;
 }
 
-const { level = "h2", textSize = "xl", className = "" } = Astro.props;
+const { level = 'h2', textSize = 'xl', className = '' } = Astro.props;
 
 const Tag = level;
 const sizeClasses = {
-  sm: "headline--sm",
-  base: "headline--base",
-  lg: "headline--lg",
-  xl: "headline--xl",
-  "2xl": "headline--2xl",
-  "3xl": "headline--3xl",
-  "4xl": "headline--4xl",
+  sm: 'headline--sm',
+  base: 'headline--base',
+  lg: 'headline--lg',
+  xl: 'headline--xl',
+  '2xl': 'headline--2xl',
+  '3xl': 'headline--3xl',
+  '4xl': 'headline--4xl',
 };
 
-const classes = ["headline", sizeClasses[textSize], className]
-  .filter(Boolean)
-  .join(" ");
+const classes = ['headline', sizeClasses[textSize], className].filter(Boolean).join(' ');
 ---
 
 <Tag class={classes}>
@@ -31,7 +29,7 @@ const classes = ["headline", sizeClasses[textSize], className]
   .headline {
     margin: 0;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.6;
     color: var(--color-text);
     letter-spacing: 0.01em;
   }

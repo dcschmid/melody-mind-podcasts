@@ -2,7 +2,6 @@
 import PayPal from '../assets/paypal.svg';
 import BuyMeACoffee from '../assets/buy-me-a-coffee.svg';
 
-
 const year = new Date().getFullYear();
 ---
 
@@ -11,8 +10,8 @@ const year = new Date().getFullYear();
     <div class="site-footer__section">
       <h2 class="site-footer__title">Melody Mind</h2>
       <p class="site-footer__text">
-        Curated stories, timelines, and playlists to help you listen with intent
-        and discover new sounds.
+        Curated stories, timelines, and playlists to help you listen with intent and discover new
+        sounds.
       </p>
     </div>
 
@@ -28,11 +27,7 @@ const year = new Date().getFullYear();
           Melody Mind
         </a>
         <div class="site-footer__pill-row">
-          <a
-            href="/rss.xml"
-            class="site-footer__pill"
-            aria-label="Subscribe to the RSS feed"
-          >
+          <a href="/rss.xml" class="site-footer__pill" aria-label="Subscribe to the RSS feed">
             RSS
           </a>
         </div>
@@ -99,13 +94,13 @@ const year = new Date().getFullYear();
 
 <style>
   .site-footer {
-    margin-top: 4rem;
     padding: 2.75rem 1.5rem 2.5rem;
+    margin-block-start: 4rem;
+    color: var(--color-text-muted);
     background: var(--color-surface);
-    border-top: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
+    border-block-start: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
     border-radius: 1.5rem;
     box-shadow: var(--shadow-soft);
-    color: var(--color-text-muted);
   }
 
   .site-footer__grid {
@@ -121,9 +116,9 @@ const year = new Date().getFullYear();
   .site-footer__title {
     margin: 0;
     font-size: 0.85rem;
+    color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.25em;
-    color: var(--color-text-muted);
   }
 
   .site-footer__text {
@@ -139,10 +134,10 @@ const year = new Date().getFullYear();
   }
 
   .site-footer__link {
-    text-decoration: none;
-    color: var(--color-text);
-    font-weight: 600;
     padding: 0.2rem 0.1rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: none;
     border-radius: 0.35rem;
   }
 
@@ -152,11 +147,11 @@ const year = new Date().getFullYear();
   }
 
   .site-footer__link--brand {
+    font-size: 1.05rem;
+    color: transparent;
     background: var(--brand-gradient);
     -webkit-background-clip: text;
     background-clip: text;
-    color: transparent;
-    font-size: 1.05rem;
   }
 
   .site-footer__pill-row {
@@ -167,14 +162,14 @@ const year = new Date().getFullYear();
 
   .site-footer__pill {
     display: inline-flex;
-    align-items: center;
     gap: 0.4rem;
+    align-items: center;
     padding: 0.5rem 1.1rem;
-    border-radius: 999px;
-    background: var(--color-primary);
-    color: var(--color-background);
     font-weight: 700;
+    color: var(--color-background);
     text-decoration: none;
+    background: var(--color-primary);
+    border-radius: 999px;
     box-shadow: var(--shadow-soft);
   }
 
@@ -191,16 +186,16 @@ const year = new Date().getFullYear();
 
   .site-footer__button {
     display: inline-flex;
+    gap: 0.5rem;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
     padding: 0.6rem 1.2rem;
-    border-radius: 999px;
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: none;
     background: var(--color-layer-2);
     border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
-    color: var(--color-text);
-    font-weight: 600;
-    text-decoration: none;
+    border-radius: 999px;
     box-shadow: var(--shadow-soft);
   }
 
@@ -211,39 +206,39 @@ const year = new Date().getFullYear();
 
   .site-footer__icon {
     display: inline-flex;
+    flex-shrink: 0;
     align-items: center;
     justify-content: center;
-    width: 1.25rem;
-    height: 1.25rem;
-    flex-shrink: 0;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
   }
 
   .site-footer__icon svg {
-    width: 100%;
-    height: 100%;
+    inline-size: 100%;
+    block-size: 100%;
   }
 
   .site-footer__legal {
-    margin-top: 2.5rem;
     display: grid;
     gap: 1.75rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+    padding-block-start: 1.5rem;
+    margin-block-start: 2.5rem;
+    border-block-start: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
   }
 
   .site-footer__subtitle {
     margin: 0;
     font-size: 0.8rem;
+    color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.25em;
-    color: var(--color-text-muted);
   }
 
   .site-footer__legal-links {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-top: 0.75rem;
+    margin-block-start: 0.75rem;
   }
 
   .site-footer__meta {
@@ -252,7 +247,7 @@ const year = new Date().getFullYear();
     font-size: 0.9rem;
   }
 
-  @media (min-width: 1024px) {
+  @media (width >= 1024px) {
     .site-footer__grid {
       grid-template-columns: 2fr 1fr 1fr;
     }
@@ -263,11 +258,11 @@ const year = new Date().getFullYear();
     }
 
     .site-footer__meta {
-      text-align: right;
+      text-align: end;
     }
   }
 
-  @media (min-width: 1200px) {
+  @media (width >= 1200px) {
     .site-footer {
       padding: 3rem 2rem 2.75rem;
     }

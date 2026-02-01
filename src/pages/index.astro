@@ -1,21 +1,19 @@
 ---
-import PodcastLayout from "../layouts/PodcastLayout.astro";
-import SearchBar from "../components/SearchBar.astro";
-import EpisodeCard from "../components/EpisodeCard.astro";
-import HomeHero from "../components/HomeHero.astro";
-import type { PodcastData } from "../types/podcast";
-import { formatDate } from "../utils/helpers";
+import PodcastLayout from '../layouts/PodcastLayout.astro';
+import SearchBar from '../components/SearchBar.astro';
+import EpisodeCard from '../components/EpisodeCard.astro';
+import HomeHero from '../components/HomeHero.astro';
+import episodesScript from '../scripts/episodes.ts?url';
+import type { PodcastData } from '../types/podcast';
+import { formatDate } from '../utils/helpers';
 
-import enPodcasts from "../data/podcasts/en.json";
+import { getAvailablePodcasts } from '../utils/podcasts';
 
-const podcasts = (enPodcasts.podcasts as PodcastData[]).filter(
-  (podcast) => podcast.isAvailable,
-);
+const podcasts: PodcastData[] = await getAvailablePodcasts();
 const sortedPodcasts = [...podcasts].sort(
   (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime(),
 );
-const normalizeSearchText = (value: string) =>
-  value.toLowerCase().replace(/\s+/g, " ").trim();
+const normalizeSearchText = (value: string) => value.toLowerCase().replace(/\s+/g, ' ').trim();
 const pageSize = 30;
 const episodeEntries = sortedPodcasts.map((podcast, index) => ({
   id: podcast.id,
@@ -30,40 +28,36 @@ const episodeEntries = sortedPodcasts.map((podcast, index) => ({
 }));
 const initialEpisodes = episodeEntries.slice(0, pageSize);
 const templateEpisode = episodeEntries[0];
-const serializedEpisodes = JSON.stringify(episodeEntries).replace(
-  /</g,
-  "\\u003c",
-);
-const encodedEpisodes = Buffer.from(serializedEpisodes, "utf8").toString("base64");
+const serializedEpisodes = JSON.stringify(episodeEntries).replace(/</g, '\\u003c');
+const encodedEpisodes = Buffer.from(serializedEpisodes, 'utf8').toString('base64');
 
 const t = {
-  title: "MelodyMind Podcasts",
-  seoTitle: "MelodyMind Podcasts — Music History Podcast with Daniel & Annabelle",
-  subtitle: "A music history podcast with Daniel & Annabelle",
+  title: 'MelodyMind Podcasts',
+  seoTitle: 'MelodyMind Podcasts — Music History Podcast with Daniel & Annabelle',
+  subtitle: 'A music history podcast with Daniel & Annabelle',
   description:
     "Welcome to MelodyMind Podcasts — a music history podcast that traces the stories, scenes, and artists shaping each decade. Daniel & Annabelle guide you from 1950s rock 'n' roll to modern streaming with thoughtful listening and cultural context.",
   seoDescription:
     "Official site of MelodyMind Podcasts, a music history podcast with Daniel & Annabelle. Explore decade-by-decade episodes from 1950s rock 'n' roll to today.",
-  episodes: "Episodes",
-  listen: "Listen Now",
+  episodes: 'Episodes',
+  listen: 'Listen Now',
   featuredContent:
-    "Discover the voices, rhythms, and revolutions that defined each decade of music",
-  totalEpisodes: " episodes available",
-  availableOn: "Available on your favorite platforms:",
-  spotifyUrl: "https://open.spotify.com/show/6iLbxIzJ4x5nMuuK5qySOQ",
-  deezerUrl: "https://www.deezer.com/en/show/1002446242",
-  youtubeUrl:
-    "https://www.youtube.com/channel/UCD7MQkWw4P5Pd5xA_o6McLg",
+    'Discover the voices, rhythms, and revolutions that defined each decade of music',
+  totalEpisodes: ' episodes available',
+  availableOn: 'Available on your favorite platforms:',
+  spotifyUrl: 'https://open.spotify.com/show/6iLbxIzJ4x5nMuuK5qySOQ',
+  deezerUrl: 'https://www.deezer.com/en/show/1002446242',
+  youtubeUrl: 'https://www.youtube.com/channel/UCD7MQkWw4P5Pd5xA_o6McLg',
   keywords: [
-    "melodymind podcasts",
-    "music history podcast",
-    "daniel and annabelle",
-    "music decades",
-    "rock and roll",
-    "music culture",
-    "vintage music",
-    "music documentary",
-    "audio stories",
+    'melodymind podcasts',
+    'music history podcast',
+    'daniel and annabelle',
+    'music decades',
+    'rock and roll',
+    'music culture',
+    'vintage music',
+    'music documentary',
+    'audio stories',
   ],
 };
 ---
@@ -97,11 +91,7 @@ const t = {
         {t.episodes}
       </h2>
 
-      <div
-        class="home__episodes-grid"
-        role="list"
-        id="episodes-list"
-      >
+      <div class="home__episodes-grid" role="list" id="episodes-list">
         {
           initialEpisodes.map((podcast) => (
             <EpisodeCard
@@ -154,184 +144,7 @@ const t = {
     </section>
   </div>
 
-  <script is:inline>
-    (() => {
-      const pageSize = 30;
-      const dataEl = document.querySelector("#episodes-data");
-      const encoded = dataEl?.getAttribute("data-episodes") || "";
-      const decoded = encoded
-        ? new TextDecoder().decode(
-            Uint8Array.from(atob(encoded), (char) => char.charCodeAt(0)),
-          )
-        : "[]";
-      const episodes = JSON.parse(decoded);
-
-      const form = document.querySelector(".search-bar");
-      if (!form) return;
-
-      const input = form.querySelector(".search-bar__input");
-      const clearButton = form.querySelector(".search-bar__clear");
-      const status = form.querySelector("#search-status");
-      const empty = form.querySelector("#search-empty");
-      const list = document.querySelector("#episodes-list");
-      const templateWrapper = document.querySelector("#episode-template");
-      const loadMore = document.querySelector("#episodes-load-more");
-      const loadMoreStatus = document.querySelector("#episodes-load-more-status");
-      const loadMoreButton = document.querySelector("#episodes-load-more-button");
-
-      if (
-        !(input instanceof HTMLInputElement) ||
-        !(list instanceof HTMLElement) ||
-        !(templateWrapper instanceof HTMLElement) ||
-        !(loadMore instanceof HTMLElement) ||
-        !(loadMoreStatus instanceof HTMLElement) ||
-        !(loadMoreButton instanceof HTMLButtonElement)
-      ) {
-        return;
-      }
-
-      let debounceId;
-      let query = "";
-      let visibleCount = pageSize;
-
-      const normalize = (value) => value.trim().toLowerCase();
-
-      const buildEpisode = (episode) => {
-        const source = templateWrapper.firstElementChild;
-        if (!(source instanceof HTMLElement)) return null;
-        const node = source.cloneNode(true);
-        if (!(node instanceof HTMLElement)) return null;
-
-        node.setAttribute("data-search", episode.searchText || "");
-
-        const image = node.querySelector(".episode-card__image");
-        if (image instanceof HTMLImageElement) {
-          image.src = `/images/${episode.imageUrl}.jpg`;
-          image.alt = `Cover image for ${episode.title} podcast episode`;
-        }
-
-        const time = node.querySelector(".episode-card__date");
-        if (time instanceof HTMLTimeElement) {
-          time.dateTime = episode.publishedAt;
-          time.textContent = episode.publishedLabel;
-        }
-
-        const badge = node.querySelector(".episode-card__badge");
-        if (!episode.isLatest && badge) {
-          badge.remove();
-        }
-
-        const duration = node.querySelector(".episode-card__duration");
-        if (duration instanceof HTMLElement) {
-          if (typeof episode.durationSeconds === "number" && episode.durationSeconds > 0) {
-            duration.textContent = `${Math.floor(episode.durationSeconds / 60)} min`;
-          } else {
-            duration.remove();
-          }
-        }
-
-        const title = node.querySelector(".episode-card__title");
-        if (title instanceof HTMLElement) {
-          title.textContent = episode.title;
-        }
-
-        const description = node.querySelector(".episode-card__description");
-        if (description instanceof HTMLElement) {
-          description.textContent = episode.description;
-        }
-
-        const link = node.querySelector(".episode-card__link");
-        if (link instanceof HTMLAnchorElement) {
-          link.href = `/${episode.id}`;
-          link.setAttribute(
-            "aria-label",
-            `Listen to ${episode.title} podcast episode`,
-          );
-        }
-
-        return node;
-      };
-
-      const updateStatus = (found, total) => {
-        if (!status) return;
-        const word = found === 1 ? "result" : "results";
-        const showing = Math.min(visibleCount, found);
-        status.textContent = `Found: ${found} of ${total} ${word}. Showing ${showing}.`;
-      };
-
-      const updateUrl = (currentQuery) => {
-        const params = new URLSearchParams();
-        if (currentQuery) params.set("q", currentQuery);
-        const queryString = params.toString();
-        const nextUrl = `${window.location.pathname}${queryString ? `?${queryString}` : ""}`;
-        window.history.replaceState(null, "", nextUrl);
-      };
-
-      const render = () => {
-        const normalized = normalize(query);
-        const filtered = normalized
-          ? episodes.filter((episode) =>
-              (episode.searchText || "").includes(normalized),
-            )
-          : episodes;
-        const total = episodes.length;
-        const found = filtered.length;
-        const visible = filtered.slice(0, visibleCount);
-
-        list.innerHTML = "";
-        visible.forEach((episode) => {
-          const node = buildEpisode(episode);
-          if (node) list.appendChild(node);
-        });
-
-        updateStatus(found, total);
-        updateUrl(query);
-
-        const showing = Math.min(visibleCount, found);
-        loadMoreStatus.textContent = `Showing ${showing} of ${found} episodes.`;
-        loadMore.hidden = found <= pageSize;
-        loadMoreButton.disabled = showing >= found;
-
-        if (empty instanceof HTMLElement) {
-          empty.hidden = found !== 0;
-        }
-      };
-
-      const initFromUrl = () => {
-        const params = new URLSearchParams(window.location.search);
-        query = params.get("q") || "";
-        input.value = query;
-      };
-
-      form.addEventListener("submit", (event) => event.preventDefault());
-
-      input.addEventListener("input", (event) => {
-        const value = event.target.value;
-        window.clearTimeout(debounceId);
-        debounceId = window.setTimeout(() => {
-          query = value;
-          visibleCount = pageSize;
-          render();
-        }, 180);
-      });
-
-      clearButton?.addEventListener("click", () => {
-        input.value = "";
-        input.focus();
-        query = "";
-        visibleCount = pageSize;
-        render();
-      });
-
-      loadMoreButton.addEventListener("click", () => {
-        visibleCount += pageSize;
-        render();
-      });
-
-      initFromUrl();
-      render();
-    })();
-  </script>
+  <script type="module" src={episodesScript}></script>
 </PodcastLayout>
 
 <style>
@@ -350,64 +163,84 @@ const t = {
     margin: 0;
     font-size: 1.75rem;
     font-weight: 800;
+    color: transparent;
+    text-shadow: 0 10px 26px rgb(2 6 13 / 60%);
     background: var(--brand-gradient);
     -webkit-background-clip: text;
     background-clip: text;
-    color: transparent;
-    text-shadow: 0 10px 26px rgba(2, 6, 13, 0.6);
   }
 
   .home__episodes-grid {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 0;
-    border-top: 1px solid var(--card-divider);
+    border-block-start: 1px solid var(--card-divider);
   }
 
   .home__load-more {
-    margin-top: 1.5rem;
     display: grid;
     justify-items: center;
+    margin-block-start: 1.5rem;
   }
 
   .home__load-more-panel {
-    width: min(28rem, 100%);
     display: grid;
     gap: 0.85rem;
     justify-items: center;
+    inline-size: min(28rem, 100%);
     padding: 1.1rem 1.5rem;
-    border-radius: 1.25rem;
-    border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
     background: linear-gradient(
       150deg,
       color-mix(in srgb, var(--color-layer-2) 92%, transparent),
       color-mix(in srgb, var(--color-layer-1) 95%, transparent)
     );
+    border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
+    border-radius: 1.25rem;
     box-shadow:
-      0 22px 50px rgba(2, 8, 18, 0.45),
-      0 0 0 1px rgba(120, 200, 255, 0.08);
+      0 22px 50px rgb(2 8 18 / 45%),
+      0 0 0 1px rgb(120 200 255 / 8%);
   }
 
   .home__load-more-status {
     margin: 0;
-    color: var(--color-text-muted);
     font-size: 0.95rem;
+    color: var(--color-text-muted);
     text-align: center;
   }
 
+  @media screen and (prefers-reduced-motion: reduce) {
+    .home__load-more-button {
+      padding: 0.65rem 1.35rem;
+      font-weight: 700;
+      color: var(--color-text);
+      cursor: pointer;
+      background: linear-gradient(
+        135deg,
+        color-mix(in srgb, var(--color-primary) 35%, var(--color-layer-1)),
+        color-mix(in srgb, var(--color-primary) 22%, var(--color-layer-2))
+      );
+      border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
+      border-radius: 999px;
+      transition: none;
+    }
+  }
+
   .home__load-more-button {
-    border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
+    padding: 0.65rem 1.35rem;
+    font-weight: 700;
+    color: var(--color-text);
+    cursor: pointer;
     background: linear-gradient(
       135deg,
       color-mix(in srgb, var(--color-primary) 35%, var(--color-layer-1)),
       color-mix(in srgb, var(--color-primary) 22%, var(--color-layer-2))
     );
-    color: var(--color-text);
-    padding: 0.65rem 1.35rem;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
     border-radius: 999px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease,
+      border-color 0.2s ease;
   }
 
   .home__load-more-button:focus-visible {
@@ -415,16 +248,17 @@ const t = {
     box-shadow: var(--focus-ring);
   }
 
-  .home__load-more-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 12px 24px rgba(2, 8, 18, 0.4);
+  .home__load-more-button:hover,
+  .home__load-more-button:focus {
     border-color: color-mix(in srgb, var(--color-primary) 50%, transparent);
+    box-shadow: 0 12px 24px rgb(2 8 18 / 40%);
+    transform: translateY(-1px);
   }
 
   .home__load-more-button[disabled] {
     cursor: not-allowed;
+    box-shadow: none;
     opacity: 0.55;
     transform: none;
-    box-shadow: none;
   }
 </style>

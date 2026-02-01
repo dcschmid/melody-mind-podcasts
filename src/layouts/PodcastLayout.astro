@@ -1,12 +1,11 @@
 ---
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
+import Footer from '../components/Footer.astro';
 
 export interface Props {
   title: string;
   description: string;
   image?: string;
-  type?: "website" | "article";
+  type?: 'website' | 'article';
   publishedTime?: string;
   modifiedTime?: string;
   author?: string;
@@ -15,7 +14,7 @@ export interface Props {
   language?: string;
   locale?: string;
   episodeNumber?: number;
-  durationSeconds?: number;
+  durationSeconds?: number | undefined;
   audioUrl?: string;
   episodeImage?: string;
   seriesDescription?: string;
@@ -24,15 +23,15 @@ export interface Props {
 const {
   title,
   description,
-  image = "/images/default-og.jpg",
-  type = "website",
+  image = '/images/default-og.jpg',
+  type = 'website',
   publishedTime,
   modifiedTime,
-  author = "MelodyMind Podcasts",
+  author = 'MelodyMind Podcasts',
   keywords = [],
   canonical,
-  language = "en",
-  locale = "en-US",
+  language = 'en',
+  locale = 'en-US',
   episodeNumber,
   durationSeconds,
   audioUrl,
@@ -40,21 +39,17 @@ const {
   seriesDescription,
 } = Astro.props;
 
-const siteTitle = "MelodyMind Podcasts";
+const siteTitle = 'MelodyMind Podcasts';
 const normalizedTitle = normalizeMetaText(title);
-const fullTitle = normalizedTitle
-  .toLowerCase()
-  .includes(siteTitle.toLowerCase())
+const fullTitle = normalizedTitle.toLowerCase().includes(siteTitle.toLowerCase())
   ? normalizedTitle
   : `${normalizedTitle} | ${siteTitle}`;
-const siteUrl = "https://podcasts.melody-mind.de";
-const currentPath = canonical
-  ? canonical.replace(siteUrl, "")
-  : Astro.url.pathname;
+const siteUrl = 'https://podcasts.melody-mind.de';
+const currentPath = canonical ? canonical.replace(siteUrl, '') : Astro.url.pathname;
 const currentUrl = `${siteUrl}${ensureTrailingSlash(currentPath)}`;
-const imageUrl = image.startsWith("http") ? image : `${siteUrl}${image}`;
+const imageUrl = image.startsWith('http') ? image : `${siteUrl}${image}`;
 const episodeImageUrl = episodeImage
-  ? episodeImage.startsWith("http")
+  ? episodeImage.startsWith('http')
     ? episodeImage
     : `${siteUrl}${episodeImage}`
   : imageUrl;
@@ -62,36 +57,28 @@ const podcastFeedUrl = `${siteUrl}/rss.xml`;
 const podcastImage = `${siteUrl}/the-melody-mind-podcast.jpg`;
 const seriesCopy =
   seriesDescription ||
-  "Melody Mind explores the stories behind the music that shaped generations, hosted by Daniel and Annabelle.";
-const genres = ["Music", "History"];
-const defaultKeywords = [
-  "podcast",
-  "music history",
-  "audio",
-  "streaming",
-  "entertainment",
-];
-const allKeywords = [...defaultKeywords, ...keywords].join(", ");
-const skipLinkText = "Skip to main content";
+  'Melody Mind explores the stories behind the music that shaped generations, hosted by Daniel and Annabelle.';
+const genres = ['Music', 'History'];
+const defaultKeywords = ['podcast', 'music history', 'audio', 'streaming', 'entertainment'];
+const allKeywords = [...defaultKeywords, ...keywords].join(', ');
+const skipLinkText = 'Skip to main content';
 const normalizedDescription = normalizeMetaText(description);
 const imageAlt =
-  type === "article"
-    ? `Cover artwork for ${normalizedTitle}`
-    : `Cover artwork for ${siteTitle}`;
+  type === 'article' ? `Cover artwork for ${normalizedTitle}` : `Cover artwork for ${siteTitle}`;
 
 const publisher = {
-  "@type": "Organization",
-  name: "MelodyMind Podcasts",
+  '@type': 'Organization',
+  name: 'MelodyMind Podcasts',
   url: siteUrl,
   logo: {
-    "@type": "ImageObject",
+    '@type': 'ImageObject',
     url: podcastImage,
   },
 };
 
 const podcastSeriesJson = {
-  "@context": "https://schema.org",
-  "@type": "PodcastSeries",
+  '@context': 'https://schema.org',
+  '@type': 'PodcastSeries',
   name: siteTitle,
   description: seriesCopy,
   url: siteUrl,
@@ -100,29 +87,48 @@ const podcastSeriesJson = {
   genre: genres,
   isAccessibleForFree: true,
   sameAs: [
-    "https://open.spotify.com/show/6iLbxIzJ4x5nMuuK5qySOQ",
-    "https://www.deezer.com/en/show/1002446242",
-    "https://podcasts.apple.com/us/podcast/melody-mind-–-english/id1847445333",
+    'https://open.spotify.com/show/6iLbxIzJ4x5nMuuK5qySOQ',
+    'https://www.deezer.com/en/show/1002446242',
+    'https://podcasts.apple.com/us/podcast/melody-mind-–-english/id1847445333',
   ],
   publisher,
   webFeed: podcastFeedUrl,
+  author: [
+    {
+      '@type': 'Person',
+      name: 'Daniel Schmid',
+      url: 'https://melody-mind.de',
+    },
+    {
+      '@type': 'Person',
+      name: 'Annabelle',
+    },
+  ],
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${siteUrl}/?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
 };
 
 const episodeDurationIso =
-  typeof durationSeconds === "number" && durationSeconds > 0
+  typeof durationSeconds === 'number' && durationSeconds > 0
     ? toIsoDuration(durationSeconds)
     : undefined;
 
 const podcastEpisodeJson =
-  type === "article"
+  type === 'article'
     ? {
-        "@context": "https://schema.org",
-        "@type": "PodcastEpisode",
+        '@context': 'https://schema.org',
+        '@type': 'PodcastEpisode',
         name: title,
         description: normalizedDescription,
         url: currentUrl,
         partOfSeries: {
-          "@type": "PodcastSeries",
+          '@type': 'PodcastSeries',
           name: siteTitle,
           url: siteUrl,
         },
@@ -136,20 +142,20 @@ const podcastEpisodeJson =
         timeRequired: episodeDurationIso,
         author: [
           {
-            "@type": "Person",
-            name: "Daniel Schmid",
-            url: "https://melody-mind.de",
+            '@type': 'Person',
+            name: 'Daniel Schmid',
+            url: 'https://melody-mind.de',
           },
           {
-            "@type": "Person",
-            name: "Annabelle",
+            '@type': 'Person',
+            name: 'Annabelle',
           },
         ],
         audio: audioUrl
           ? {
-              "@type": "AudioObject",
+              '@type': 'AudioObject',
               url: audioUrl,
-              encodingFormat: "audio/mpeg",
+              encodingFormat: 'audio/mpeg',
               duration: episodeDurationIso,
             }
           : undefined,
@@ -160,27 +166,31 @@ const podcastEpisodeJson =
 const jsonLd = [podcastSeriesJson, podcastEpisodeJson].filter(Boolean);
 
 function ensureTrailingSlash(pathname: string) {
-  if (!pathname.startsWith("/")) return `/${pathname}/`;
-  return pathname.endsWith("/") ? pathname : `${pathname}/`;
+  if (!pathname.startsWith('/')) {
+    return `/${pathname}/`;
+  }
+  return pathname.endsWith('/') ? pathname : `${pathname}/`;
 }
 
 function normalizeMetaText(value: string) {
-  return value.replace(/\s+/g, " ").trim();
+  return value.replace(/\s+/g, ' ').trim();
 }
 
 function toIsoDuration(totalSeconds: number) {
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = Math.floor(totalSeconds % 60);
-  return `PT${hours > 0 ? `${hours}H` : ""}${minutes > 0 ? `${minutes}M` : ""}${seconds || (!hours && !minutes) ? `${seconds}S` : ""}`;
+  return `PT${hours > 0 ? `${hours}H` : ''}${minutes > 0 ? `${minutes}M` : ''}${seconds || (!hours && !minutes) ? `${seconds}S` : ''}`;
 }
 ---
 
 <!doctype html>
-<html lang={language}>
+<html lang={language} data-view-transition>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1119" />
+    <meta name="color-scheme" content="dark" />
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
@@ -205,8 +215,6 @@ function toIsoDuration(totalSeconds: number) {
     <link rel="canonical" href={currentUrl} />
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 
@@ -217,18 +225,10 @@ function toIsoDuration(totalSeconds: number) {
     <meta property="og:image" content={imageUrl} />
     <meta property="og:image:alt" content={imageAlt} />
     <meta property="og:site_name" content={siteTitle} />
-    <meta property="og:locale" content={locale.replace("-", "_")} />
-    {
-      publishedTime && (
-        <meta property="article:published_time" content={publishedTime} />
-      )
-    }
-    {
-      modifiedTime && (
-        <meta property="article:modified_time" content={modifiedTime} />
-      )
-    }
-    {type === "article" && <meta property="article:author" content={author} />}
+    <meta property="og:locale" content={locale.replace('-', '_')} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
+    {type === 'article' && <meta property="article:author" content={author} />}
 
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={currentUrl} />
@@ -248,6 +248,7 @@ function toIsoDuration(totalSeconds: number) {
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="//cdn.usefathom.com" />
     <script src="https://cdn.usefathom.com/script.js" data-site="IGOFKHTB" defer></script>
     <script
       type="application/ld+json"
@@ -255,11 +256,11 @@ function toIsoDuration(totalSeconds: number) {
         jsonLd.map((entry) => ({
           ...entry,
           potentialAction:
-            type === "website"
+            type === 'website'
               ? {
-                  "@type": "SearchAction",
+                  '@type': 'SearchAction',
                   target: `${siteUrl}/?q={search_term_string}`,
-                  "query-input": "required name=search_term_string",
+                  'query-input': 'required name=search_term_string',
                 }
               : undefined,
         })),
@@ -278,16 +279,15 @@ function toIsoDuration(totalSeconds: number) {
 
       <Footer />
     </div>
-
-    <script src="https://cdn.usefathom.com/script.js" data-site="VDTKKBDN" defer></script>
   </body>
 </html>
 
 <style>
   .podcast-layout {
-    --color-primary: #4fd3ff;
-    --color-secondary: #2cc6ff;
-    --color-contrast: #8ad9ff;
+    --color-primary: #6fe1ff;
+    --color-primary-strong: #bff2ff;
+    --color-secondary: #3ad1ff;
+    --color-contrast: #b3efff;
     --color-background: #0b1119;
     --color-surface: #111a24;
     --color-surface-2: #141f2b;
@@ -295,34 +295,42 @@ function toIsoDuration(totalSeconds: number) {
     --color-layer-2: #182535;
     --color-layer-3: #1b2a3d;
     --color-layer-4: #0f1621;
-    --color-text: #f2f6fb;
-    --color-text-muted: #c5d2e6;
-    --color-error-soft: #ff9fb1;
-    --brand-gradient: linear-gradient(110deg, #8ad9ff 0%, #4fd3ff 45%, #2cc6ff 90%);
-    --shadow-soft: 0 20px 50px rgba(2, 6, 13, 0.45);
-    --shadow-strong: 0 30px 80px rgba(2, 6, 13, 0.7);
-    --focus-ring: 0 0 0 3px rgba(79, 211, 255, 0.6);
+    --color-text: #f7fbff;
+    --color-text-muted: #e2ecf8;
+    --color-error-soft: #ffb7c5;
+    --color-error-strong: #ffd3dc;
+    --brand-gradient: linear-gradient(110deg, #b3efff 0%, #6fe1ff 45%, #3ad1ff 90%);
+    --shadow-soft: 0 20px 50px rgb(2 6 13 / 45%);
+    --shadow-strong: 0 30px 80px rgb(2 6 13 / 70%);
+    --focus-ring: 0 0 0 3px #fff, 0 0 0 6px #6fe1ff;
     --max-width: 72rem;
 
+    min-block-size: 100vb;
     margin: 0;
-    min-height: 100vh;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    color: var(--color-text);
+    letter-spacing: 0.01em;
     background-color: var(--color-background);
     background-image:
-      radial-gradient(circle at 15% 20%, rgba(79, 211, 255, 0.08), transparent 35%),
-      radial-gradient(circle at 85% 10%, rgba(44, 198, 255, 0.08), transparent 32%),
-      radial-gradient(circle at 70% 70%, rgba(138, 217, 255, 0.06), transparent 40%);
-    color: var(--color-text);
-    font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
-    letter-spacing: 0.01em;
+      radial-gradient(circle at 15% 20%, rgb(79 211 255 / 8%), transparent 35%),
+      radial-gradient(circle at 85% 10%, rgb(44 198 255 / 8%), transparent 32%),
+      radial-gradient(circle at 70% 70%, rgb(138 217 255 / 6%), transparent 40%);
+    text-rendering: optimizelegibility;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
   }
 
   .podcast-layout__container {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 2rem 1.25rem 3rem;
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: 2.5rem;
+    max-inline-size: var(--max-width);
+    padding-block: clamp(2rem, 4vi, 3.5rem);
+    padding-inline: clamp(1.25rem, 3vi, 2.5rem);
+    margin: 0 auto;
   }
 
   .podcast-layout__main {
@@ -331,30 +339,38 @@ function toIsoDuration(totalSeconds: number) {
 
   .podcast-layout__skip-link {
     position: absolute;
-    left: -9999px;
-    top: auto;
-    width: 1px;
-    height: 1px;
+    inset-block-start: auto;
+    inset-inline-start: -9999px;
+    inline-size: 1px;
+    block-size: 1px;
     overflow: hidden;
   }
 
   .podcast-layout__skip-link:focus,
   .podcast-layout__skip-link:focus-visible {
-    left: 1rem;
-    top: 1rem;
-    width: auto;
-    height: auto;
+    inset-block-start: 1rem;
+    inset-inline-start: 1rem;
+    z-index: 100;
+    inline-size: auto;
+    block-size: auto;
     padding: 0.5rem 1rem;
-    background: var(--color-primary);
     color: var(--color-background);
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+    background: var(--color-primary);
     border-radius: 0.5rem;
     box-shadow: var(--shadow-soft);
-    z-index: 100;
   }
 
-  @media (min-width: 640px) {
+  @media (width >= 640px) {
     .podcast-layout__container {
       padding: 2.5rem 1.5rem 4rem;
+    }
+  }
+
+  @media (width <= 380px) {
+    .podcast-layout__container {
+      padding-inline: 0.85rem;
     }
   }
 
@@ -362,9 +378,9 @@ function toIsoDuration(totalSeconds: number) {
     *,
     *::before,
     *::after {
+      transition-duration: 0.01ms !important;
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
   }

@@ -4,7 +4,7 @@ interface Props {
   title: string;
   description: string;
   imageUrl: string;
-  durationSeconds?: number;
+  durationSeconds?: number | undefined;
   searchText: string;
   publishedAt: string;
   publishedLabel: string;
@@ -24,12 +24,7 @@ const {
 } = Astro.props as Props;
 ---
 
-<article
-  data-episode
-  data-search={searchText}
-  class="episode-card"
-  role="listitem"
->
+<article data-episode data-search={searchText} class="episode-card" role="listitem">
   <div class="episode-card__media">
     <img
       src={`/images/${imageUrl}.jpg`}
@@ -39,6 +34,7 @@ const {
       decoding="async"
       width={600}
       height={400}
+      sizes="(max-width: 760px) 100vw, (max-width: 1024px) 168px, 192px"
     />
   </div>
   <div class="episode-card__body">
@@ -47,11 +43,11 @@ const {
         {publishedLabel}
       </time>
       {isLatest && <span class="episode-card__badge">Latest</span>}
-      {durationSeconds && (
-        <span class="episode-card__duration">
-          {Math.floor(durationSeconds / 60)} min
-        </span>
-      )}
+      {
+        durationSeconds && (
+          <span class="episode-card__duration">{Math.floor(durationSeconds / 60)} min</span>
+        )
+      }
     </div>
     <h3 class="episode-card__title">
       {title}
@@ -59,23 +55,19 @@ const {
     <p class="episode-card__description">
       {description}
     </p>
-    <a
-      href={`/${id}`}
-      class="episode-card__link"
-      aria-label={`Listen to ${title} podcast episode`}
-    >
+    <a href={`/${id}`} class="episode-card__link" aria-label={`Listen to ${title} podcast episode`}>
       Listen Now
     </a>
   </div>
 </article>
 
-  <style>
+<style>
   .episode-card {
     display: flex;
     flex-direction: column;
     gap: 1.1rem;
     padding: 1.1rem 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+    border-block-end: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
   }
 
   .episode-card[hidden] {
@@ -84,15 +76,23 @@ const {
 
   .episode-card__media {
     position: relative;
-    width: 100%;
+    inline-size: 100%;
+    container-type: inline-size;
   }
 
   .episode-card__image {
-    width: 100%;
-    height: auto;
-    border-radius: 0.75rem;
-    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
     display: block;
+    inline-size: 100%;
+    block-size: auto;
+    object-fit: cover;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
+    border-radius: 0.75rem;
+  }
+
+  @container (min-width: 300px) {
+    .episode-card__image {
+      block-size: 180px;
+    }
   }
 
   .episode-card__body {
@@ -105,8 +105,8 @@ const {
     flex-wrap: wrap;
     gap: 0.5rem;
     align-items: center;
-    color: var(--color-text-muted);
     font-size: 0.85rem;
+    color: var(--color-text-muted);
   }
 
   .episode-card__date {
@@ -117,54 +117,85 @@ const {
   .episode-card__badge,
   .episode-card__duration {
     padding: 0.2rem 0.6rem;
-    border-radius: 999px;
-    background: var(--color-layer-2);
-    border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
-    color: var(--color-text);
     font-size: 0.75rem;
     font-weight: 600;
+    color: var(--color-text);
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 18%, transparent);
+    border-radius: 999px;
   }
 
   .episode-card__badge {
-    background: color-mix(in srgb, var(--color-primary) 16%, var(--color-layer-2));
     color: var(--color-text);
+    background: color-mix(in srgb, var(--color-primary) 16%, var(--color-layer-2));
   }
 
   .episode-card__title {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: clamp(1.1rem, 1.6vi, 1.35rem);
     color: var(--color-text);
   }
 
   .episode-card__description {
     margin: 0;
+    line-height: 1.65;
     color: var(--color-text-muted);
-    line-height: 1.6;
   }
 
   .episode-card__link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.6rem 1rem;
-    border-radius: 0.75rem;
-    background: var(--color-primary);
-    color: var(--color-background);
+    inline-size: fit-content;
+    min-block-size: 2.75rem;
+    padding: 0.65rem 1.1rem;
     font-weight: 700;
+    color: var(--color-background);
     text-decoration: none;
-    width: fit-content;
+    background: var(--color-primary);
+    border-radius: 0.75rem;
   }
 
   .episode-card__link:focus-visible {
     outline: none;
+    outline: 2px solid #fff;
+    outline-offset: 2px;
     box-shadow: var(--focus-ring);
   }
 
-  @media (min-width: 760px) {
+  @supports (content-visibility: auto) {
+    .episode-card {
+      contain-intrinsic-size: 320px;
+      content-visibility: auto;
+    }
+  }
+
+  @supports (text-wrap: balance) {
+    .episode-card__title {
+      text-wrap: balance;
+    }
+  }
+
+  @supports not (color-mix(in srgb, #000 50%, transparent)) {
+    .episode-card {
+      border-block-end-color: rgb(111 225 255 / 22%);
+    }
+
+    .episode-card__image {
+      border-color: rgb(111 225 255 / 28%);
+    }
+
+    .episode-card__badge,
+    .episode-card__duration {
+      border-color: rgb(111 225 255 / 28%);
+    }
+  }
+
+  @media (width >= 760px) {
     .episode-card {
       flex-direction: row;
-      align-items: flex-start;
       gap: 1.5rem;
+      align-items: flex-start;
       padding: 1.5rem 0;
     }
 
@@ -174,8 +205,8 @@ const {
     }
 
     .episode-card__image {
-      width: 100%;
-      height: 6rem;
+      inline-size: 100%;
+      block-size: 6rem;
       object-fit: cover;
     }
 
@@ -184,13 +215,13 @@ const {
     }
   }
 
-  @media (min-width: 1024px) {
+  @media (width >= 1024px) {
     .episode-card__media {
       flex: 0 0 12rem;
     }
 
     .episode-card__image {
-      height: 6.75rem;
+      block-size: 6.75rem;
     }
   }
 </style>

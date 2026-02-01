@@ -1,36 +1,32 @@
 ---
-import PodcastLayout from "../layouts/PodcastLayout.astro";
-import Headline from "../components/Headline.astro";
-import Prose from "../components/Prose.astro";
-import TranscriptDropdown from "../components/TranscriptDropdown.astro";
-import AudioPlayer from "../components/AudioPlayer.astro";
-import type { PodcastData } from "../types/podcast";
-import { formatDate, buildMetaDescription } from "../utils/helpers";
+import PodcastLayout from '../layouts/PodcastLayout.astro';
+import Headline from '../components/Headline.astro';
+import Prose from '../components/Prose.astro';
+import TranscriptDropdown from '../components/TranscriptDropdown.astro';
+import AudioPlayer from '../components/AudioPlayer.astro';
+import type { PodcastData } from '../types/podcast';
+import { formatDate, buildMetaDescription } from '../utils/helpers';
 
-import enPodcasts from "../data/podcasts/en.json";
+import { getAvailablePodcasts, getPodcastById } from '../utils/podcasts';
 
 export async function getStaticPaths() {
-  const podcasts = (enPodcasts.podcasts as PodcastData[]).filter(
-    (podcast) => podcast.isAvailable,
-  );
-  return podcasts.map((podcast) => ({
+  const podcasts: PodcastData[] = await getAvailablePodcasts();
+  return podcasts.map((podcast: PodcastData) => ({
     params: { id: podcast.id },
   }));
 }
 
 const { id } = Astro.params;
 
-const podcasts = (enPodcasts.podcasts as PodcastData[]).filter(
-  (podcast) => podcast.isAvailable,
-);
-const currentPodcast = podcasts.find((podcast) => podcast.id === id);
+const podcasts: PodcastData[] = await getAvailablePodcasts();
+const currentPodcast = await getPodcastById(id ?? '', podcasts);
 
 if (!currentPodcast) {
-  return Astro.redirect("/404");
+  return Astro.redirect('/404');
 }
 
 function getNavigation() {
-  const currentIndex = podcasts.findIndex((podcast) => podcast.id === id);
+  const currentIndex = podcasts.findIndex((podcast: PodcastData) => podcast.id === id);
 
   if (currentIndex === -1) {
     return { prev: null, next: null };
@@ -38,39 +34,34 @@ function getNavigation() {
 
   return {
     prev: currentIndex > 0 ? podcasts[currentIndex - 1] : null,
-    next:
-      currentIndex < podcasts.length - 1 ? podcasts[currentIndex + 1] : null,
+    next: currentIndex < podcasts.length - 1 ? podcasts[currentIndex + 1] : null,
   };
 }
 
 const { prev, next } = getNavigation();
-const episodeNumber = podcasts.findIndex((podcast) => podcast.id === id) + 1;
+const episodeNumber = podcasts.findIndex((podcast: PodcastData) => podcast.id === id) + 1;
 const metaDescription =
   currentPodcast.metaDescription ||
-  buildMetaDescription(
-    currentPodcast.description,
-    155,
-    "MelodyMind Podcasts",
-  );
+  buildMetaDescription(currentPodcast.description, 155, 'MelodyMind Podcasts');
 
 const t = {
-  backToAll: "← Back to all podcasts",
-  listenToEpisode: "🎧 Listen to Episode",
-  episode: "Episode",
-  previousEpisode: "Previous Episode",
-  nextEpisode: "Next Episode",
-  episodeNavigation: "Episode navigation",
-  publishedOn: "Published on",
-  duration: "Duration",
-  musicHistory: "Music History",
-  knowledge: "Knowledge article",
-  readArticle: "Read the knowledge article",
-  transcript: "Transcript",
-  showTranscript: "Show Transcript",
-  hideTranscript: "Hide Transcript",
-  loading: "Loading transcript...",
-  notAvailable: "Transcript not available",
-  error: "Error loading transcript",
+  backToAll: '← Back to all podcasts',
+  listenToEpisode: '🎧 Listen to Episode',
+  episode: 'Episode',
+  previousEpisode: 'Previous Episode',
+  nextEpisode: 'Next Episode',
+  episodeNavigation: 'Episode navigation',
+  publishedOn: 'Published on',
+  duration: 'Duration',
+  musicHistory: 'Music History',
+  knowledge: 'Knowledge article',
+  readArticle: 'Read the knowledge article',
+  transcript: 'Transcript',
+  showTranscript: 'Show Transcript',
+  hideTranscript: 'Hide Transcript',
+  loading: 'Loading transcript...',
+  notAvailable: 'Transcript not available',
+  error: 'Error loading transcript',
 };
 ---
 
@@ -90,19 +81,19 @@ const t = {
   keywords={[
     currentPodcast.title.toLowerCase(),
     t.musicHistory.toLowerCase(),
-    "music podcast",
-    "audio story",
-    "music history",
+    'music podcast',
+    'audio story',
+    'music history',
+    'melodymind podcasts',
+    'daniel and annabelle',
+    'music documentary',
+    'music education',
   ]}
   canonical={`https://podcasts.melody-mind.de/${currentPodcast.id}`}
 >
   <div class="episode">
     <nav class="episode__breadcrumb" aria-label="Breadcrumb navigation">
-      <a
-        href="/"
-        class="episode__breadcrumb-link"
-        aria-label="Go back to all podcasts"
-      >
+      <a href="/" class="episode__breadcrumb-link" aria-label="Go back to all podcasts">
         {t.backToAll}
       </a>
     </nav>
@@ -117,23 +108,23 @@ const t = {
           loading="eager"
           class="episode__hero-image"
           decoding="async"
+          sizes="(max-width: 960px) 100vw, 50vw"
         />
       </div>
 
       <div class="episode__hero-body">
         <div class="episode__meta">
-          <span
-            class="episode__pill"
-            aria-label={`${t.episode} number ${episodeNumber}`}
-          >
-            {t.episode} {episodeNumber}
+          <span class="episode__pill" aria-label={`${t.episode} number ${episodeNumber}`}>
+            {t.episode}
+            {episodeNumber}
           </span>
           <time
             class="episode__date"
             datetime={currentPodcast.publishedAt}
             aria-label={`${t.publishedOn} ${formatDate(currentPodcast.publishedAt)}`}
           >
-            {t.publishedOn} {formatDate(currentPodcast.publishedAt)}
+            {t.publishedOn}
+            {formatDate(currentPodcast.publishedAt)}
           </time>
         </div>
 
@@ -145,101 +136,102 @@ const t = {
       </div>
     </section>
 
-    {currentPodcast.knowledgeUrl && (
-      <section
-        class="episode__knowledge"
-        aria-labelledby="knowledge-link"
-      >
-        <div class="episode__knowledge-body">
-          <p class="episode__kicker" id="knowledge-link">
-            {t.knowledge}
-          </p>
-          <p class="episode__knowledge-text">
-            Deepen your dive with the related Melody Mind knowledge article.
-          </p>
-        </div>
-        <a
-          href={currentPodcast.knowledgeUrl}
-          class="episode__knowledge-link"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`${t.readArticle}: ${currentPodcast.title}`}
-        >
-          {t.readArticle}
-        </a>
-      </section>
-    )}
+    {
+      currentPodcast.knowledgeUrl && (
+        <section class="episode__knowledge" aria-labelledby="knowledge-link">
+          <div class="episode__knowledge-body">
+            <p class="episode__kicker" id="knowledge-link">
+              {t.knowledge}
+            </p>
+            <p class="episode__knowledge-text">
+              Deepen your dive with the related Melody Mind knowledge article.
+            </p>
+          </div>
+          <a
+            href={currentPodcast.knowledgeUrl}
+            class="episode__knowledge-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${t.readArticle}: ${currentPodcast.title}`}
+          >
+            {t.readArticle}
+          </a>
+        </section>
+      )
+    }
 
-    {currentPodcast.audioUrl && (
-      <section class="episode__audio" aria-labelledby="audio-player-heading">
-        <Headline level="h2" textSize="lg" className="episode__section-title">
-          <span id="audio-player-heading">{t.listenToEpisode}</span>
-        </Headline>
+    {
+      currentPodcast.audioUrl && (
+        <section class="episode__audio" aria-labelledby="audio-player-heading">
+          <Headline level="h2" textSize="lg" className="episode__section-title">
+            <span id="audio-player-heading">{t.listenToEpisode}</span>
+          </Headline>
 
-        <AudioPlayer
-          title={currentPodcast.title}
-          audioUrl={currentPodcast.audioUrl}
-          subtitleUrl={currentPodcast.subtitleUrl}
-        />
-      </section>
-    )}
+          <AudioPlayer
+            title={currentPodcast.title}
+            audioUrl={currentPodcast.audioUrl}
+            subtitleUrl={currentPodcast.subtitleUrl}
+          />
+        </section>
+      )
+    }
 
     <TranscriptDropdown
       subtitleUrl={currentPodcast.subtitleUrl}
       podcastTitle={currentPodcast.title}
     />
 
-    {currentPodcast.showNotesHtml && (
-      <section class="episode__notes" aria-labelledby="show-notes-heading">
-        <Headline level="h2" textSize="xl" className="episode__section-title">
-          <span id="show-notes-heading">Show Notes</span>
-        </Headline>
+    {
+      currentPodcast.showNotesHtml && (
         <article role="region" aria-labelledby="show-notes-heading">
           <Prose html={currentPodcast.showNotesHtml} size="lg" />
         </article>
-      </section>
-    )}
+      )
+    }
 
-    {(prev || next) && (
-      <nav class="episode__nav" aria-labelledby="episode-nav-heading">
-        <h2 id="episode-nav-heading" class="episode__sr-only">{t.episodeNavigation}</h2>
-        <div class="episode__nav-grid">
-          {prev && (
-            <a
-              href={`/${prev.id}`}
-              class="episode__nav-card"
-              aria-label={`Go to previous episode: ${prev.title}`}
-            >
-              <span class="episode__nav-direction" aria-hidden="true">←</span>
-              <div class="episode__nav-body">
-                <span class="episode__nav-label">
-                  {t.previousEpisode}
+    {
+      (prev || next) && (
+        <nav class="episode__nav" aria-labelledby="episode-nav-heading">
+          <h2 id="episode-nav-heading" class="episode__sr-only">
+            {t.episodeNavigation}
+          </h2>
+          <div class="episode__nav-grid">
+            {prev && (
+              <a
+                href={`/${prev.id}`}
+                class="episode__nav-card"
+                aria-label={`Go to previous episode: ${prev.title}`}
+              >
+                <span class="episode__nav-direction" aria-hidden="true">
+                  ←
                 </span>
-                <span class="episode__nav-title">{prev.title}</span>
-              </div>
-            </a>
-          )}
+                <div class="episode__nav-body">
+                  <span class="episode__nav-label">{t.previousEpisode}</span>
+                  <span class="episode__nav-title">{prev.title}</span>
+                </div>
+              </a>
+            )}
 
-          {next && (
-            <a
-              href={`/${next.id}`}
-              class="episode__nav-card episode__nav-card--next"
-              aria-label={`Go to next episode: ${next.title}`}
-            >
-              <div class="episode__nav-body">
-                <span class="episode__nav-label">
-                  {t.nextEpisode}
+            {next && (
+              <a
+                href={`/${next.id}`}
+                class="episode__nav-card episode__nav-card--next"
+                aria-label={`Go to next episode: ${next.title}`}
+              >
+                <div class="episode__nav-body">
+                  <span class="episode__nav-label">{t.nextEpisode}</span>
+                  <span class="episode__nav-title">{next.title}</span>
+                </div>
+                <span class="episode__nav-direction" aria-hidden="true">
+                  →
                 </span>
-                <span class="episode__nav-title">{next.title}</span>
-              </div>
-              <span class="episode__nav-direction" aria-hidden="true">→</span>
-            </a>
-          )}
-        </div>
-      </nav>
-    )}
+              </a>
+            )}
+          </div>
+        </nav>
+      )
+    }
   </div>
-
 </PodcastLayout>
 
 <style>
@@ -249,19 +241,19 @@ const t = {
   }
 
   .episode__breadcrumb {
-    margin-top: 0.25rem;
+    margin-block-start: 0.25rem;
   }
 
   .episode__breadcrumb-link {
     display: inline-flex;
     align-items: center;
     padding: 0.6rem 1rem;
-    border-radius: 0.8rem;
-    background: var(--color-layer-2);
-    border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
+    font-weight: 600;
     color: var(--color-text);
     text-decoration: none;
-    font-weight: 600;
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
+    border-radius: 0.8rem;
   }
 
   .episode__breadcrumb-link:focus-visible {
@@ -273,23 +265,23 @@ const t = {
     display: grid;
     gap: 2rem;
     padding: 1.75rem;
-    border-radius: 1.6rem;
     background: var(--color-surface);
     border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
+    border-radius: 1.6rem;
     box-shadow: var(--shadow-soft);
   }
 
   .episode__hero-media {
-    width: 100%;
+    inline-size: 100%;
   }
 
   .episode__hero-image {
-    width: 100%;
-    height: auto;
-    border-radius: 1.5rem;
-    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
-    box-shadow: var(--shadow-soft);
     display: block;
+    inline-size: 100%;
+    block-size: auto;
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-soft);
   }
 
   .episode__hero-body {
@@ -306,45 +298,45 @@ const t = {
 
   .episode__pill {
     padding: 0.4rem 0.9rem;
-    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
     background: var(--color-layer-2);
     border: 1px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
-    color: var(--color-text);
-    font-weight: 700;
-    font-size: 0.85rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+    border-radius: 999px;
   }
 
   .episode__date {
     padding: 0.35rem 0.75rem;
-    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
     background: var(--color-layer-1);
     border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
-    color: var(--color-text-muted);
-    font-size: 0.85rem;
+    border-radius: 999px;
   }
 
   .episode__title {
-    margin-top: 0.25rem;
+    margin-block-start: 0.25rem;
   }
 
   .episode__description {
+    max-inline-size: 70ch;
     margin: 0;
-    color: var(--color-text-muted);
-    line-height: 1.9;
     font-size: 1.05rem;
-    max-width: 70ch;
+    line-height: 1.9;
+    color: var(--color-text-muted);
   }
 
   .episode__knowledge {
-    padding: 1.5rem;
-    border-radius: 1.25rem;
-    background: var(--color-layer-2);
-    border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
     display: grid;
     gap: 1rem;
     align-items: center;
+    padding: 1.5rem;
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
+    border-radius: 1.25rem;
   }
 
   .episode__knowledge-body {
@@ -355,16 +347,16 @@ const t = {
   .episode__kicker {
     margin: 0;
     font-size: 0.75rem;
+    color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.25em;
-    color: var(--color-text-muted);
   }
 
   .episode__knowledge-text {
+    max-inline-size: 68ch;
     margin: 0;
-    color: var(--color-text);
     line-height: 1.8;
-    max-width: 68ch;
+    color: var(--color-text);
   }
 
   .episode__knowledge-link {
@@ -372,11 +364,11 @@ const t = {
     align-items: center;
     justify-content: center;
     padding: 0.6rem 1rem;
-    border-radius: 0.75rem;
-    background: var(--color-primary);
-    color: var(--color-background);
     font-weight: 700;
+    color: var(--color-background);
     text-decoration: none;
+    background: var(--color-primary);
+    border-radius: 0.75rem;
   }
 
   .episode__knowledge-link:focus-visible {
@@ -385,12 +377,12 @@ const t = {
   }
 
   .episode__audio {
-    padding: 1.5rem;
-    border-radius: 1.25rem;
-    background: var(--color-layer-4);
-    border: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
     display: grid;
     gap: 1rem;
+    padding: 1.5rem;
+    background: var(--color-layer-4);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
+    border-radius: 1.25rem;
   }
 
   .episode__notes {
@@ -409,14 +401,14 @@ const t = {
 
   .episode__sr-only {
     position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
+    inline-size: 1px !important;
+    block-size: 1px !important;
     padding: 0 !important;
     margin: -1px !important;
     overflow: hidden !important;
-    clip: rect(0 0 0 0) !important;
     white-space: nowrap !important;
     border: 0 !important;
+    clip-path: inset(50%) !important;
   }
 
   .episode__nav-grid {
@@ -429,17 +421,17 @@ const t = {
     grid-template-columns: auto 1fr;
     gap: 1rem;
     padding: 1.1rem 1.25rem;
-    border-radius: 1rem;
-    background: var(--color-layer-2);
-    border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
     color: var(--color-text);
     text-decoration: none;
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
+    border-radius: 1rem;
     box-shadow: var(--shadow-soft);
   }
 
   .episode__nav-card--next {
     grid-template-columns: 1fr auto;
-    text-align: right;
+    text-align: end;
   }
 
   .episode__nav-card:focus-visible {
@@ -458,17 +450,17 @@ const t = {
   }
 
   .episode__nav-label {
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
     font-size: 0.7rem;
     color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
   }
 
   .episode__nav-title {
     font-weight: 700;
   }
 
-  @media (min-width: 960px) {
+  @media (width >= 960px) {
     .episode__hero {
       grid-template-columns: 1fr 1.4fr;
       align-items: center;

@@ -56,23 +56,23 @@ export interface PodcastData {
   /** Brief description of the podcast content */
   description: string;
   /** Optional rich HTML show notes for the episode */
-  showNotesHtml?: string;
+  showNotesHtml?: string | undefined;
   /** Optional shorter meta description for SEO snippets */
-  metaDescription?: string;
+  metaDescription?: string | undefined;
   /** URL to the audio file */
   audioUrl: string;
   /** Optional duration in seconds (if known / precomputed) */
-  durationSeconds?: number;
+  durationSeconds?: number | undefined;
   /** Optional precise audio file size in bytes (for <enclosure length="...">) */
-  fileSizeBytes?: number;
+  fileSizeBytes?: number | undefined;
   /** URL to the VTT subtitle file */
-  subtitleUrl?: string;
+  subtitleUrl?: string | undefined;
   /** Cover image URL */
   imageUrl: string;
   /** Optional intrinsic cover image width in pixels (for precise OG/Twitter metadata) */
-  imageWidth?: number;
+  imageWidth?: number | undefined;
   /** Optional intrinsic cover image height in pixels */
-  imageHeight?: number;
+  imageHeight?: number | undefined;
   /** Publication date */
   publishedAt: string;
   /** Language of the podcast */
@@ -80,9 +80,9 @@ export interface PodcastData {
   /** Whether the podcast is available */
   isAvailable: boolean;
   /** Optional series name (podcast show) for structured data & SEO */
-  seriesName?: string;
+  seriesName?: string | undefined;
   /** Optional explicit episode number (overrides auto numbering if present) */
-  episodeNumber?: number;
+  episodeNumber?: number | undefined;
   /** Optional URL to related knowledge article */
-  knowledgeUrl?: string;
+  knowledgeUrl?: string | undefined;
 }

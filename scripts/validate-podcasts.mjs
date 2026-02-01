@@ -27,7 +27,7 @@ import { imageSize } from 'image-size';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
-const dataDir = path.join(root, 'src', 'data', 'podcasts');
+const dataDir = path.join(root, 'src', 'content', 'podcasts');
 const args = process.argv.slice(2);
 const strict = args.includes('--strict');
 const outJson = args.includes('--json');

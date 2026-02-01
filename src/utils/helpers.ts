@@ -35,7 +35,7 @@ export function buildMetaDescription(
   const normalizedSuffix = suffix?.replace(/\s+/g, " ").trim();
 
   if (!normalizedSuffix) {
-    if (normalizedText.length <= maxLength) return normalizedText;
+    if (normalizedText.length <= maxLength) {return normalizedText;}
     return `${normalizedText.slice(0, Math.max(0, maxLength - 3)).trimEnd()}...`;
   }
 
@@ -43,7 +43,7 @@ export function buildMetaDescription(
   const maxBaseLength = maxLength - separator.length - normalizedSuffix.length;
 
   if (maxBaseLength <= 0) {
-    if (normalizedText.length <= maxLength) return normalizedText;
+    if (normalizedText.length <= maxLength) {return normalizedText;}
     return `${normalizedText.slice(0, Math.max(0, maxLength - 3)).trimEnd()}...`;
   }
 

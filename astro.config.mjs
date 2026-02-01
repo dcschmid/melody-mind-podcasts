@@ -2,24 +2,16 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import path from 'path';
 import minifyHtml from 'astro-minify-html-swc';
-import enPodcasts from './src/data/podcasts/en.json' assert { type: 'json' };
+import enPodcasts from './src/content/podcasts/en.json' with { type: 'json' };
 
-const legacyLocales = ['de', 'es', 'fr', 'it'];
 const availableSlugs = (enPodcasts.podcasts ?? [])
   .filter((podcast) => podcast.isAvailable)
   .map((podcast) => podcast.id);
-const legacyRedirects = legacyLocales.reduce((acc, locale) => {
-  acc[`/${locale}`] = '/';
-  availableSlugs.forEach((slug) => {
-    acc[`/${locale}/${slug}`] = `/${slug}`;
-  });
-  return acc;
-}, {});
 
 export default defineConfig({
   site: 'https://podcasts.melody-mind.de',
   output: 'static',
-  redirects: legacyRedirects,
+  redirects: {},
   integrations: [
     sitemap({
       xslURL: '/sitemap.xsl',
@@ -50,10 +42,14 @@ export default defineConfig({
   ],
   build: {
     inlineStylesheets: 'auto',
-    assets: 'assets'
+    assets: 'assets',
+    format: 'directory'
   },
   compressHTML: true,
   vite: {
+    css: {
+      transformer: 'lightningcss',
+    },
     resolve: {
       alias: {
         '@components': path.resolve('./src/components'),

@@ -8,9 +8,9 @@ export async function generatePodcastRSSFeed(
 ): Promise<string> {
   const lang = "en";
   const locale = "en-US";
-  const title = "Melody Mind – Journey Through Music History";
+  const title = "Melody Mind Podcast – Where Music Becomes Story";
   const description =
-    "Melody Mind explores the stories behind the music that shaped generations. Annabelle and Daniel guide listeners through decades, genres, and iconic artists—from the 1950s to today. Each episode blends rich history, emotional insights, and immersive storytelling, showing how music connects cultures and defines moments. A podcast for everyone who wants to hear the world through sound.";
+    "Every song has a story. Every decade has a soundtrack. Join Annabelle and Daniel as they take you on an unforgettable journey through music history—from the birth of Rock 'n' Roll to today's chart-toppers. Discover the artists who changed the world, the moments that defined generations, and the emotions that connect us all through sound. Your musical time machine starts here.";
 
   const sortedEpisodes = episodes
     .filter((episode) => episode.isAvailable)
@@ -43,7 +43,7 @@ export async function generatePodcastRSSFeed(
     if (Array.isArray(persons)) {
       personsTags = persons
         .map((p: any) => {
-          if (!p || !p.name) return "";
+          if (!p || !p.name) {return "";}
           const name = escapeXML(p.name);
           const role = p.role ? escapeXML(p.role) : "host";
           const href = p.href ? ` href="${p.href}"` : "";
@@ -53,7 +53,7 @@ export async function generatePodcastRSSFeed(
         .filter(Boolean)
         .join("\n    ");
     }
-  } catch (e) {
+  } catch {
     // ignore if file missing
   }
 

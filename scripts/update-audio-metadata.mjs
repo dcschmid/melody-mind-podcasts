@@ -2,7 +2,7 @@
 /**
  * Update audio metadata (fileSizeBytes, optional duration placeholder) in podcast JSON files.
  *
- * - Liest alle JSON Dateien unter src/data/podcasts/*.json
+ * - Liest alle JSON Dateien unter src/content/podcasts/*.json
  * - Für jedes Podcast-Objekt mit audioUrl wird ein HEAD Request ausgeführt
  * - Content-Length wird als fileSizeBytes eingetragen (falls vorhanden)
  * - Optional: Dauer-Ermittlung könnte später ergänzt werden (TODO)
@@ -36,7 +36,7 @@ import * as mm from 'music-metadata';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.join(__dirname, '..');
-const dataDir = path.join(root, 'src', 'data', 'podcasts');
+const dataDir = path.join(root, 'src', 'content', 'podcasts');
 
 const args = process.argv.slice(2);
 const isWrite = !args.includes('--no-write');

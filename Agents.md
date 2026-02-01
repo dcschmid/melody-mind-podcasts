@@ -1,335 +1,155 @@
 # AGENTS.md
 
-A focused operations and conventions guide for AI coding agents working on the `melody-mind-podcasts` repository. Humans should read `README.md` for product context; agents should prioritize this file for precise instructions, architecture, and execution rules.
-
----
-
-## 1. Project Snapshot
-
-List of core attributes:
-
-- Stack: Astro 5.x (static output) + Tailwind CSS + TypeScript 5.x
-- Node: 22.x (minimum 18.20.8 for Astro, prefer 22)
-- Package manager: npm (lockfile: `yarn.lock` currently present; treat scripts as portable via `npm run <script>` or `yarn <script>`; prefer `npm` for new instructions)
-- Primary domain: `https://podcasts.melody-mind.de`
-- Supported locales: `en`, `de`, `es`, `fr`, `it`, `pt`
-- Core data: JSON episode lists per language in `src/data/podcasts/*.json`
-
-### Key Goals
-
-1. Serve accessible multi‑language podcast pages and per‑language RSS feeds.
-2. Maintain Podcasting 2.0 tags (transcripts, persons) in RSS.
-3. Enforce content style guidelines (length windows, CTA patterns, emoji mapping).
-4. Optimize SEO (hreflang, structured metadata, sitemap, performant HTML).
-
----
+Operating guide for agentic coding assistants in `melody-mind-podcasts`.
+Use this file for build/lint/test commands, style rules, and repo conventions.
 
-## 2. Directory Overview (Agent-Relevant)
+## 1) Project Snapshot
 
-```text
-src/
-  components/        Reusable presentation building blocks
-  data/              Podcast episode & persons JSON
-  layouts/           Page layout & meta tags (SEO, OG, hreflang)
-  pages/             Route definitions (dynamic `[lang]`, `[id]`, RSS endpoint)
-  types/             TypeScript interfaces (podcast structures)
-  utils/             Logic: rss generator, audio player helpers
-scripts/             Maintenance & validation automation
-public/              Static assets (images, sitemap.xsl, manifest)
-.cache/              Generated audio metadata cache
-```
+- Stack: Astro 5.x + TypeScript 5.x, static output
+- Package manager: Yarn (preferred). `package-lock.json` exists; avoid mixing npm.
+- Language: English-only content
+- Data source: Astro Content Collections in `src/content/podcasts/*.json`
 
-Agents must not delete directories listed above. Adding new scripts is allowed if justified with clear naming (`<verb>-<target>.mjs`).
+## 2) Commands (Build/Lint/Test)
 
----
+Run the fastest applicable command. Do not invent alternatives.
 
-## 3. Build & Run Commands
+### Install
 
-Use the fastest applicable command; do not invent alternatives.
+- `yarn install`
 
-| Intent | Command |
-|--------|---------|
-| Install deps | `npm install` |
-| Dev server (local) | `npm run dev` (default port 4321) |
-| Production build | `npm run build` |
-| Preview build | `npm run preview` |
-| Update audio metadata | `npm run update:audio-metadata` |
-| Validate podcast data | `npm run validate:podcasts` |
-| Check style compliance | `npm run check:style` |
-| Normalize images | `npm run normalize:images` |
-| Convert PNG to JPG | `npm run convert:png` |
+### Dev / Build
 
-Always run validation scripts after modifying episode JSON or persons data.
+- Dev server: `yarn dev`
+- Production build: `yarn build`
+- Preview: `yarn preview`
 
----
+### Lint / Format
 
-## 4. Data Contracts
+- ESLint: `yarn lint`
+- ESLint fix: `yarn lint:fix`
+- Stylelint: `yarn lint:css`
+- Stylelint fix: `yarn lint:css:fix`
+- Prettier write: `yarn format`
+- Prettier check: `yarn format:check`
 
-### Episode Object (per language JSON)
+### Data / Maintenance
 
-```ts
-{
-  "id": string,                 // unique, stable slug
-  "title": string,              // must meet style guide rules
-  "description": string,        // style guide length & CTA rules
-  "publishedAt": "YYYY-MM-DD", // ISO date (UTC assumed)
-  "imageUrl": string,           // base name (without /images/ prefix logic)
-  "audioUrl": string,           // absolute or CDN URL to MP3
-  "showNotesHtml": string?,     // optional rich HTML (sanitized by author)
-  "isAvailable": boolean,       // include only if true in UI & RSS
-  "fileSizeBytes": number?,     // filled by metadata script
-  "durationSeconds": number?,   // filled by metadata analysis
-  "subtitleUrl": string?,       // VTT for transcript (RSS <podcast:transcript>)
-  "episodeNumber": number?      // overrides derived numbering
-}
-```
+- Update audio metadata: `yarn update:audio-metadata`
+- Validate podcasts: `yarn validate:podcasts`
+- Check content style rules: `yarn check:style`
+- Normalize images: `yarn normalize:images`
+- Convert PNG to JPG: `yarn convert:png`
 
-Constraints:
+### Tests
 
-- `id` must not contain spaces; use hyphenated lowercase.
-- `publishedAt` future dates allowed; episodes appear only when `isAvailable` is true.
-- `showNotesHtml` must avoid untrusted scripts; agents do not inline `<script>`.
+- No test runner is configured. For a “single test,” run the most targeted script above.
 
-### Persons (`src/data/persons.json`)
+## 3) Husky / Pre-commit
 
-```json
-[
-  {
-    "name": "Daniel Schmid",           
-    "role": "host",                    
-    "href": "https://melody-mind.de",  
-    "img": "https://melody-mind.de/images/daniel.jpg"
-  }
-]
-```
+- Husky is enabled via `prepare`.
+- Pre-commit runs `lint-staged`.
+- Lint-staged targets all staged files:
+  - `**/*.{js,ts,astro}` → `eslint --fix`
+  - `**/*.{astro,css,md,json}` → `prettier --write`
 
-Never remove existing person entries without an explicit request. Additions require a `name` and optionally `role`.
+## 4) Code Style & Formatting
 
----
+### Formatting
 
-## 5. Style Enforcement (Content)
+- Prettier is the source of truth (`prettier.config.cjs`).
+- Run `yarn format` after changes that affect markup or JSON.
 
-See `STYLEGUIDE.md` for comprehensive rules. Critical subset agents must enforce:
+### ESLint (strict)
 
-- Title length: 55–65 characters inclusive; exactly one terminal emoji matching mapping.
-- Decade episodes: `1950s – Hook ... <Emoji>` (en dash, no colon).
-- Description length: 250–300 characters inclusive; contains host phrase: `Daniel and Annabelle guide you` (case-insensitive) before CTA.
-- CTA sentence starts with `Press play and` and ends with a single mapped emoji.
-- No multiple emojis or emojis mid‑title (only trailing one).
-- No exclamation marks in CTA.
+- Flat config: `eslint.config.js`.
+- `no-console` is **error**.
+- `@typescript-eslint/no-unused-vars` is **error** (ignore args prefixed with `_`).
+- `no-debugger`, `eqeqeq`, `curly`, `no-implicit-coercion` enabled.
+- Globals are set for browser + node + ES2021.
 
-On violation: update minimally; retain semantic intent. Report changes in commit message.
+### Stylelint (strict)
 
----
+- Config: `stylelint.config.cjs`.
+- A11y rules enforced (media-reduced-motion; focus-visible; etc.).
+- Logical CSS required: prefer `inline-size`, `block-size`, `padding-inline`, `margin-block`.
+- Logical units: use `vi`/`vb` instead of `vw`/`vh` when possible.
+- Vendor prefixes allowed only where configured (e.g. `-webkit-background-clip`).
 
-## 6. RSS Generation Rules
+## 5) Naming & Structure
 
-Function: `generatePodcastRSSFeed(lang, episodes, baseUrl)` in `src/utils/rss.ts`.
-Agents modifying RSS logic must preserve:
+- File and component names: `PascalCase` for components, `kebab-case` for utilities.
+- CSS classes: BEM-ish (`block__element--modifier`).
+- Episode IDs: lowercase, hyphenated slugs (no spaces).
 
-- Namespaces: `itunes`, `atom`, `content`, `podcast`.
-- `<podcast:locked>` must remain `yes` with owner email unchanged.
-- Persons tags built from `persons.json` (do not hardcode).
-- Episode ordering: newest first by `publishedAt`.
-- Derived `<itunes:episode>` when `episodeNumber` absent (newest = total count).
-- `<enclosure length>` uses `fileSizeBytes` or fallback if missing.
-- Transcript tag only when `subtitleUrl` present.
+## 6) TypeScript Conventions
 
-If adding new Podcasting 2.0 tags, include brief inline comment and maintain XML validity.
+- Avoid `any`; add or refine types in `src/types/*`.
+- Prefer narrow types and explicit return types for helpers.
+- Use `type` for object shapes and unions; `interface` for component props when helpful.
 
----
+## 7) Error Handling
 
-## 7. Testing & Validation Workflow
+- Fail fast in scripts; do not swallow errors silently.
+- For optional data (e.g., missing `persons.json`), use guarded fallbacks.
+- Keep defaults conservative (no breaking changes to RSS output).
 
-Before committing changes that affect data or RSS logic:
+## 8) Content Rules (critical)
 
-1. Run `npm run validate:podcasts` (add `--style-strict` if adjusting style-critical fields).
-2. Run `npm run check:style` for any additional internal style checks (if present).
-3. Build: `npm run build` to ensure no TypeScript or Astro compile errors.
-4. Optional: manual spot-check served pages via `npm run preview`.
+- Podcast data lives in `src/content/podcasts/en.json`.
+- Only `isAvailable: true` episodes are shown and emitted in RSS.
+- Avoid inline `<script>` in content fields.
 
-Agents should not skip these steps even for small changes to JSON data.
+## 9) RSS Rules
 
----
- 
-## 8. Error Handling Principles
+File: `src/utils/rss.ts`
 
-- Scripts: Fail fast with non‑zero exit codes on validation errors (`--style-strict` path). Do not suppress these.
-- TypeScript: Avoid `any`. Extend interfaces in `src/types/podcast.ts` if new fields are needed—do not repurpose existing ones.
-- Fallback logic: Keep conservative defaults (e.g., placeholder enclosure length). If enriching, ensure backwards compatibility.
+- Preserve namespaces and `<podcast:locked>` owner.
+- Order episodes newest → oldest by `publishedAt`.
+- Use `subtitleUrl` for transcript tag when present.
+- Keep enclosure length fallback if `fileSizeBytes` missing.
 
----
- 
-## 9. Performance & Accessibility
+## 10) Accessibility & UX
 
-Agents adding UI components must:
+- Use semantic elements (`button`, `nav`, `main`).
+- Provide `aria-label` for custom controls.
+- Honor `prefers-reduced-motion`.
+- Ensure keyboard focus is visible and non-destructive.
 
-- Use semantic HTML elements (`<button>`, `<nav>`, `<main>`).
-- Provide `aria-label` for interactive custom controls.
-- Avoid large client bundles; prefer server/static rendering.
-- Reuse existing Tailwind utility patterns; avoid inline styles unless necessary.
+## 11) Data Contracts
 
-Never introduce blocking large scripts or unoptimized images.
+### Episode shape (Content Collection)
 
----
- 
-## 10. Security & Safety
+Minimal keys:
 
-- No inline or remote third‑party scripts without explicit request.
-- Do not introduce tracking pixels or analytics code.
-- Sanitize or escape any dynamic HTML added to RSS (already enclosed in CDATA for show notes).
-- Keep email addresses in RSS unchanged unless user instructs.
+- `id`, `title`, `description`, `publishedAt`, `imageUrl`, `audioUrl`, `language`, `isAvailable`
+  Optional:
+- `showNotesHtml`, `fileSizeBytes`, `durationSeconds`, `subtitleUrl`, `episodeNumber`, `knowledgeUrl`
 
----
- 
-## 11. Git & Commit Conventions
+### Persons
 
-Format: `Update: <scope> <short description> <YYYY-MM-DD>` or `Fix: <scope> ... <YYYY-MM-DD>`.
-Include scope tags: `data`, `rss`, `layout`, `styleguide`, `scripts`.
-Example: `Update: data episode metadata corrections 2025-10-23`.
+- `src/data/persons.json` for Podcasting 2.0 `<podcast:person>` tags.
+- Do not remove entries without explicit request.
 
-Group related JSON adjustments in one commit when possible.
+## 12) Modern CSS Features
 
-### Conventional Commits (English Required)
+- Allowed: `clamp`, `color-mix`, `content-visibility`, `text-wrap` (guarded via `@supports`).
+- Use `@supports` for features with partial support.
 
-Agents should prefer the Conventional Commits specification for all commit messages (always in English) unless a task explicitly requests the legacy format above. If both formats are used together, place the conventional type first followed by the legacy scope format if needed.
+## 13) Repo Rules (Cursor/Copilot)
 
-Basic pattern:
+- No `.cursorrules`, `.cursor/rules/`, or `.github/copilot-instructions.md` present.
 
-```text
-<type>(<optional scope>): <short imperative summary>
+## 14) Git Guidance
 
-<optional body>
+- Do not amend commits unless explicitly asked.
+- No force-push.
+- Keep commits focused and in English.
 
-<optional footer(s)>
-```
+## 15) Quick Checklist
 
-Supported `type` values and usage guidelines:
-
-- `feat`: Introduces a new user‑visible feature (UI component, RSS enhancement, new episode attribute).
-- `fix`: Corrects a bug (broken layout, incorrect RSS tag ordering, validation error logic).
-- `docs`: Documentation only changes (`Agents.md`, `README.md`, comments).
-- `style`: Non‑functional code style changes (formatting, whitespace) – avoid noisy diffs.
-- `refactor`: Code change that neither fixes a bug nor adds a feature (structure, decomposition, naming).
-- `perf`: Performance improvement (reduced bundle size, faster script execution).
-- `test`: Adds or adjusts tests or validation scripts.
-- `build`: Build system or dependency changes (package.json, Astro config, Tailwind setup).
-- `ci`: Continuous integration workflow adjustments (if CI added later).
-- `chore`: Minor maintenance tasks that don’t affect src logic (dependency bumps, housekeeping).
-
-Capitalization & grammar:
-- Summary starts lowercase (unless first word is a proper noun) and is written in imperative mood: `add duration formatting`, `fix transcript tag ordering`.
-- No period at end of summary.
-- Keep summary under ~70 characters.
-
-Scopes (choose one when helpful): `rss`, `layout`, `data`, `scripts`, `styleguide`, `i18n`, `images`, `accessibility`, `audio`, `seo`.
-
-Examples:
-
-```text
-feat(rss): add podcast:chapters tag fallback generation
-fix(layout): correct hreflang ordering for pt locale
-docs: expand Agents.md with conventional commits section
-perf(images): reduce processed cover size by 25%
-refactor(audio): extract time formatting helper
-```
-
-Body recommendations:
-- Explain reasoning for non‑obvious changes (`Why` + constraints).
-- Reference validation script outputs if a fix addresses warnings.
-- List follow‑ups with `Follow-up:` prefix if needed.
-
-Footers:
-- Use `BREAKING CHANGE:` only when public structures (episode JSON contract or RSS root shape) change in a way that requires consumer updates.
-- Use issue references (`Closes #12`) when resolving tracked tasks.
-
-Do NOT:
-- Start summary with a capital unless required.
-- Include emoji in commit messages.
-- Mix multiple unrelated scopes; split commits instead.
-
-Hybrid format example (if legacy style retained for audit trail):
-
-```text
-feat(rss): implement enclosure length fallback
-
-Update: rss enclosure fallback logic 2025-10-23
-```
-
----
- 
-## 12. Extensibility Guidelines
-
-When introducing new episode attributes:
-
-1. Add to `PodcastData` interface.
-2. Update validation script (if semantics require checks).
-3. Provide default handling in RSS (omit tag if undefined to avoid noise).
-4. Document in Section 4 (Data Contracts) of this file.
-
-When adding a new language:
-
-1. Extend `astro.config.mjs` locales mapping (i18n & sitemap integration).
-2. Add new JSON file `src/data/podcasts/<lang>.json` with initial episodes.
-3. Adjust CHANNEL_TITLES & CHANNEL_DESCRIPTIONS in `rss.ts`.
-4. Include hreflang updates if explicit mapping logic added elsewhere.
-
----
- 
-## 13. Local Development Tips
-
-- If image processing error occurs (from `sharp`), ensure host system has required shared libraries; retry install.
-- Use targeted filtering flags on scripts if available (`--filter=en` etc.) to speed iteration.
-- Prefer editing only the language JSON you need; avoid reformatting entire file to minimize diff noise.
-
----
- 
-## 14. Do Not Change Without Approval
-
-- Domain in `astro.config.mjs` (`site` property).
-- `<podcast:locked>` owner email.
-- Existing person `name` values.
-- License references.
-- Emoji mappings in `STYLEGUIDE.md` (may extend but not alter existing without user sign‑off).
-
----
- 
-## 15. Glossary
-
-- Episode JSON: Structured metadata describing a single podcast episode.
-- Persons Tag: Podcasting 2.0 `<podcast:person>` element listing contributors.
-- Transcript Tag: `<podcast:transcript>` referencing a captions/VTT resource.
-- Derived Episode Number: Numeric assignment based on chronological ordering when explicit number absent.
-- CTA: Call to Action sentence in description ending with mapped emoji.
-
----
- 
-## 16. FAQ (Agent-Focused)
-
-Q: Where to add a new validation rule?
-A: Create/modify logic in `scripts/validate-podcasts.mjs` (prefer small pure functions). Document changes here.
-
-Q: Missing `fileSizeBytes`—should I guess?
-A: No. Leave existing fallback; run metadata script to populate accurately.
-
-Q: Add analytics?
-A: Do not unless explicitly asked.
-
-Q: Can I rename episode IDs?
-A: Avoid. IDs are stable keys for routing and RSS GUIDs.
-
----
- 
-## 17. Completion Checklist for Agents
-
-Before concluding a task that modifies code or data:
-
-- [ ] Validation scripts pass
-- [ ] Build succeeds (no type errors)
-- [ ] RSS logic unaffected or updated with tests
-- [ ] Style rules preserved (titles/descriptions)
-- [ ] Commit message follows convention
-- [ ] This file updated if data contract or rules changed
-
----
-Treat `AGENTS.md` as living documentation. Update sections responsibly when conventions evolve.
+- `yarn lint` clean
+- `yarn lint:css` clean
+- `yarn format:check` clean
+- `yarn validate:podcasts` after data edits
+- `yarn build` for production changes

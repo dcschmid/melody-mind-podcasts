@@ -1,275 +1,52 @@
 ---
+import transcriptScript from '../scripts/transcript.ts?url';
+
 interface Props {
-  subtitleUrl?: string;
+  subtitleUrl?: string | undefined;
   podcastTitle: string;
 }
 
 const { subtitleUrl, podcastTitle } = Astro.props as Props;
 ---
 
-{subtitleUrl && (
-  <section
-    class="transcript"
-    aria-labelledby="transcript-title"
-    data-subtitle-url={subtitleUrl}
-    data-podcast-title={podcastTitle}
-    data-player-id={subtitleUrl}
-  >
-    <details class="transcript__details">
-      <summary class="transcript__summary">
-        <span class="transcript__summary-title" id="transcript-title">📄 Transcript</span>
-        <span class="transcript__summary-hint">Show Transcript</span>
-      </summary>
-      <div class="transcript__body">
-        <p class="transcript__status transcript__status--loading" hidden>
-          Loading transcript...
-        </p>
-        <p class="transcript__status transcript__status--error" hidden>
-          Error loading transcript
-        </p>
-        <div class="transcript__content" hidden></div>
-      </div>
-    </details>
-  </section>
-)}
+{
+  subtitleUrl && (
+    <section
+      class="transcript"
+      aria-labelledby="transcript-title"
+      data-subtitle-url={subtitleUrl}
+      data-podcast-title={podcastTitle}
+      data-player-id={subtitleUrl}
+    >
+      <details class="transcript__details">
+        <summary class="transcript__summary">
+          <span class="transcript__summary-title" id="transcript-title">
+            📄 Transcript
+          </span>
+          <span class="transcript__summary-hint">Show Transcript</span>
+        </summary>
+        <div class="transcript__body">
+          <p class="transcript__status transcript__status--loading" hidden>
+            Loading transcript...
+          </p>
+          <p class="transcript__status transcript__status--error" hidden>
+            Error loading transcript
+          </p>
+          <div class="transcript__content" hidden />
+        </div>
+      </details>
+    </section>
+  )
+}
 
-<script is:inline>
-  (() => {
-    const roots = document.querySelectorAll(".transcript");
-    roots.forEach((root) => {
-      const subtitleUrl = root.getAttribute("data-subtitle-url");
-      if (!subtitleUrl) return;
-
-      const playerId = root.getAttribute("data-player-id") || "";
-      const details = root.querySelector(".transcript__details");
-      const hint = root.querySelector(".transcript__summary-hint");
-      const loading = root.querySelector(".transcript__status--loading");
-      const error = root.querySelector(".transcript__status--error");
-      const content = root.querySelector(".transcript__content");
-
-      if (!details || !content || !loading || !error || !hint) return;
-
-      let loaded = false;
-      let loadingInProgress = false;
-      let cues = [];
-      let cueButtons = [];
-      let activeCueIndex = -1;
-      let lastAudioTime = null;
-
-      const updateHint = () => {
-        hint.textContent = details.open ? "Hide Transcript" : "Show Transcript";
-      };
-
-      const parseTimeToSeconds = (timeStr) => {
-        const clean = timeStr.split(/[ \t]/)[0];
-        const parts = clean.split(":").map((part) => part.trim());
-        if (parts.length === 3) {
-          const [hours, minutes, seconds] = parts;
-          return (
-            parseInt(hours, 10) * 3600 +
-            parseInt(minutes, 10) * 60 +
-            parseFloat(seconds)
-          );
-        }
-        if (parts.length === 2) {
-          const [minutes, seconds] = parts;
-          return parseInt(minutes, 10) * 60 + parseFloat(seconds);
-        }
-        return 0;
-      };
-
-      const formatTime = (totalSeconds) => {
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = Math.floor(totalSeconds % 60);
-        return `${minutes}:${seconds.toString().padStart(2, "0")}`;
-      };
-
-      const parseVTT = (vttText) => {
-        const lines = vttText.split("\n");
-        const cues = [];
-        let i = 0;
-
-        while (i < lines.length && !lines[i].includes("-->")) {
-          i++;
-        }
-
-        while (i < lines.length) {
-          const line = lines[i].trim();
-          if (line.includes("-->")) {
-            const [startStr] = line.split("-->").map((part) => part.trim());
-            i++;
-            let cueText = "";
-
-            while (
-              i < lines.length &&
-              lines[i].trim() !== "" &&
-              !lines[i].includes("-->")
-            ) {
-              cueText += (cueText ? " " : "") + lines[i].trim();
-              i++;
-            }
-
-            cueText = cueText.replace(/<[^>]*>/g, "").trim();
-            if (cueText) {
-              cues.push({
-                start: startStr,
-                startSeconds: parseTimeToSeconds(startStr),
-                text: cueText,
-              });
-            }
-          } else {
-            i++;
-          }
-        }
-
-        return cues;
-      };
-
-      const renderCues = (cues) => {
-        content.innerHTML = "";
-        cueButtons = [];
-        activeCueIndex = -1;
-        cues.forEach((cue) => {
-          const cueRow = document.createElement("button");
-          cueRow.type = "button";
-          cueRow.className = "transcript__cue";
-          cueRow.dataset.start = cue.startSeconds.toString();
-          cueRow.setAttribute(
-            "aria-label",
-            `Jump to ${formatTime(cue.startSeconds)}`,
-          );
-
-          const time = document.createElement("span");
-          time.className = "transcript__time";
-          time.textContent = formatTime(cue.startSeconds);
-
-          const text = document.createElement("span");
-          text.className = "transcript__text";
-          text.textContent = cue.text;
-
-          cueRow.appendChild(time);
-          cueRow.appendChild(text);
-          content.appendChild(cueRow);
-          cueButtons.push(cueRow);
-        });
-      };
-
-      const getActiveCueIndex = (currentTime) => {
-        if (!Number.isFinite(currentTime)) return -1;
-        let index = -1;
-        for (let i = 0; i < cues.length; i += 1) {
-          if (currentTime >= cues[i].startSeconds) {
-            index = i;
-          } else {
-            break;
-          }
-        }
-        return index;
-      };
-
-      const setActiveCue = (nextIndex) => {
-        if (nextIndex === activeCueIndex) return;
-        if (activeCueIndex >= 0 && cueButtons[activeCueIndex]) {
-          const previousButton = cueButtons[activeCueIndex];
-          previousButton.classList.remove("transcript__cue--active");
-          previousButton.removeAttribute("aria-current");
-        }
-        activeCueIndex = nextIndex;
-        if (activeCueIndex >= 0 && cueButtons[activeCueIndex]) {
-          const nextButton = cueButtons[activeCueIndex];
-          nextButton.classList.add("transcript__cue--active");
-          nextButton.setAttribute("aria-current", "true");
-          nextButton.scrollIntoView({ block: "nearest", behavior: "smooth" });
-        }
-      };
-
-      const dispatchSeekEvent = (timeSeconds) => {
-        if (!playerId || !Number.isFinite(timeSeconds)) return;
-        window.dispatchEvent(
-          new CustomEvent("transcript:seek", {
-            detail: {
-              playerId,
-              time: timeSeconds,
-              autoplay: true,
-            },
-          }),
-        );
-      };
-
-      const loadTranscript = async () => {
-        if (loaded || loadingInProgress) return;
-        loadingInProgress = true;
-        loading.hidden = false;
-        error.hidden = true;
-        content.hidden = true;
-
-        try {
-          const response = await fetch(subtitleUrl);
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-          const vttText = await response.text();
-          const parsedCues = parseVTT(vttText);
-
-          if (parsedCues.length === 0) {
-            throw new Error("No cues found.");
-          }
-
-          cues = parsedCues;
-          renderCues(cues);
-          if (Number.isFinite(lastAudioTime)) {
-            setActiveCue(getActiveCueIndex(lastAudioTime));
-          }
-          content.hidden = false;
-          loaded = true;
-        } catch (err) {
-          error.hidden = false;
-        } finally {
-          loading.hidden = true;
-          loadingInProgress = false;
-        }
-      };
-
-      content.addEventListener("click", (event) => {
-        if (!(event.target instanceof Element)) return;
-        const cueButton = event.target.closest(".transcript__cue");
-        if (!(cueButton instanceof HTMLButtonElement)) return;
-        const startSeconds = Number(cueButton.dataset.start);
-        dispatchSeekEvent(startSeconds);
-      });
-
-      window.addEventListener("audio:time", (event) => {
-        if (!(event instanceof CustomEvent)) return;
-        const detail = event.detail;
-        if (!detail || detail.playerId !== playerId) return;
-        const currentTime = Number(detail.currentTime);
-        if (!Number.isFinite(currentTime)) return;
-        lastAudioTime = currentTime;
-        if (!loaded || content.hidden || !details.open) return;
-        setActiveCue(getActiveCueIndex(currentTime));
-      });
-
-      details.addEventListener("toggle", () => {
-        updateHint();
-        if (details.open) {
-          loadTranscript();
-          if (loaded && Number.isFinite(lastAudioTime)) {
-            setActiveCue(getActiveCueIndex(lastAudioTime));
-          }
-        }
-      });
-
-      updateHint();
-    });
-  })();
-</script>
+<script type="module" src={transcriptScript}></script>
 
 <style>
   .transcript {
-    margin-top: 2rem;
+    margin-block-start: 2rem;
+    background: var(--color-layer-4);
     border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
     border-radius: 1rem;
-    background: var(--color-layer-4);
     box-shadow: var(--shadow-soft);
   }
 
@@ -290,8 +67,8 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
 
   .transcript__summary:focus-visible {
     outline: none;
-    box-shadow: var(--focus-ring);
     border-radius: 0.5rem;
+    box-shadow: var(--focus-ring);
   }
 
   .transcript__summary-title {
@@ -306,7 +83,7 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
 
   .transcript__body {
     padding: 1rem 1.25rem 1.25rem;
-    border-top: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
+    border-block-start: 1px solid color-mix(in srgb, var(--color-primary) 24%, transparent);
   }
 
   .transcript__status {
@@ -321,28 +98,28 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
   .transcript__content {
     display: grid;
     gap: 0.75rem;
-    max-height: 24rem;
-    overflow-y: auto;
-    padding-right: 0.25rem;
+    max-block-size: 24rem;
+    padding-inline-end: 0.25rem;
+    overflow-block: auto;
   }
 
   :global(.transcript .transcript__cue) {
-    width: 100%;
-    text-align: left;
-    font: inherit;
-    margin: 0;
-    padding: 0.85rem 1rem;
-    border-radius: 0.85rem;
-    background: var(--color-layer-2);
-    border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
-    color: var(--color-text);
-    line-height: 1.65;
     display: grid;
     grid-template-columns: minmax(3.5rem, auto) 1fr;
     gap: 0.75rem;
     align-items: start;
-    cursor: pointer;
+    inline-size: 100%;
+    padding: 0.85rem 1rem;
+    margin: 0;
+    font: inherit;
+    line-height: 1.65;
+    color: var(--color-text);
+    text-align: start;
     appearance: none;
+    cursor: pointer;
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
+    border-radius: 0.85rem;
   }
 
   :global(.transcript .transcript__cue:focus-visible) {
@@ -357,14 +134,32 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
 
   :global(.transcript .transcript__time) {
     display: inline-block;
-    min-width: 3.5rem;
+    min-inline-size: 3.5rem;
     font-weight: 600;
-    color: var(--color-primary);
     font-variant-numeric: tabular-nums;
-    text-align: right;
+    color: var(--color-primary);
+    text-align: end;
   }
 
   :global(.transcript .transcript__text) {
     color: var(--color-text);
+  }
+
+  @supports not (color-mix(in srgb, #000 50%, transparent)) {
+    .transcript {
+      border-color: rgb(111 225 255 / 32%);
+    }
+
+    .transcript__body {
+      border-block-start-color: rgb(111 225 255 / 28%);
+    }
+
+    :global(.transcript .transcript__cue) {
+      border-color: rgb(111 225 255 / 28%);
+    }
+
+    :global(.transcript .transcript__cue--active) {
+      border-color: rgb(111 225 255 / 60%);
+    }
   }
 </style>

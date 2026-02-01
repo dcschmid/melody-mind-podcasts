@@ -94,9 +94,11 @@ melody-mind-podcasts/
 │   │   ├── Headline.astro
 │   │   ├── Paragraph.astro
 │   │   └── Prose.astro
-│   ├── data/
-│   │   └── podcasts/        # Podcast data
+│   ├── content/
+│   │   └── podcasts/        # Podcast data (Astro content collection)
 │   │       └── en.json
+│   ├── data/
+│   │   └── persons.json       # Podcast persons metadata
 │   ├── layouts/
 │   │   └── PodcastLayout.astro  # Main layout with SEO
 │   ├── pages/
@@ -122,7 +124,7 @@ melody-mind-podcasts/
 
 ### Adding New Episodes
 
-1. **Add episode data** to `src/data/podcasts/en.json`
+1. **Add episode data** to `src/content/podcasts/en.json`
 2. **Include episode artwork** in `public/images/`
 3. **Set `isAvailable: true`** for episodes ready for publication
 4. **Build and deploy** - new episodes will automatically appear
@@ -280,13 +282,13 @@ Generator version: `MelodyMind RSS Generator v1.1.0`
 
 `SearchBar.astro` provides an accessible search:
 
- - `role="search"` with clear `aria-label`
- - Visually hidden label for screen readers
- - Live region (`aria-live="polite"`) announces result count without focus loss
- - Fully focusable input & clear button with visible focus rings (AAA contrast)
- - High contrast support (`prefers-contrast: high`)
- - Respects reduced motion (`prefers-reduced-motion`)
- - Uses semantic articles; filtering toggles `hidden`
+- `role="search"` with clear `aria-label`
+- Visually hidden label for screen readers
+- Live region (`aria-live="polite"`) announces result count without focus loss
+- Fully focusable input & clear button with visible focus rings (AAA contrast)
+- High contrast support (`prefers-contrast: high`)
+- Respects reduced motion (`prefers-reduced-motion`)
+- Uses semantic articles; filtering toggles `hidden`
 
 Usage: from 2 characters it filters title + description; “Clear” resets. Server-side or fuzzy search can be added easily.
 
@@ -339,7 +341,7 @@ lighthouse http://localhost:4321/en/1950s --only-categories=accessibility
 - Follow existing code style and formatting
 - Add TypeScript types for new features
 - Ensure accessibility compliance for UI changes
-- Test across multiple languages and devices
+- Test across devices and browsers
 - Update documentation for new features
 
 ## 📝 License
@@ -363,4 +365,4 @@ For questions, issues, or feature requests:
 
 ---
 
-**MelodyMind Podcasts** - Exploring music history through accessible, multi-language storytelling 🎵
+**MelodyMind Podcasts** - Exploring music history through accessible, English-first storytelling 🎵

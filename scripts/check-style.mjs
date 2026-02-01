@@ -14,7 +14,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 
 const root = path.join(process.cwd());
-const dataFile = path.join(root, 'src', 'data', 'podcasts', 'en.json');
+const dataFile = path.join(root, 'src', 'content', 'podcasts', 'en.json');
 
 const emojiMap = {
   // decades

@@ -1,12 +1,9 @@
 import type { APIRoute } from "astro";
-import enPodcastsJson from "../data/podcasts/en.json";
+import { getAvailablePodcasts } from "../utils/podcasts";
 import { generatePodcastRSSFeed } from "../utils/rss";
-import type { PodcastData } from "../types/podcast";
 
 export const GET: APIRoute = async ({ request }) => {
-  const episodes = (enPodcastsJson.podcasts as PodcastData[]).filter(
-    (episode) => episode.isAvailable,
-  );
+  const episodes = await getAvailablePodcasts();
 
   const baseUrl = new URL(request.url).origin;
   const rssXML = await generatePodcastRSSFeed(episodes, baseUrl);
