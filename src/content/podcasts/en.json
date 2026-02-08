@@ -118,6 +118,20 @@
       "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/genre-evolution-pathways/blues-to-extreme-metal.vtt",
       "fileSizeBytes": 126445235,
       "durationSeconds": 3951
+    },
+    {
+      "id": "classic-to-neo-classical",
+      "title": "Genre Evolution Pathways: Classical to Neo-Classical Listening",
+      "description": "Daniel and Annabelle trace how classical music unfolds into modern classical, minimalism, and post-classical listening through artists, decisions, and shared attention.",
+      "language": "en",
+      "isAvailable": true,
+      "publishedAt": "2026-02-08T10:00:00Z",
+      "showNotesHtml": "<h2>Episode Description</h2>\n<p>In this episode of Melody Mind, Daniel and Annabelle follow a long listening pathway rather than a timeline. The conversation moves from late classical music into modern classical rupture, through minimalist reduction, and finally into post-classical and neo-classical listening spaces.</p>\n\n<p>This is not a history lesson and not a genre overview. It is a shared studio conversation about how music changed when composers stopped trying to resolve tension and started trusting time, repetition, silence, and the listener.</p>\n\n<p>The episode begins with late classical figures whose work quietly loosened form and certainty. From there, it enters the pressure of modern classical music, where rhythm, dissonance, and instability confront the listener directly. These moments are explored not as innovations to admire, but as human responses to social, political, and personal limits.</p>\n\n<p>From that pressure, the conversation moves into early minimalism. Here, reduction is treated as a deliberate artistic decision rather than a style. Repetition, duration, and patience become central, changing how listening itself functions. The focus shifts from complexity to presence, from forward motion to staying.</p>\n\n<p>As minimalism leaves experimental spaces and enters everyday listening, Daniel and Annabelle explore how music adapts without losing intention. The episode traces how listening becomes more private, intimate, and interior, shaped by recording, headphones, and personal environments rather than public ceremony.</p>\n\n<p>The final part reflects on post-classical and neo-classical music as memory work rather than revival. Classical gestures reappear as fragments, softened and fragile, shaped by contemporary life and listening habits. The music no longer claims authority. It offers companionship.</p>\n\n<p>Throughout the episode, artists are discussed as working musicians shaped by real conditions: training, institutions, exclusion, collaboration, technology, and personal limits. Biography appears only where it clarifies musical decisions. The focus remains on sound, attention, and how listening has changed over time.</p>\n\n<p>This episode is designed for long-form listening. No summaries. No rankings. Just a shared space to stay with music long enough for it to matter.</p>",
+      "imageUrl": "classic-to-neo-classical",
+      "audioUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/genre-evolution-pathways/classic-to-neo-classical.mp3",
+      "subtitleUrl": "https://eu2.contabostorage.com/b2aeddb452b14863a944e9b2e80105bf:melody-mind/genre-evolution-pathways/classic-to-neo-classical.vtt",
+      "fileSizeBytes": 78731015,
+      "durationSeconds": 2460
     }
   ]
 }
