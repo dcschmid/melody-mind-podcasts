@@ -1,6 +1,4 @@
 ---
-import audioPlayerScript from '../scripts/audio-player.ts?url';
-
 interface Props {
   title: string;
   audioUrl: string;
@@ -129,7 +127,7 @@ const playerId = subtitleUrl ?? audioUrl;
     preload="metadata"
     aria-label={`Audio player for ${title}`}
     data-title={title}
-    crossorigin="anonymous"
+    crossorigin=""
   >
     <source src={audioUrl} type="audio/mpeg" />
     {
@@ -141,7 +139,9 @@ const playerId = subtitleUrl ?? audioUrl;
   </audio>
 </div>
 
-<script type="module" src={audioPlayerScript}></script>
+<script>
+  import '../scripts/audio-player';
+</script>
 
 <style>
   .episode-player {

@@ -1,6 +1,4 @@
 ---
-import transcriptScript from '../scripts/transcript.ts?url';
-
 interface Props {
   subtitleUrl?: string | undefined;
   podcastTitle: string;
@@ -39,7 +37,9 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
   )
 }
 
-<script type="module" src={transcriptScript}></script>
+<script>
+  import '../scripts/transcript';
+</script>
 
 <style>
   .transcript {

@@ -3,7 +3,6 @@ import PodcastLayout from '../layouts/PodcastLayout.astro';
 import SearchBar from '../components/SearchBar.astro';
 import EpisodeCard from '../components/EpisodeCard.astro';
 import HomeHero from '../components/HomeHero.astro';
-import episodesScript from '../scripts/episodes.ts?url';
 import type { PodcastData } from '../types/podcast';
 import { formatDate } from '../utils/helpers';
 
@@ -45,8 +44,8 @@ const t = {
     'Discover the voices, rhythms, and revolutions that defined each decade of music',
   totalEpisodes: ' episodes available',
   availableOn: 'Available on your favorite platforms:',
-  spotifyUrl: 'https://open.spotify.com/show/6iLbxIzJ4x5nMuuK5qySOQ',
-  deezerUrl: 'https://www.deezer.com/en/show/1002446242',
+  spotifyUrl: 'https://open.spotify.com/show/1qCTySbRctOad9Oi3FGpoF',
+  deezerUrl: 'https://www.deezer.com/en/show/1002678961',
   youtubeUrl: 'https://www.youtube.com/channel/UCD7MQkWw4P5Pd5xA_o6McLg',
   keywords: [
     'melodymind podcasts',
@@ -144,7 +143,9 @@ const t = {
     </section>
   </div>
 
-  <script type="module" src={episodesScript}></script>
+  <script>
+    import '../scripts/episodes';
+  </script>
 </PodcastLayout>
 
 <style>
