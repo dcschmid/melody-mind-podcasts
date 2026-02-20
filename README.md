@@ -104,7 +104,7 @@ melody-mind-podcasts/
 │   ├── pages/
 │   │   ├── index.astro          # Homepage
 │   │   └── [id].astro           # Episode detail pages
-│   │       └── rss.xml.ts       # RSS feed generation
+│   │       └── podcast.xml.ts   # RSS feed generation
 │   ├── styles/
 │   │   └── global.css           # Global styles & accessibility
 │   ├── types/

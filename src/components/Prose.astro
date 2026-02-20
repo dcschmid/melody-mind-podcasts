@@ -14,45 +14,46 @@ const classes = `prose prose--${size}`;
 <style>
   .prose {
     max-inline-size: 70ch;
-    line-height: 1.9;
+    line-height: var(--leading-enhanced, 1.8);
     color: var(--color-text);
   }
 
   .prose--sm {
-    font-size: 0.95rem;
+    font-size: var(--font-size-ui);
   }
 
   .prose--base {
-    font-size: 1rem;
+    font-size: var(--font-size-body);
   }
 
   .prose--lg {
-    font-size: 1.1rem;
+    font-size: var(--font-size-body-strong);
   }
 
   .prose p {
-    margin: 0 0 1.6rem;
+    margin: 0 0 1.2em;
+    line-height: var(--leading-enhanced, 1.8);
   }
 
   .prose h1,
   .prose h2,
   .prose h3 {
-    margin: 1.8rem 0 0.9rem;
+    margin: 1.4em 0 0.7em;
     font-weight: 700;
-    line-height: 1.6;
+    line-height: var(--leading-tight, 1.25);
     color: var(--color-text);
   }
 
   .prose h1 {
-    font-size: 1.6rem;
+    font-size: var(--font-size-title-lg);
   }
 
   .prose h2 {
-    font-size: 1.4rem;
+    font-size: var(--font-size-title-md);
   }
 
   .prose h3 {
-    font-size: 1.2rem;
+    font-size: var(--font-size-title-sm);
   }
 
   .prose a {
@@ -71,9 +72,9 @@ const classes = `prose prose--${size}`;
   .prose ul,
   .prose ol {
     display: grid;
-    gap: 1.75rem;
-    padding-inline-start: 1.5rem;
-    margin: 0 0 1.8rem;
+    gap: 1.4em;
+    padding-inline-start: 1.2em;
+    margin: 0 0 1.4em;
     list-style-position: outside;
   }
 
@@ -87,7 +88,7 @@ const classes = `prose prose--${size}`;
 
   .prose li {
     margin: 0;
-    line-height: 1.9;
+    line-height: var(--leading-enhanced, 1.8);
   }
 
   .prose strong {
@@ -95,7 +96,7 @@ const classes = `prose prose--${size}`;
   }
 
   .prose code {
-    padding: 0.1rem 0.35rem;
+    padding: 0.1em 0.35em;
     font-family:
       ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
       monospace;
@@ -105,8 +106,8 @@ const classes = `prose prose--${size}`;
   }
 
   .prose blockquote {
-    padding-inline-start: 1rem;
-    margin: 1.5rem 0;
+    padding-inline-start: 1em;
+    margin: 1.2em 0;
     font-style: italic;
     color: var(--color-text-muted);
     border-inline-start: 4px solid color-mix(in srgb, var(--color-primary) 40%, transparent);

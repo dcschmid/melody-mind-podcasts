@@ -56,3 +56,4 @@ temp/
 
 # Package lock files (keeping yarn.lock, ignoring npm)
 package-lock.json
+.tmp/

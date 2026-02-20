@@ -1,36 +1,33 @@
 #!/usr/bin/env node
 /**
- * Update audio metadata (fileSizeBytes, optional duration placeholder) in podcast JSON files.
+ * Update audio metadata (fileSizeBytes, duration) in podcast MDX files.
  *
- * - Liest alle JSON Dateien unter src/content/podcasts/*.json
- * - Für jedes Podcast-Objekt mit audioUrl wird ein HEAD Request ausgeführt
- * - Content-Length wird als fileSizeBytes eingetragen (falls vorhanden)
- * - Optional: Dauer-Ermittlung könnte später ergänzt werden (TODO)
+ * - Liest alle MDX Dateien unter src/content/podcasts/*.mdx
+ * - Extrahiert Frontmatter (YAML)
+ * - Für jedes Podcast mit audioUrl wird ein HEAD Request ausgeführt
+ * - Content-Length wird als fileSizeBytes eingetragen
+ * - Dauer wird via ffprobe oder music-metadata ermittelt
  *
  * Flags:
  *  --write   : Änderungen wirklich zurückschreiben (Default ist an)
  *  --no-write : Deaktiviert Schreiben (Dry-Run)
- *  --filter=<lang> : Nur bestimmte Sprachdatei bearbeiten (z.B. en,de)
  *  --timeout=<ms> : Request Timeout (Standard 8000)
- *  --duration : Versucht Dauer zu bestimmen (music-metadata). Lädt Datei (kann Traffic erzeugen)
- *  --ffprobe : Nutzt lokales ffprobe (falls installiert) für exaktere Dauer (überschreibt music-metadata)
- *  --no-duration : Deaktiviert Dauer-Ermittlung (Default ist an)
- *  --no-ffprobe : Deaktiviert ffprobe Nutzung (Default ist an)
- *  --no-refresh : Deaktiviert erzwungenes Refresh (Default ist an)
- *  --max-bytes=<n> : Max Bytes die für music-metadata gestreamt werden (Default 6_000_000)
- *  --no-cache : Ignoriert vorhandenen Cache (Default ist an)
- *  --use-cache : Aktiviert Cache Nutzung (Default ist aus)
- *  --refresh : Erzwingt erneutes Abrufen (überschreibt Cache Eintrag)
- *  --available-only : Nur Podcasts mit isAvailable=true bearbeiten
- *  --ids=a,b,c : Nur diese Podcast-IDs verarbeiten (Komma-getrennt)
+ *  --duration : Versucht Dauer zu bestimmen (music-metadata)
+ *  --ffprobe : Nutzt lokales ffprobe für exaktere Dauer
+ *  --no-duration : Deaktiviert Dauer-Ermittlung
+ *  --no-ffprobe : Deaktiviert ffprobe Nutzung
+ *  --no-refresh : Deaktiviert erzwungenes Refresh
+ *  --max-bytes=<n> : Max Bytes für music-metadata (Default 6_000_000)
+ *  --no-cache : Ignoriert Cache
+ *  --use-cache : Aktiviert Cache
+ *  --refresh : Erzwingt erneutes Abrufen
+ *  --available-only : Nur Podcasts mit isAvailable=true
+ *  --ids=a,b,c : Nur diese Podcast-IDs verarbeiten
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as wait } from 'node:timers/promises';
-import { createWriteStream } from 'node:fs';
-import { tmpdir } from 'node:os';
-import { randomUUID } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import * as mm from 'music-metadata';
 
@@ -40,93 +37,105 @@ const dataDir = path.join(root, 'src', 'content', 'podcasts');
 
 const args = process.argv.slice(2);
 const isWrite = !args.includes('--no-write');
-const filterArg = args.find(a => a.startsWith('--filter='));
-const filter = filterArg ? filterArg.split('=')[1].split(',').map(s => s.trim()) : null;
-const timeoutArg = args.find(a => a.startsWith('--timeout='));
+const timeoutArg = args.find((a) => a.startsWith('--timeout='));
 const timeoutMs = timeoutArg ? parseInt(timeoutArg.split('=')[1], 10) : 8000;
 const wantDuration = !args.includes('--no-duration');
 const useFfprobe = !args.includes('--no-ffprobe');
-const maxBytesArg = args.find(a => a.startsWith('--max-bytes='));
+const maxBytesArg = args.find((a) => a.startsWith('--max-bytes='));
 const maxBytes = maxBytesArg ? parseInt(maxBytesArg.split('=')[1], 10) : 6_000_000;
 const noCache = !args.includes('--use-cache');
 const refresh = !args.includes('--no-refresh');
 const availableOnly = args.includes('--available-only');
-const idsArg = args.find(a => a.startsWith('--ids='));
-const idFilter = idsArg ? idsArg.split('=')[1].split(',').map(s => s.trim()).filter(Boolean) : null;
+const idsArg = args.find((a) => a.startsWith('--ids='));
+const idFilter = idsArg
+  ? idsArg
+      .split('=')[1]
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+  : null;
 const cacheDir = path.join(root, '.cache');
 const cacheFile = path.join(cacheDir, 'audio-metadata.json');
 let cache = {};
 let cacheDirty = false;
 
-async function loadCache(){
-  if(noCache) { log('Cache disabled (--no-cache)'); return; }
+async function loadCache() {
+  if (noCache) {
+    log('Cache disabled (--no-cache)');
+    return;
+  }
   try {
-    const data = await fs.readFile(cacheFile,'utf8');
+    const data = await fs.readFile(cacheFile, 'utf8');
     cache = JSON.parse(data);
     log('Cache loaded entries:', Object.keys(cache).length);
-  } catch(e){ log('No existing cache'); }
+  } catch {
+    log('No existing cache');
+  }
 }
 
-async function saveCache(){
-  if(noCache) return;
-  if(!cacheDirty) return;
+async function saveCache() {
+  if (noCache) return;
+  if (!cacheDirty) return;
   await fs.mkdir(cacheDir, { recursive: true });
-  await fs.writeFile(cacheFile, JSON.stringify(cache, null, 2)+'\n','utf8');
+  await fs.writeFile(cacheFile, JSON.stringify(cache, null, 2) + '\n', 'utf8');
   log('Cache saved');
 }
 
-/** Minimal HEAD fetch using undici (Node 18+) oder Fallback fetch */
-async function head(url, { timeout } = { timeout: timeoutMs }) {
+/** HEAD first, Range-GET fallback if HEAD not allowed */
+async function headWithFallback(url, { timeout } = { timeout: timeoutMs }) {
   const controller = new AbortController();
   const t = setTimeout(() => controller.abort(), timeout);
   try {
     const res = await fetch(url, { method: 'HEAD', signal: controller.signal });
-    return res;
-  } finally {
     clearTimeout(t);
-  }
-}
-
-/** HEAD first, Range-GET fallback if HEAD not allowed (403/405/400) */
-async function headWithFallback(url, { timeout } = { timeout: timeoutMs }) {
-  try {
-    const res = await head(url, { timeout });
     if (res.ok) return res;
     if (res.status && ![400, 401, 403, 405].includes(res.status)) return res;
-  } catch (e) {
-    // ignore and try fallback
+  } catch {
+    clearTimeout(t);
   }
-  const controller = new AbortController();
-  const t = setTimeout(() => controller.abort(), timeout);
+
+  const controller2 = new AbortController();
+  const t2 = setTimeout(() => controller2.abort(), timeout);
   try {
     const res = await fetch(url, {
       method: 'GET',
       headers: { Range: 'bytes=0-0' },
-      signal: controller.signal
+      signal: controller2.signal,
     });
+    clearTimeout(t2);
     return res;
-  } catch (e) {
+  } catch {
+    clearTimeout(t2);
     return null;
-  } finally {
-    clearTimeout(t);
   }
 }
 
-function log(...msg) { console.log('[update-audio-metadata]', ...msg); }
+function log(...msg) {
+  console.log('[update-audio-metadata]', ...msg);
+}
 
 async function probeWithFfprobe(url) {
   return new Promise((resolve, reject) => {
-    const proc = spawn('ffprobe', ['-v','error','-show_entries','format=duration','-of','default=noprint_wrappers=1:nokey=1', url]);
-    let out=''; let err='';
-    proc.stdout.on('data', d=> out += d.toString());
-    proc.stderr.on('data', d=> err += d.toString());
-    proc.on('close', code => {
-      if(code===0){
+    const proc = spawn('ffprobe', [
+      '-v',
+      'error',
+      '-show_entries',
+      'format=duration',
+      '-of',
+      'default=noprint_wrappers=1:nokey=1',
+      url,
+    ]);
+    let out = '';
+    let err = '';
+    proc.stdout.on('data', (d) => (out += d.toString()));
+    proc.stderr.on('data', (d) => (err += d.toString()));
+    proc.on('close', (code) => {
+      if (code === 0) {
         const dur = parseFloat(out.trim());
-        if(!isNaN(dur)) return resolve(dur);
+        if (!Number.isNaN(dur)) return resolve(dur);
         return reject(new Error('ffprobe no duration'));
       }
-      reject(new Error('ffprobe failed: '+err.trim()));
+      reject(new Error('ffprobe failed: ' + err.trim()));
     });
   });
 }
@@ -134,15 +143,16 @@ async function probeWithFfprobe(url) {
 async function fetchPartial(url, limitBytes) {
   const controller = new AbortController();
   const res = await fetch(url, { signal: controller.signal });
-  if(!res.ok) throw new Error('HTTP '+res.status);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
   const reader = res.body.getReader();
-  let received = 0; const chunks = [];
-  while(true){
-    const {done, value} = await reader.read();
-    if(done) break;
+  let received = 0;
+  const chunks = [];
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
     received += value.length;
     chunks.push(value);
-    if(received >= limitBytes){
+    if (received >= limitBytes) {
       controller.abort();
       break;
     }
@@ -151,110 +161,200 @@ async function fetchPartial(url, limitBytes) {
 }
 
 async function deriveDuration(url) {
-  if(useFfprobe){
-    try { return await probeWithFfprobe(url); } catch(e){ log('ffprobe fallback to partial read:', e.message); }
+  if (useFfprobe) {
+    try {
+      return await probeWithFfprobe(url);
+    } catch (e) {
+      log('ffprobe fallback to partial read:', e.message);
+    }
   }
-  // Fallback: partial fetch + music-metadata parse
   try {
     const buf = await fetchPartial(url, maxBytes);
     const meta = await mm.parseBuffer(buf, undefined, { duration: true });
-    if(meta.format.duration) return meta.format.duration;
-  } catch(e){ log('music-metadata failed', e.message); }
+    if (meta.format.duration) return meta.format.duration;
+  } catch (e) {
+    log('music-metadata failed', e.message);
+  }
   return undefined;
+}
+
+/**
+ * Parse MDX frontmatter into key-value object.
+ * Supports: single-line values, quoted strings, dates, numbers, booleans.
+ */
+function parseFrontmatter(content) {
+  const match = content.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return { frontmatter: {}, body: content };
+
+  const yaml = match[1];
+  const body = content.slice(match[0].length);
+  const frontmatter = {};
+
+  // Simple YAML parser for frontmatter
+  for (const line of yaml.split('\n')) {
+    const colonIdx = line.indexOf(':');
+    if (colonIdx === -1) continue;
+
+    const key = line.slice(0, colonIdx).trim();
+    let value = line.slice(colonIdx + 1).trim();
+
+    if (!key || !value) continue;
+
+    // Remove quotes
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+
+    // Parse types
+    if (value === 'true') frontmatter[key] = true;
+    else if (value === 'false') frontmatter[key] = false;
+    else if (value === 'null') frontmatter[key] = null;
+    else if (/^\d+$/.test(value)) frontmatter[key] = parseInt(value, 10);
+    else if (/^\d+\.\d+$/.test(value)) frontmatter[key] = parseFloat(value);
+    else frontmatter[key] = value;
+  }
+
+  return { frontmatter, body };
+}
+
+/**
+ * Stringify frontmatter object back to YAML.
+ */
+function stringifyFrontmatter(frontmatter) {
+  const lines = [];
+  for (const [key, value] of Object.entries(frontmatter)) {
+    if (value === undefined) continue;
+
+    let serialized;
+    if (typeof value === 'string') {
+      // Quote strings that might cause issues
+      if (value.includes(':') || value.includes('#') || value.includes('\n')) {
+        serialized = `"${value.replace(/"/g, '\\"')}"`;
+      } else {
+        serialized = value;
+      }
+    } else if (value instanceof Date) {
+      serialized = value.toISOString();
+    } else if (typeof value === 'boolean') {
+      serialized = value ? 'true' : 'false';
+    } else if (value === null) {
+      serialized = 'null';
+    } else {
+      serialized = String(value);
+    }
+
+    lines.push(`${key}: ${serialized}`);
+  }
+  return lines.join('\n');
+}
+
+/**
+ * Rebuild MDX content with updated frontmatter.
+ */
+function rebuildMdx(frontmatter, body) {
+  const yaml = stringifyFrontmatter(frontmatter);
+  return `---\n${yaml}\n---${body}`;
 }
 
 async function processFile(filePath) {
   const base = path.basename(filePath);
-  const lang = base.replace(/\.json$/, '');
-  if (filter && !filter.includes(lang)) {
-    log(`Skip (filtered) ${base}`);
+  log(`Processing ${base}...`);
+
+  const raw = await fs.readFile(filePath, 'utf8');
+  const { frontmatter, body } = parseFrontmatter(raw);
+
+  if (!frontmatter.id) {
+    log('No id found in', base);
     return;
   }
-  const raw = await fs.readFile(filePath, 'utf8');
-  let json;
-  try { json = JSON.parse(raw); } catch (e) { log('JSON parse error in', base, e); return; }
-  if (!Array.isArray(json.podcasts)) { log('No podcasts array in', base); return; }
+
+  if (idFilter && !idFilter.includes(frontmatter.id)) {
+    log('Skip (filtered by id)', frontmatter.id);
+    return;
+  }
+
+  if (availableOnly && !frontmatter.isAvailable) {
+    log('Skip (not available)', frontmatter.id);
+    return;
+  }
+
+  if (!frontmatter.audioUrl) {
+    log('No audioUrl in', frontmatter.id);
+    return;
+  }
 
   let changed = false;
-  let reusedCount = 0;
-  let updatedCount = 0;
-  let durationAdded = 0;
-  let errorsCount = 0;
-  for (const p of json.podcasts) {
-    if (availableOnly && !p.isAvailable) continue;
-    if (idFilter && !idFilter.includes(p.id)) continue;
-    if (!p.audioUrl) continue;
-    try {
-      const cacheKey = p.audioUrl;
-      const cached = cache[cacheKey];
-      const canReuse = cached && !refresh;
-      if(canReuse) {
-        // apply cached values if missing or different
-        if(cached.fileSizeBytes && p.fileSizeBytes !== cached.fileSizeBytes){ p.fileSizeBytes = cached.fileSizeBytes; changed = true; }
-        if(wantDuration && cached.durationSeconds && !p.durationSeconds){ p.durationSeconds = cached.durationSeconds; changed = true; }
-        reusedCount++;
-        log('REUSE', p.audioUrl);
-      }
-      if(!canReuse || !p.fileSizeBytes || (wantDuration && !p.durationSeconds)) {
-        log('HEAD', p.audioUrl);
-      const res = await headWithFallback(p.audioUrl);
-      if (!res || !res.ok) {
-        log('WARN status', res?.status, 'for', p.audioUrl);
-        continue;
-      }
-      let len = res.headers.get('content-length');
-      if(!len){
-        const cr = res.headers.get('content-range'); // bytes 0-0/12345
-        const m = cr && cr.match(/\/(\d+)$/);
-        if(m) len = m[1];
-      }
-      if (len) {
-        const num = parseInt(len, 10);
-        if (!Number.isNaN(num)) {
-          if (p.fileSizeBytes !== num) {
-            p.fileSizeBytes = num;
-            changed = true;
-            log(`  -> fileSizeBytes=${num}`);
-          }
-        }
-      } else {
-        log('  (no content-length header)');
-      }
-        if (wantDuration && (refresh || !p.durationSeconds)) {
-          log('  derive duration...');
-          const dur = await deriveDuration(p.audioUrl);
-          if (dur && !Number.isNaN(dur)) {
-            const seconds = Math.round(dur);
-            if (p.durationSeconds !== seconds) {
-              p.durationSeconds = seconds;
-              changed = true;
-              durationAdded++;
-              log(`  -> durationSeconds=${seconds}`);
-            }
-          } else {
-            log('  (duration unresolved)');
-          }
-        }
-        // update cache entry
-        if(!noCache){
-          cache[cacheKey] = {
-            fileSizeBytes: p.fileSizeBytes,
-            durationSeconds: p.durationSeconds
-          };
-          cacheDirty = true;
-          updatedCount++;
-        }
-      }
-      await wait(100); // kleine Pause um Rate Limits zu vermeiden
-    } catch (e) {
-      log('ERROR fetch', p.audioUrl, e.message);
-      errorsCount++;
+  const cacheKey = frontmatter.audioUrl;
+  const cached = cache[cacheKey];
+  const canReuse = cached && !refresh;
+
+  if (canReuse) {
+    if (cached.fileSizeBytes && frontmatter.fileSizeBytes !== cached.fileSizeBytes) {
+      frontmatter.fileSizeBytes = cached.fileSizeBytes;
+      changed = true;
     }
+    if (wantDuration && cached.durationSeconds && !frontmatter.durationSeconds) {
+      frontmatter.durationSeconds = cached.durationSeconds;
+      changed = true;
+    }
+    log('REUSE', frontmatter.audioUrl);
+  }
+
+  if (!canReuse || !frontmatter.fileSizeBytes || (wantDuration && !frontmatter.durationSeconds)) {
+    log('HEAD', frontmatter.audioUrl);
+    const res = await headWithFallback(frontmatter.audioUrl);
+    if (!res || !res.ok) {
+      log('WARN status', res?.status, 'for', frontmatter.audioUrl);
+      return;
+    }
+
+    let len = res.headers.get('content-length');
+    if (!len) {
+      const cr = res.headers.get('content-range');
+      const m = cr && cr.match(/\/(\d+)$/);
+      if (m) len = m[1];
+    }
+
+    if (len) {
+      const num = parseInt(len, 10);
+      if (!Number.isNaN(num) && frontmatter.fileSizeBytes !== num) {
+        frontmatter.fileSizeBytes = num;
+        changed = true;
+        log(`  -> fileSizeBytes=${num}`);
+      }
+    }
+
+    if (wantDuration && (refresh || !frontmatter.durationSeconds)) {
+      log('  derive duration...');
+      const dur = await deriveDuration(frontmatter.audioUrl);
+      if (dur && !Number.isNaN(dur)) {
+        const seconds = Math.round(dur);
+        if (frontmatter.durationSeconds !== seconds) {
+          frontmatter.durationSeconds = seconds;
+          changed = true;
+          log(`  -> durationSeconds=${seconds}`);
+        }
+      }
+    }
+
+    if (!noCache) {
+      cache[cacheKey] = {
+        fileSizeBytes: frontmatter.fileSizeBytes,
+        durationSeconds: frontmatter.durationSeconds,
+      };
+      cacheDirty = true;
+    }
+
+    await wait(100);
   }
 
   if (changed) {
     if (isWrite) {
-      await fs.writeFile(filePath, JSON.stringify(json, null, 2) + '\n', 'utf8');
+      const newContent = rebuildMdx(frontmatter, body);
+      await fs.writeFile(filePath, newContent, 'utf8');
       log('WROTE', base);
     } else {
       log('Dry-Run change detected for', base, '(use --write to persist)');
@@ -262,25 +362,48 @@ async function processFile(filePath) {
   } else {
     log('No changes for', base);
   }
-  log(`Stats ${base}: reused=${reusedCount} updated=${updatedCount} durationAdded=${durationAdded} errors=${errorsCount}`);
 }
 
 async function main() {
   await loadCache();
-  log('Start (write mode:', isWrite, ') duration mode:', wantDuration, 'ffprobe:', useFfprobe, 'refresh:', refresh, 'available-only:', availableOnly, 'ids:', idFilter || 'all');
+  log(
+    'Start (write mode:',
+    isWrite,
+    ') duration mode:',
+    wantDuration,
+    'ffprobe:',
+    useFfprobe,
+    'refresh:',
+    refresh,
+    'available-only:',
+    availableOnly,
+    'ids:',
+    idFilter || 'all',
+  );
+
   const entries = await fs.readdir(dataDir);
-  const files = entries.filter(f => f.endsWith('.json')).map(f => path.join(dataDir, f));
+  const files = entries.filter((f) => f.endsWith('.mdx')).map((f) => path.join(dataDir, f));
+
+  if (files.length === 0) {
+    log('No MDX files found in', dataDir);
+    return;
+  }
+
+  log(`Found ${files.length} MDX files`);
+
   for (const file of files) {
     await processFile(file);
   }
+
   await saveCache();
   log('Done');
+
   if (!isWrite) {
     log('Dry-Run beendet. Füge --write hinzu um Änderungen zu speichern.');
   }
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error(err);
   process.exitCode = 1;
 });

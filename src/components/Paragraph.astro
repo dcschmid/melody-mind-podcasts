@@ -31,7 +31,7 @@ const classes = ['paragraph', sizeClasses[textSize], toneClasses[tone], classNam
 <style>
   .paragraph {
     margin: 0;
-    line-height: 1.6;
+    line-height: var(--leading-relaxed, 1.75);
     color: var(--color-text);
   }
 
@@ -44,18 +44,18 @@ const classes = ['paragraph', sizeClasses[textSize], toneClasses[tone], classNam
   }
 
   .paragraph--sm {
-    font-size: 0.9rem;
+    font-size: var(--font-size-caption);
   }
 
   .paragraph--base {
-    font-size: 1rem;
+    font-size: var(--font-size-ui);
   }
 
   .paragraph--lg {
-    font-size: 1.125rem;
+    font-size: var(--font-size-body);
   }
 
   .paragraph--xl {
-    font-size: 1.25rem;
+    font-size: var(--font-size-body-strong);
   }
 </style>

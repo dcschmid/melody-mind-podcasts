@@ -55,8 +55,10 @@ export interface PodcastData {
   title: string;
   /** Brief description of the podcast content */
   description: string;
-  /** Optional rich HTML show notes for the episode */
+  /** Optional rich HTML show notes for the episode (rendered from body) */
   showNotesHtml?: string | undefined;
+  /** Optional raw Markdown show notes from MDX body */
+  showNotesMarkdown?: string | undefined;
   /** Optional shorter meta description for SEO snippets */
   metaDescription?: string | undefined;
   /** URL to the audio file */

@@ -126,7 +126,7 @@ const labels = {
     inline-size: 100%;
     padding-block: 0.95rem;
     padding-inline: 1.2rem 3.6rem;
-    font-size: 1.05rem;
+    font-size: var(--font-size-body);
     color: var(--color-text);
     background: transparent;
     border: none;
@@ -151,8 +151,8 @@ const labels = {
       place-items: center;
       inline-size: 2.75rem;
       block-size: 2.75rem;
-      font-size: 1.1rem;
-      line-height: 1.5;
+      font-size: var(--font-size-body);
+      line-height: var(--leading-normal, 1.5);
       color: var(--color-text);
       cursor: pointer;
       background: var(--color-layer-2);
@@ -171,8 +171,8 @@ const labels = {
     place-items: center;
     inline-size: 2.75rem;
     block-size: 2.75rem;
-    font-size: 1.1rem;
-    line-height: 1.5;
+    font-size: var(--font-size-body);
+    line-height: var(--leading-normal, 1.5);
     color: var(--color-text);
     cursor: pointer;
     background: var(--color-layer-2);
@@ -218,19 +218,19 @@ const labels = {
 
   .search-bar__hint {
     margin: 0;
-    font-size: 0.9rem;
+    font-size: var(--font-size-caption);
     color: var(--color-text-muted);
   }
 
   .search-bar__status {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: var(--font-size-ui);
     color: var(--color-primary-strong);
   }
 
   .search-bar__empty {
     margin: 0;
-    font-size: 0.95rem;
+    font-size: var(--font-size-ui);
     color: var(--color-error-strong);
   }
 
@@ -246,7 +246,7 @@ const labels = {
 
     .search-bar__input {
       padding-inline: 1rem 3.2rem;
-      font-size: 1rem;
+      font-size: var(--font-size-ui);
     }
 
     .search-bar__clear {

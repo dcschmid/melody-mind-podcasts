@@ -231,7 +231,7 @@ const playerId = subtitleUrl ?? audioUrl;
   }
 
   .episode-player__status {
-    font-size: 1.05rem;
+    font-size: var(--font-size-body);
     font-weight: 600;
     color: var(--color-text);
   }
@@ -284,12 +284,12 @@ const playerId = subtitleUrl ?? audioUrl;
     flex-direction: column;
     gap: 0.35rem;
     align-items: center;
-    font-size: 0.9rem;
+    font-size: var(--font-size-caption);
     color: var(--color-text-muted);
   }
 
   .episode-player__shortcut-hint {
-    font-size: 0.9rem;
+    font-size: var(--font-size-caption);
   }
 
   .episode-player__shortcut-hint--hidden {

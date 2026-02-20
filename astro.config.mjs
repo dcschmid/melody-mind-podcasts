@@ -1,25 +1,24 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import mdx from '@astrojs/mdx';
 import path from 'path';
 import minifyHtml from 'astro-minify-html-swc';
-import enPodcasts from './src/content/podcasts/en.json' with { type: 'json' };
-
-const availableSlugs = (enPodcasts.podcasts ?? [])
-  .filter((podcast) => podcast.isAvailable)
-  .map((podcast) => podcast.id);
 
 export default defineConfig({
   site: 'https://podcasts.melody-mind.de',
   output: 'static',
   redirects: {},
   integrations: [
+    mdx({
+      optimize: true,
+    }),
     sitemap({
       xslURL: '/sitemap.xsl',
       namespaces: {
         news: false,
         video: false,
         image: false,
-        xhtml: true
+        xhtml: true,
       },
       serialize: (item) => {
         if (item.url.endsWith('/')) {
@@ -30,20 +29,20 @@ export default defineConfig({
           item.changefreq = 'monthly';
         }
         return item;
-      }
+      },
     }),
     minifyHtml({
       collapseWhitespace: 'conservative',
       removeComments: true,
       removeRedundantAttributes: true,
       minifyCss: true,
-      collapseBooleanAttributes: true
-    })
+      collapseBooleanAttributes: true,
+    }),
   ],
   build: {
     inlineStylesheets: 'auto',
     assets: 'assets',
-    format: 'directory'
+    format: 'directory',
   },
   compressHTML: true,
   vite: {
@@ -59,5 +58,5 @@ export default defineConfig({
         '@types': path.resolve('./src/types'),
       },
     },
-  }
+  },
 });

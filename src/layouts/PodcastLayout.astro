@@ -53,7 +53,7 @@ const episodeImageUrl = episodeImage
     ? episodeImage
     : `${siteUrl}${episodeImage}`
   : imageUrl;
-const podcastFeedUrl = `${siteUrl}/rss.xml`;
+const podcastFeedUrl = `${siteUrl}/podcast.xml`;
 const podcastImage = `${siteUrl}/the-melody-mind-podcast.jpg`;
 const seriesCopy =
   seriesDescription ||
@@ -242,12 +242,10 @@ function toIsoDuration(totalSeconds: number) {
       rel="alternate"
       type="application/rss+xml"
       title="RSS Feed - English"
-      href="/rss.xml"
+      href="/podcast.xml"
       hreflang={locale}
     />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="dns-prefetch" href="//cdn.usefathom.com" />
     <script src="https://cdn.usefathom.com/script.js" data-site="IGOFKHTB" defer></script>
     <script
@@ -283,6 +281,36 @@ function toIsoDuration(totalSeconds: number) {
 </html>
 
 <style>
+  /* Font: Atkinson Hyperlegible - loaded locally for consistency with Melody Mind */
+  @font-face {
+    font-family: "Atkinson Hyperlegible";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/fonts/atkinson-hyperlegible-regular.woff2") format("woff2");
+  }
+
+  /* Global minimum font size of 18px for better readability */
+  :root {
+    font-size: 112.5%; /* 18px = 1rem at standard browser settings */
+
+    /* Line height tokens for harmonious typography */
+    --leading-tight: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.75;
+    --leading-enhanced: 1.8;
+
+    /* Typography scale tokens */
+    --font-size-caption: 1rem;
+    --font-size-ui: 1.0625rem;
+    --font-size-body: 1.125rem;
+    --font-size-body-strong: 1.25rem;
+    --font-size-title-sm: 1.5rem;
+    --font-size-title-md: 1.75rem;
+    --font-size-title-lg: 2.25rem;
+    --font-size-hero: clamp(2.5rem, 4.4vw, 3.35rem);
+  }
+
   .podcast-layout {
     --color-primary: #6fe1ff;
     --color-primary-strong: #bff2ff;
@@ -307,7 +335,9 @@ function toIsoDuration(totalSeconds: number) {
 
     min-block-size: 100vb;
     margin: 0;
-    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
+    font-size: 1.25rem;
+    line-height: var(--leading-relaxed);
     color: var(--color-text);
     letter-spacing: 0.01em;
     background-color: var(--color-background);
@@ -316,6 +346,9 @@ function toIsoDuration(totalSeconds: number) {
       radial-gradient(circle at 85% 10%, rgb(44 198 255 / 8%), transparent 32%),
       radial-gradient(circle at 70% 70%, rgb(138 217 255 / 6%), transparent 40%);
     text-rendering: optimizelegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-wrap: pretty;
   }
 
   *,

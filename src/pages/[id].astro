@@ -1,17 +1,17 @@
 ---
 import PodcastLayout from '../layouts/PodcastLayout.astro';
-import Headline from '../components/Headline.astro';
-import Prose from '../components/Prose.astro';
 import TranscriptDropdown from '../components/TranscriptDropdown.astro';
 import AudioPlayer from '../components/AudioPlayer.astro';
-import type { PodcastData } from '../types/podcast';
-import { formatDate, buildMetaDescription } from '../utils/helpers';
-
+import Prose from '../components/Prose.astro';
+import Headline from '../components/Headline.astro';
 import { getAvailablePodcasts, getPodcastById } from '../utils/podcasts';
+import { getAdjacentByKey } from '../utils/array';
+import { buildMetaDescription, formatDate } from '../utils/helpers';
+import type { PodcastData } from '../types/podcast';
 
 export async function getStaticPaths() {
-  const podcasts: PodcastData[] = await getAvailablePodcasts();
-  return podcasts.map((podcast: PodcastData) => ({
+  const podcasts = await getAvailablePodcasts();
+  return podcasts.map((podcast) => ({
     params: { id: podcast.id },
   }));
 }
@@ -25,21 +25,9 @@ if (!currentPodcast) {
   return Astro.redirect('/404');
 }
 
-function getNavigation() {
-  const currentIndex = podcasts.findIndex((podcast: PodcastData) => podcast.id === id);
-
-  if (currentIndex === -1) {
-    return { prev: null, next: null };
-  }
-
-  return {
-    prev: currentIndex > 0 ? podcasts[currentIndex - 1] : null,
-    next: currentIndex < podcasts.length - 1 ? podcasts[currentIndex + 1] : null,
-  };
-}
-
-const { prev, next } = getNavigation();
-const episodeNumber = podcasts.findIndex((podcast: PodcastData) => podcast.id === id) + 1;
+// Use utility for navigation
+const { prev, next, index } = getAdjacentByKey(podcasts, 'id', id ?? '');
+const episodeNumber = index + 1;
 const metaDescription =
   currentPodcast.metaDescription ||
   buildMetaDescription(currentPodcast.description, 155, 'MelodyMind Podcasts');
@@ -297,8 +285,8 @@ const t = {
   }
 
   .episode__pill {
-    padding: 0.4rem 0.9rem;
-    font-size: 0.85rem;
+    padding: 0.4em 0.9em;
+    font-size: var(--font-size-caption);
     font-weight: 700;
     color: var(--color-text);
     text-transform: uppercase;
@@ -309,8 +297,8 @@ const t = {
   }
 
   .episode__date {
-    padding: 0.35rem 0.75rem;
-    font-size: 0.85rem;
+    padding: 0.35em 0.75em;
+    font-size: var(--font-size-caption);
     color: var(--color-text-muted);
     background: var(--color-layer-1);
     border: 1px solid color-mix(in srgb, var(--color-primary) 20%, transparent);
@@ -324,8 +312,8 @@ const t = {
   .episode__description {
     max-inline-size: 70ch;
     margin: 0;
-    font-size: 1.05rem;
-    line-height: 1.9;
+    font-size: var(--font-size-body);
+    line-height: var(--leading-relaxed, 1.75);
     color: var(--color-text-muted);
   }
 
@@ -346,7 +334,7 @@ const t = {
 
   .episode__kicker {
     margin: 0;
-    font-size: 0.75rem;
+    font-size: var(--font-size-caption);
     color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.25em;
@@ -355,7 +343,7 @@ const t = {
   .episode__knowledge-text {
     max-inline-size: 68ch;
     margin: 0;
-    line-height: 1.8;
+    line-height: var(--leading-relaxed, 1.75);
     color: var(--color-text);
   }
 
@@ -440,7 +428,7 @@ const t = {
   }
 
   .episode__nav-direction {
-    font-size: 1.6rem;
+    font-size: var(--font-size-title-sm);
     color: var(--color-primary);
   }
 
@@ -450,7 +438,7 @@ const t = {
   }
 
   .episode__nav-label {
-    font-size: 0.7rem;
+    font-size: var(--font-size-caption);
     color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.15em;
