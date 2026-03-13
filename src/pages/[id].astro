@@ -34,22 +34,15 @@ const metaDescription =
 
 const t = {
   backToAll: '← Back to all podcasts',
-  listenToEpisode: '🎧 Listen to Episode',
+  listenToEpisode: '🎧 Listen to the Episode',
   episode: 'Episode',
   previousEpisode: 'Previous Episode',
   nextEpisode: 'Next Episode',
   episodeNavigation: 'Episode navigation',
-  publishedOn: 'Published on',
-  duration: 'Duration',
+  publishedOn: 'Published',
   musicHistory: 'Music History',
-  knowledge: 'Knowledge article',
-  readArticle: 'Read the knowledge article',
-  transcript: 'Transcript',
-  showTranscript: 'Show Transcript',
-  hideTranscript: 'Hide Transcript',
-  loading: 'Loading transcript...',
-  notAvailable: 'Transcript not available',
-  error: 'Error loading transcript',
+  knowledge: 'Related Article',
+  readArticle: 'Read the related article',
 };
 ---
 
@@ -81,7 +74,7 @@ const t = {
 >
   <div class="episode">
     <nav class="episode__breadcrumb" aria-label="Breadcrumb navigation">
-      <a href="/" class="episode__breadcrumb-link" aria-label="Go back to all podcasts">
+      <a href="/" class="episode__breadcrumb-link" aria-label="Return to all podcasts">
         {t.backToAll}
       </a>
     </nav>
@@ -93,7 +86,7 @@ const t = {
           <source srcset={`/images/${currentPodcast.imageUrl}.webp`} type="image/webp" />
           <img
             src={`/images/${currentPodcast.imageUrl}.jpg`}
-            alt={`Cover artwork for ${currentPodcast.title} podcast episode`}
+            alt={`Cover art for the podcast episode ${currentPodcast.title}`}
             width="400"
             height="267"
             loading="eager"
@@ -136,9 +129,7 @@ const t = {
             <p class="episode__kicker" id="knowledge-link">
               {t.knowledge}
             </p>
-            <p class="episode__knowledge-text">
-              Deepen your dive with the related Melody Mind knowledge article.
-            </p>
+            <p class="episode__knowledge-text">Go deeper with the related Melody Mind article.</p>
           </div>
           <a
             href={currentPodcast.knowledgeUrl}
@@ -193,7 +184,7 @@ const t = {
               <a
                 href={`/${prev.id}`}
                 class="episode__nav-card"
-                aria-label={`Go to previous episode: ${prev.title}`}
+                aria-label={`Go to the previous episode: ${prev.title}`}
               >
                 <span class="episode__nav-direction" aria-hidden="true">
                   ←
@@ -209,7 +200,7 @@ const t = {
               <a
                 href={`/${next.id}`}
                 class="episode__nav-card episode__nav-card--next"
-                aria-label={`Go to next episode: ${next.title}`}
+                aria-label={`Go to the next episode: ${next.title}`}
               >
                 <div class="episode__nav-body">
                   <span class="episode__nav-label">{t.nextEpisode}</span>

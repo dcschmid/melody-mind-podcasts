@@ -98,7 +98,7 @@ const initEpisodes = () => {
         });
       }
       image.src = `/images/${episode.imageUrl}.jpg`;
-      image.alt = `Cover image for ${episode.title} podcast episode`;
+      image.alt = `Cover art for the podcast episode ${episode.title}`;
     }
 
     const time = node.querySelector('.episode-card__date');
@@ -134,7 +134,7 @@ const initEpisodes = () => {
     const link = node.querySelector('.episode-card__link');
     if (link instanceof HTMLAnchorElement) {
       link.href = `/${episode.id}`;
-      link.setAttribute('aria-label', `Listen to ${episode.title} podcast episode`);
+      link.setAttribute('aria-label', `View the episode ${episode.title}`);
     }
 
     return node;
@@ -146,7 +146,7 @@ const initEpisodes = () => {
     }
     const word = found === 1 ? 'episode' : 'episodes';
     const showing = Math.min(visibleCount, found);
-    status.textContent = `Found ${found} of ${total} ${word}. Showing ${showing}.`;
+    status.textContent = `Showing ${showing} of ${found} matching ${word} out of ${total}.`;
   };
 
   // Keep the search query in the URL for shareable results.
@@ -182,7 +182,7 @@ const initEpisodes = () => {
     updateUrl(query);
 
     const showing = Math.min(visibleCount, found);
-    loadMoreStatus.textContent = `Showing ${showing} of ${found} episodes.`;
+    loadMoreStatus.textContent = `Showing ${showing} of ${found} matching episodes.`;
     loadMore.hidden = found <= pageSize;
     loadMoreButton.disabled = showing >= found;
 

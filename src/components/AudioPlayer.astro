@@ -14,7 +14,7 @@ const playerId = subtitleUrl ?? audioUrl;
   data-episode-player
   data-player-id={playerId}
   tabindex="0"
-  aria-label={`${title} audio player`}
+  aria-label={`Audio player for ${title}`}
 >
   <div class="episode-player__controls">
     <button
@@ -54,7 +54,9 @@ const playerId = subtitleUrl ?? audioUrl;
   </div>
 
   <div class="episode-player__progress-wrap">
-    <span id="episode-player-progress-label" class="episode-player__sr-only"> Audio progress </span>
+    <span id="episode-player-progress-label" class="episode-player__sr-only">
+      Playback progress
+    </span>
     <div
       class="episode-player__progress"
       role="slider"
@@ -79,17 +81,18 @@ const playerId = subtitleUrl ?? audioUrl;
       0:00 / 0:00
     </span>
     <span class="episode-player__shortcut-hint" id="episode-player-hint" aria-live="polite">
-      Shortcuts: Space, ←/→, Home/End, Page Up/Down. Press ? to toggle.
+      Keyboard shortcuts: Space, left/right arrows, Home/End, and Page Up/Page Down. Press ? to show
+      or hide this hint.
     </span>
   </div>
 
-  <div class="episode-player__transport" role="group" aria-label="Audio player controls">
+  <div class="episode-player__transport" role="group" aria-label="Playback controls">
     <button
       class="episode-player__transport-button"
       type="button"
       data-action="rewind"
-      aria-label="Rewind 10 seconds"
-      title="Rewind 10 seconds"
+      aria-label="Go back 10 seconds"
+      title="Go back 10 seconds"
     >
       <svg
         class="episode-player__transport-icon"
@@ -106,8 +109,8 @@ const playerId = subtitleUrl ?? audioUrl;
       class="episode-player__transport-button"
       type="button"
       data-action="forward"
-      aria-label="Forward 10 seconds"
-      title="Forward 10 seconds"
+      aria-label="Skip forward 10 seconds"
+      title="Skip forward 10 seconds"
     >
       <svg
         class="episode-player__transport-icon"
@@ -125,7 +128,7 @@ const playerId = subtitleUrl ?? audioUrl;
   <audio
     class="episode-player__audio"
     preload="metadata"
-    aria-label={`Audio player for ${title}`}
+    aria-label={`Audio playback for ${title}`}
     data-title={title}
     crossorigin=""
   >
@@ -135,7 +138,7 @@ const playerId = subtitleUrl ?? audioUrl;
         <track kind="captions" src={subtitleUrl} srclang="en" label="English" default />
       )
     }
-    Your browser does not support the audio element.
+    Your browser does not support audio playback.
   </audio>
 </div>
 

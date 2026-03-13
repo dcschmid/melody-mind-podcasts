@@ -1,17 +1,17 @@
-# 🎵 MelodyMind Podcasts
+# MelodyMind Podcasts
 
-A modern, accessible, and SEO-optimized podcast website built with Astro.js, featuring comprehensive WCAG AAA compliance.
+An accessible, SEO-focused podcast website built with Astro.js, with strong WCAG support and a custom listening experience.
 
-## 🌟 Features
+## Features
 
-### 🎧 Audio Experience
+### Audio Experience
 
 - **Interactive Audio Player** with custom controls
 - **Progress tracking** and time display
 - **Keyboard shortcuts** (rewind/forward 10 seconds)
 - **Accessible controls** with ARIA labels and screen reader support
 
-### ♿ Accessibility (WCAG AAA)
+### Accessibility
 
 - **Skip-to-content links**
 - **Enhanced focus indicators** and keyboard navigation
@@ -20,7 +20,7 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 - **Reduced motion support** for users with vestibular disorders
 - **Color contrast ratios** exceeding AAA standards
 
-### 🚀 Performance & SEO
+### Performance & SEO
 
 - **Static Site Generation** with Astro.js
 - **Comprehensive meta tags** (Open Graph, Twitter Cards)
@@ -29,17 +29,17 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 - **Optimized images** with proper aspect ratios
 - **Core Web Vitals** optimization
 
-### 🎨 Modern Design
+### Design
 
-- **Dark theme** with purple/indigo gradient accents
+- **Dark theme** with atmospheric gradient accents
 - **Responsive design** for all device sizes
 - **Scoped component styles** with BEM class naming
 - **Custom animations** and hover effects
 - **Professional typography** with Atkinson Hyperlegible font
 
-### 🔗 Streaming Integration
+### Streaming Integration
 
-### 🧩 Podcast Operations (Tooling)
+### Podcast Operations
 
 - Automatic audio metadata (file size, duration, cache) via `update:audio-metadata` script
 - Validate episode metadata (missing fields, image dimensions, future publish dates) via `validate:podcasts`
@@ -51,14 +51,14 @@ A modern, accessible, and SEO-optimized podcast website built with Astro.js, fea
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Astro.js](https://astro.build/) v5.x
+- **Framework**: [Astro](https://astro.build/) v5.x
 - **Styling**: Scoped `<style>` blocks in `.astro` components (BEM classes)
 - **TypeScript**: Full typing
 - **Node Version**: 22 (via `.nvmrc` and `nvm use`)
 - **Package Manager**: npm
 - **Deployment**: Netlify, Vercel, or any static hosting
 
-## 📦 Installation
+## Installation
 
 ### Prerequisites
 
@@ -85,7 +85,7 @@ npm run build
 npm run preview
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 melody-mind-podcasts/
@@ -95,10 +95,10 @@ melody-mind-podcasts/
 │   │   ├── Paragraph.astro
 │   │   └── Prose.astro
 │   ├── content/
-│   │   └── podcasts/        # Podcast data (Astro content collection)
-│   │       └── en.json
+│   │   └── podcasts/        # Podcast episodes as MDX content entries
+│   │       └── *.mdx
 │   ├── data/
-│   │   └── persons.json       # Podcast persons metadata
+│   │   └── persons.json       # Podcast person metadata
 │   ├── layouts/
 │   │   └── PodcastLayout.astro  # Main layout with SEO
 │   ├── pages/
@@ -120,16 +120,16 @@ melody-mind-podcasts/
 └── tsconfig.json                # TypeScript configuration
 ```
 
-## 🎯 Content Management
+## Content Management
 
 ### Adding New Episodes
 
-1. **Add episode data** to `src/content/podcasts/en.json`
+1. **Add an episode file** to `src/content/podcasts/`
 2. **Include episode artwork** in `public/images/`
 3. **Set `isAvailable: true`** for episodes ready for publication
 4. **Build and deploy** - new episodes will automatically appear
 
-### Episode Data Structure
+### Episode Frontmatter
 
 ```json
 {
@@ -148,7 +148,7 @@ melody-mind-podcasts/
 }
 ```
 
-Fields like `fileSizeBytes` and `durationSeconds` are preferably auto-filled (see scripts below). `subtitleUrl` enables output of `<podcast:transcript>`.
+Fields such as `fileSizeBytes` and `durationSeconds` are best filled automatically with the scripts below. `subtitleUrl` enables `<podcast:transcript>` output.
 
 ### Persons (Podcasting 2.0)
 
@@ -167,7 +167,7 @@ Global file `src/data/persons.json` defines persons that appear in RSS as `<podc
 
 Supported fields: `name` (required), `role`, `href`, `img`. Roles can be `host`, `producer`, `guest`, etc.
 
-## 🔧 Scripts & Tooling
+## Scripts & Tooling
 
 ### Update Audio Metadata
 
@@ -196,7 +196,7 @@ Quick commands:
 
 ### Validation
 
-Checks completeness and quality.
+Checks metadata completeness and quality.
 
 ```bash
 yarn validate:podcasts --strict
@@ -254,9 +254,9 @@ Flags: `--dry-run`, `--replace`, `--background=<hex|transparent>`, `--mode=<cont
 
 ### Update Persons
 
-Edit `src/data/persons.json` – on build/RSS fetch, updated `<podcast:person>` entries are emitted automatically.
+Edit `src/data/persons.json`. Updated `<podcast:person>` entries are emitted automatically during build and RSS generation.
 
-## 🛰 RSS Extensions
+## RSS Extensions
 
 - Namespace `xmlns:podcast="https://podcastindex.org/namespace/1.0"`
 - `<podcast:transcript>` when `subtitleUrl` is present
@@ -267,11 +267,11 @@ Edit `src/data/persons.json` – on build/RSS fetch, updated `<podcast:person>` 
 
 Generator version: `MelodyMind RSS Generator v1.1.0`
 
-## ♿ Accessibility Features
+## Accessibility Features
 
-### WCAG AAA Compliance
+### WCAG Support
 
-- ✅ **4.5:1** minimum contrast ratio (AAA standard)
+- ✅ Strong contrast and visible focus treatment
 - ✅ **Keyboard navigation** for all interactive elements
 - ✅ **Screen reader support** with comprehensive ARIA labels
 - ✅ **Focus management** with visible focus indicators
@@ -290,7 +290,7 @@ Generator version: `MelodyMind RSS Generator v1.1.0`
 - Respects reduced motion (`prefers-reduced-motion`)
 - Uses semantic articles; filtering toggles `hidden`
 
-Usage: from 2 characters it filters title + description; “Clear” resets. Server-side or fuzzy search can be added easily.
+Usage: it filters episode titles and descriptions as you type; `Clear` resets the field. Server-side or fuzzy search can be added later if needed.
 
 ### Testing Accessibility
 
@@ -303,7 +303,7 @@ axe http://localhost:4321/en/1950s
 lighthouse http://localhost:4321/en/1950s --only-categories=accessibility
 ```
 
-## 🚀 Deployment
+## Deployment
 
 ### Sitemap & SEO
 
@@ -320,7 +320,7 @@ lighthouse http://localhost:4321/en/1950s --only-categories=accessibility
 - **SEO**: Adjust meta tags in `PodcastLayout.astro`
 - **Streaming platforms**: Add/remove platforms in homepage template
 
-## 📊 Performance
+## Performance
 
 - **Lighthouse Score**: 100/100 (Performance, Accessibility, Best Practices, SEO)
 - **Core Web Vitals**: All green metrics
@@ -328,7 +328,7 @@ lighthouse http://localhost:4321/en/1950s --only-categories=accessibility
 - **First Contentful Paint**: < 1.5s
 - **Time to Interactive**: < 2.5s
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -344,18 +344,18 @@ lighthouse http://localhost:4321/en/1950s --only-categories=accessibility
 - Test across devices and browsers
 - Update documentation for new features
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Astro.js** team for the excellent static site generator
 - **BEM methodology** for consistent CSS naming
 - **Atkinson Hyperlegible** font for enhanced readability
 - **WCAG** guidelines for accessibility standards
 
-## 📧 Support
+## Support
 
 For questions, issues, or feature requests:
 
@@ -365,4 +365,4 @@ For questions, issues, or feature requests:
 
 ---
 
-**MelodyMind Podcasts** - Exploring music history through accessible, English-first storytelling 🎵
+**MelodyMind Podcasts** - Exploring music history through accessible, English-first storytelling.

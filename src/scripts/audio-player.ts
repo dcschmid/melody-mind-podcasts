@@ -266,13 +266,13 @@ const initAudioPlayers = () => {
       const errorInfo = audio.error
         ? `${audio.error.message || audio.error.code}`
         : 'Unknown error';
-      setStatus(`Error loading ${title}`);
+      setStatus(`Could not load ${title}`);
       logError(errorInfo, `audio player: ${title}`);
     });
     audio.addEventListener('playing', () => {
       isPlaying = true;
       updateToggleButton();
-      setStatus(`Playing ${title}`);
+      setStatus(`Now playing: ${title}`);
       dispatchTimeEvent();
     });
     audio.addEventListener('pause', () => {
@@ -281,7 +281,7 @@ const initAudioPlayers = () => {
       }
       isPlaying = false;
       updateToggleButton();
-      setStatus(`Paused ${title}`);
+      setStatus(`Paused: ${title}`);
       dispatchTimeEvent();
     });
     audio.addEventListener('ended', () => {
@@ -291,11 +291,11 @@ const initAudioPlayers = () => {
         progressFill.style.width = '0%';
       }
       updateProgress();
-      setStatus(`Finished ${title}`);
+      setStatus(`Finished: ${title}`);
       dispatchTimeEvent();
     });
 
-    setStatus(`Paused ${title}`);
+    setStatus(`Paused: ${title}`);
     updateProgress();
     updateToggleButton();
   });

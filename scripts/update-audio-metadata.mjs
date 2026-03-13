@@ -2,27 +2,27 @@
 /**
  * Update audio metadata (fileSizeBytes, duration) in podcast MDX files.
  *
- * - Liest alle MDX Dateien unter src/content/podcasts/*.mdx
- * - Extrahiert Frontmatter (YAML)
- * - Für jedes Podcast mit audioUrl wird ein HEAD Request ausgeführt
- * - Content-Length wird als fileSizeBytes eingetragen
- * - Dauer wird via ffprobe oder music-metadata ermittelt
+ * - Reads all MDX files in src/content/podcasts/*.mdx
+ * - Extracts YAML frontmatter
+ * - Runs a HEAD request for each podcast with an audioUrl
+ * - Stores Content-Length as fileSizeBytes
+ * - Derives duration via ffprobe or music-metadata
  *
  * Flags:
- *  --write   : Änderungen wirklich zurückschreiben (Default ist an)
- *  --no-write : Deaktiviert Schreiben (Dry-Run)
- *  --timeout=<ms> : Request Timeout (Standard 8000)
- *  --duration : Versucht Dauer zu bestimmen (music-metadata)
- *  --ffprobe : Nutzt lokales ffprobe für exaktere Dauer
- *  --no-duration : Deaktiviert Dauer-Ermittlung
- *  --no-ffprobe : Deaktiviert ffprobe Nutzung
- *  --no-refresh : Deaktiviert erzwungenes Refresh
- *  --max-bytes=<n> : Max Bytes für music-metadata (Default 6_000_000)
- *  --no-cache : Ignoriert Cache
- *  --use-cache : Aktiviert Cache
- *  --refresh : Erzwingt erneutes Abrufen
- *  --available-only : Nur Podcasts mit isAvailable=true
- *  --ids=a,b,c : Nur diese Podcast-IDs verarbeiten
+ *  --write: Persist changes to disk (enabled by default)
+ *  --no-write: Disable file writes and run as a dry run
+ *  --timeout=<ms>: Request timeout in milliseconds (default: 8000)
+ *  --duration: Try to determine duration with music-metadata
+ *  --ffprobe: Prefer local ffprobe for more accurate duration detection
+ *  --no-duration: Skip duration detection
+ *  --no-ffprobe: Disable ffprobe usage
+ *  --no-refresh: Disable forced refresh
+ *  --max-bytes=<n>: Maximum bytes to fetch for music-metadata (default: 6_000_000)
+ *  --no-cache: Ignore the metadata cache
+ *  --use-cache: Read from the metadata cache
+ *  --refresh: Force a fresh fetch
+ *  --available-only: Only process podcasts with isAvailable=true
+ *  --ids=a,b,c: Only process the specified podcast IDs
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -190,7 +190,7 @@ function parseFrontmatter(content) {
   const body = content.slice(match[0].length);
   const frontmatter = {};
 
-  // Simple YAML parser for frontmatter
+  // Minimal YAML parser for frontmatter
   for (const line of yaml.split('\n')) {
     const colonIdx = line.indexOf(':');
     if (colonIdx === -1) continue;
@@ -200,7 +200,7 @@ function parseFrontmatter(content) {
 
     if (!key || !value) continue;
 
-    // Remove quotes
+    // Remove wrapping quotes
     if (
       (value.startsWith('"') && value.endsWith('"')) ||
       (value.startsWith("'") && value.endsWith("'"))
@@ -208,7 +208,7 @@ function parseFrontmatter(content) {
       value = value.slice(1, -1);
     }
 
-    // Parse types
+    // Parse primitive types
     if (value === 'true') frontmatter[key] = true;
     else if (value === 'false') frontmatter[key] = false;
     else if (value === 'null') frontmatter[key] = null;
@@ -230,7 +230,7 @@ function stringifyFrontmatter(frontmatter) {
 
     let serialized;
     if (typeof value === 'string') {
-      // Quote strings that might cause issues
+      // Quote strings that could break YAML parsing
       if (value.includes(':') || value.includes('#') || value.includes('\n')) {
         serialized = `"${value.replace(/"/g, '\\"')}"`;
       } else {
@@ -399,7 +399,7 @@ async function main() {
   log('Done');
 
   if (!isWrite) {
-    log('Dry-Run beendet. Füge --write hinzu um Änderungen zu speichern.');
+    log('Dry run finished. Add --write to save changes.');
   }
 }
 

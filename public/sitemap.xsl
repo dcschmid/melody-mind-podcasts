@@ -20,13 +20,13 @@
       </head>
       <body>
         <h1>MelodyMind Sitemap Index</h1>
-        <p>Menschenlesbare Darstellung der generierten Sitemap-Dateien. Jede Zeile repräsentiert einen Eintrag mit möglichen Sprachvarianten.</p>
+        <p>A human-readable view of the generated sitemap files. Each row represents one entry and its available language variants.</p>
         <table>
           <tr>
             <th>URL</th>
-            <th>Letzte Änderung</th>
-            <th>Priorität</th>
-            <th>Frequenz</th>
+            <th>Last Updated</th>
+            <th>Priority</th>
+            <th>Change Frequency</th>
             <th>Alternate Locales</th>
           </tr>
           <xsl:for-each select="sitemap:urlset/sitemap:url">
@@ -43,7 +43,7 @@
             </tr>
           </xsl:for-each>
         </table>
-        <footer>© 2025 MelodyMind Podcasts – Diese Ansicht dient nur der Übersicht. Suchmaschinen verarbeiten die rohe XML-Struktur.</footer>
+        <footer>© 2025 MelodyMind Podcasts. This view is for reference only. Search engines read the raw XML structure.</footer>
       </body>
     </html>
   </xsl:template>

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Kurze Analyse der Zeichenlängen aller Titel & Descriptions der englischen Podcasts.
- * Ziel: Ermitteln welche angepasst werden müssen (Titel 55–65 Zeichen, Description 250–300 Zeichen).
+ * Quick analysis of title and description lengths for English podcast entries.
+ * Goal: identify entries that need adjustment (title 55-65 characters, description 250-300 characters).
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -13,7 +13,7 @@ const raw = await fs.readFile(file, 'utf8');
 const data = JSON.parse(raw);
 
 function len(str){
-  return [...str].length; // korrekt für UTF-16 surrogate pairs / Emojis
+  return [...str].length; // Correct for UTF-16 surrogate pairs and emoji
 }
 
 const TITLE_MIN = 55;
@@ -35,10 +35,10 @@ for(const p of data.podcasts){
   console.log(p.id.padEnd(28), String(tLen).padEnd(8), String(dLen).padEnd(8), tStatus.padEnd(10), dStatus);
 }
 
-console.log('\nTitel zu ändern:', needTitle, 'von', data.podcasts.length);
-console.log('Descriptions zu ändern:', needDesc, 'von', data.podcasts.length);
+console.log('\nTitles to adjust:', needTitle, 'of', data.podcasts.length);
+console.log('Descriptions to adjust:', needDesc, 'of', data.podcasts.length);
 
-// Aggregierte Statistik
+// Aggregate statistics
 const titleLengths = data.podcasts.map(p=>len(p.title));
 const descLengths = data.podcasts.map(p=>len(p.description));
 function stats(arr){
@@ -50,5 +50,5 @@ function stats(arr){
   const median = sorted[Math.floor(sorted.length/2)];
   return {min,max,avg:Math.round(avg*10)/10,median};
 }
-console.log('\nTitel Stats:', stats(titleLengths));
+console.log('\nTitle Stats:', stats(titleLengths));
 console.log('Description Stats:', stats(descLengths));

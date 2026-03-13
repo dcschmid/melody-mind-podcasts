@@ -21,14 +21,14 @@ const { subtitleUrl, podcastTitle } = Astro.props as Props;
           <span class="transcript__summary-title" id="transcript-title">
             📄 Transcript
           </span>
-          <span class="transcript__summary-hint">Show Transcript</span>
+          <span class="transcript__summary-hint">Show transcript</span>
         </summary>
         <div class="transcript__body">
           <p class="transcript__status transcript__status--loading" hidden>
             Loading transcript...
           </p>
           <p class="transcript__status transcript__status--error" hidden>
-            Error loading transcript
+            Could not load the transcript.
           </p>
           <div class="transcript__content" hidden />
         </div>

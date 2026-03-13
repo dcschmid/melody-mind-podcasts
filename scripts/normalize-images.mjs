@@ -2,19 +2,18 @@
 /**
  * Normalize podcast episode images: ensure square thumbnails.
  *
- * Für jede Bildreferenz in den Podcast JSON Dateien:
- *  - Sucht lokale Datei unter public/images/<imageUrl>.jpg|.png
- *  - Erstellt (falls nicht quadratisch) eine zentrierte Canvas-Kopie
- *    mit weißem (oder transparentem) Rand und legt sie als
- *    public/images/<imageUrl>-square.jpg (JPEG 85%) an.
- *  - Optional Flag --replace ersetzt Original durch square Version.
+ * For each image reference in the podcast JSON files:
+ *  - Finds the local file at public/images/<imageUrl>.jpg|.png
+ *  - Creates a centered square canvas copy when the source is not square
+ *  - Writes the result to public/images/<imageUrl>-square.jpg (JPEG 85%)
+ *  - Optionally replaces the original when --replace is used
  *
  * Flags:
- *  --filter=<lang>    Nur bestimmte Sprachdateien
- *  --dry-run          Nur anzeigen, keine Dateien schreiben
- *  --replace          Ersetzt Originaldatei mit Quadrat (Backup .orig anlegen)
- *  --background=<hex|transparent> Hintergrundfarbe (Default: #ffffff)
- *  --mode=<contain|crop> Erstellungsstrategie (Default: contain)
+ *  --filter=<lang>: Only process selected language files
+ *  --dry-run: Preview changes without writing files
+ *  --replace: Replace the original file with the square version and keep a .orig backup
+ *  --background=<hex|transparent>: Background color (default: #ffffff)
+ *  --mode=<contain|crop>: Creation strategy (default: contain)
  */
 import fs from 'node:fs/promises';
 import { existsSync, renameSync } from 'node:fs';
@@ -45,7 +44,7 @@ async function listPodcastFiles(){
 }
 
 function resolveImageBase(imageUrl){
-  if(/^https?:/i.test(imageUrl)) return null; // remote, skip
+  if(/^https?:/i.test(imageUrl)) return null; // Remote image, skip
   const candidates = [
     path.join(imagesDir, imageUrl + '.jpg'),
     path.join(imagesDir, imageUrl + '.png'),
@@ -71,7 +70,7 @@ async function processImage(filePath, imageUrl){
     return { square: true };
   }
   const size = Math.max(meta.width, meta.height);
-  // Hintergrund
+  // Background color
   let bg;
   if(background === 'transparent') bg = { r:0,g:0,b:0, alpha:0 }; else {
     const hex = background.replace('#','');
@@ -86,7 +85,7 @@ async function processImage(filePath, imageUrl){
   if(dryRun) return { wouldCreate: dest };
   let pipeline = img;
   if(mode === 'crop') {
-    // Zentrischer Zuschnitt: zuerst skalieren kürzere Seite auf Zielgröße, dann zuschneiden
+    // Center crop after scaling to the target size
     pipeline = pipeline.resize(size, size, { fit: 'cover', position: 'centre' });
   } else {
     pipeline = pipeline.resize({ width: size, height: size, fit: 'contain', background: bg });

@@ -51,7 +51,7 @@ const initTranscripts = () => {
     let lastAudioTime: number | null = null;
 
     const updateHint = () => {
-      hint.textContent = details.open ? 'Hide Transcript' : 'Show Transcript';
+      hint.textContent = details.open ? 'Hide transcript' : 'Show transcript';
     };
 
     const parseVtt = (vttText: string) => {

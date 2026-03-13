@@ -31,7 +31,7 @@ const {
       <source srcset={`/images/${imageUrl}.webp`} type="image/webp" />
       <img
         src={`/images/${imageUrl}.jpg`}
-        alt={`Cover image for ${title} podcast episode`}
+        alt={`Cover art for the podcast episode ${title}`}
         class="episode-card__image"
         loading="lazy"
         decoding="async"
@@ -59,8 +59,8 @@ const {
     <p class="episode-card__description">
       {description}
     </p>
-    <a href={`/${id}`} class="episode-card__link" aria-label={`Listen to ${title} podcast episode`}>
-      Listen Now
+    <a href={`/${id}`} class="episode-card__link" aria-label={`View the episode ${title}`}>
+      View Episode
     </a>
   </div>
 </article>

@@ -2,14 +2,14 @@
 const { total } = Astro.props as { total: number };
 
 const labels = {
-  placeholder: 'Search episodes',
+  placeholder: 'Search by title or description',
   label: 'Search episodes',
   results: 'episodes',
   resultOne: 'episode',
   clear: 'Clear search',
-  hint: 'Type to filter episodes. Matches title & description.',
+  hint: 'Type to filter episodes by title and description.',
   empty: 'No matching episodes.',
-  statusTemplate: 'Found {found} of {total} {word}. Showing {shown}.',
+  statusTemplate: 'Showing {shown} of {found} matching {word} out of {total}.',
 };
 ---
 
@@ -45,10 +45,10 @@ const labels = {
   >
     {
       labels.statusTemplate
+        .replace('{shown}', String(total))
         .replace('{found}', String(total))
         .replace('{total}', String(total))
         .replace('{word}', total === 1 ? labels.resultOne : labels.results)
-        .replace('{shown}', String(total))
     }
   </div>
   <div id="search-empty" class="search-bar__empty" role="status" hidden>

@@ -1,6 +1,6 @@
 {
-  "name": "MelodyMind Podcats",
-  "short_name": "Podcasts",
+  "name": "MelodyMind Podcasts",
+  "short_name": "MelodyMind",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

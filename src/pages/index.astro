@@ -32,18 +32,16 @@ const encodedEpisodes = Buffer.from(serializedEpisodes, 'utf8').toString('base64
 
 const t = {
   title: 'MelodyMind Podcasts',
-  seoTitle: 'MelodyMind Podcasts — Music History Podcast with Daniel & Annabelle',
+  seoTitle: 'MelodyMind Podcasts | Music History with Daniel and Annabelle',
   subtitle: 'A music history podcast with Daniel & Annabelle',
   description:
-    "Welcome to MelodyMind Podcasts — a music history podcast that traces the stories, scenes, and artists shaping each decade. Daniel & Annabelle guide you from 1950s rock 'n' roll to modern streaming with thoughtful listening and cultural context.",
+    "Welcome to MelodyMind Podcasts, a music history podcast about the stories, scenes, and artists that shaped each era. Daniel and Annabelle guide you from 1950s rock 'n' roll to the streaming era with thoughtful listening and cultural context.",
   seoDescription:
-    "Official site of MelodyMind Podcasts, a music history podcast with Daniel & Annabelle. Explore decade-by-decade episodes from 1950s rock 'n' roll to today.",
+    "Official site of MelodyMind Podcasts, a music history podcast with Daniel and Annabelle. Explore episodes that move from 1950s rock 'n' roll to the present day.",
   episodes: 'Episodes',
-  listen: 'Listen Now',
-  featuredContent:
-    'Discover the voices, rhythms, and revolutions that defined each decade of music',
+  featuredContent: 'Discover the voices, rhythms, and turning points that shaped each musical era',
   totalEpisodes: ' episodes available',
-  availableOn: 'Available on your favorite platforms:',
+  availableOn: 'Listen on:',
   spotifyUrl: 'https://open.spotify.com/show/1qCTySbRctOad9Oi3FGpoF',
   deezerUrl: 'https://www.deezer.com/en/show/1002678961',
   youtubeUrl: 'https://www.youtube.com/channel/UCD7MQkWw4P5Pd5xA_o6McLg',
@@ -126,7 +124,7 @@ const t = {
         )
       }
       <div class="home__load-more" id="episodes-load-more" hidden>
-        <div class="home__load-more-panel" role="group" aria-label="Load more episodes">
+        <div class="home__load-more-panel" role="group" aria-label="More episodes">
           <p class="home__load-more-status" id="episodes-load-more-status" aria-live="polite">
             Showing {Math.min(pageSize, podcasts.length)} of {podcasts.length} episodes.
           </p>
@@ -136,7 +134,7 @@ const t = {
             type="button"
             aria-controls="episodes-list"
           >
-            Load more
+            Show more episodes
           </button>
         </div>
       </div>

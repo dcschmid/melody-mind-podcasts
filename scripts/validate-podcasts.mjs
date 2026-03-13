@@ -37,13 +37,13 @@ const filter = filterArg ? filterArg.split('=')[1].split(',').map(s => s.trim())
 
 const requiredFields = ['id','title','description','audioUrl','publishedAt','language','isAvailable','imageUrl'];
 const publicImagesDir = path.join(root, 'public', 'images');
-// Content Style Guidelines (Version 2.0)
+// Content style guidelines (version 2.0)
 //  - Title length: 55–65 characters (inclusive)
 //  - Description length: 250–300 characters (inclusive)
-//  - Must contain host phrase (sprachabhängig)
+//  - Must contain a host phrase (language-specific)
 //        EN: "Daniel and Annabelle guide you"
 //        DE: "Daniel und Annabelle führen dich" | "Daniel und Annabelle begleiten dich"
-//  - Must contain CTA phrase beginning with (sprachabhängig)
+//  - Must contain a CTA phrase beginning with (language-specific)
 //        EN: "Press play and"
 //        DE: "Drück auf Play und" | "Drücke auf Play und" | "Drück Play und"
 
@@ -153,10 +153,10 @@ async function validateFile(file){
     if(!p.durationSeconds) warnings.push(`Episode ${p.id} missing durationSeconds`);
     if(!p.subtitleUrl) warnings.push(`Episode ${p.id} missing subtitleUrl (transcript potential)`);
     if(p.episodeNumber !== undefined && typeof p.episodeNumber !== 'number') errors.push(`Episode ${p.id} episodeNumber not a number`);
-    // Image existence / dimensions (nur wenn relative Angabe ohne http)
+    // Image existence and dimensions (only for relative local paths)
     if(p.imageUrl){
       if(!/^https?:/i.test(p.imageUrl)) {
-        // wir erwarten eine Datei public/images/<imageUrl>.jpg oder .png
+        // Expect a file in public/images/<imageUrl>.jpg or .png
         const candidates = [
           path.join(publicImagesDir, p.imageUrl + '.jpg'),
             path.join(publicImagesDir, p.imageUrl + '.png'),
@@ -175,7 +175,7 @@ async function validateFile(file){
               // Apple: zwischen 1400 und 3000 quadratisch bevorzugt
               if(dim.width !== dim.height) {
                 warnings.push(`Episode ${p.id} image not square (${dim.width}x${dim.height})`);
-                // Prüfe ob ein quadratisches Derivat existiert
+                // Check whether a square derivative exists
                 const baseNoExt = path.basename(found).replace(/(\.jpg|\.png)?$/, '');
                 const squareName = baseNoExt + '-square.jpg';
                 const squarePath = path.join(publicImagesDir, squareName);
@@ -247,7 +247,7 @@ async function main(){
   for(const [id, langs] of globalIdMap.entries()){
     const uniqueLangs = [...new Set(langs)];
     if(uniqueLangs.length > 1){
-      // Downgraded to warning (intentional multilingual reuse of IDs)
+      // Downgraded to a warning because multilingual ID reuse is intentional
       results.forEach(r => {
         if(r.warnings) r.warnings.push(`Global duplicate id '${id}' appears in languages: ${uniqueLangs.join(',')} (treated as warning)`);
       });
