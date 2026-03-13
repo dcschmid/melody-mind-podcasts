@@ -200,6 +200,21 @@ function toIsoDuration(totalSeconds: number) {
 
     <link rel="manifest" href="/site.webmanifest" />
 
+    <!-- Preload critical font for faster First Paint -->
+    <link
+      rel="preload"
+      href="/fonts/atkinson-hyperlegible-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- Preconnect to external platforms for faster connections -->
+    <link rel="preconnect" href="https://open.spotify.com" crossorigin />
+    <link rel="preconnect" href="https://www.deezer.com" crossorigin />
+    <link rel="preconnect" href="https://www.youtube.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.usefathom.com" crossorigin />
+
     <title>{fullTitle}</title>
     <meta name="title" content={fullTitle} />
     <meta name="description" content={normalizedDescription} />
@@ -283,72 +298,146 @@ function toIsoDuration(totalSeconds: number) {
 <style>
   /* Font: Atkinson Hyperlegible - loaded locally for consistency with Melody Mind */
   @font-face {
-    font-family: "Atkinson Hyperlegible";
+    font-family: 'Atkinson Hyperlegible';
     font-style: normal;
     font-weight: 400;
+    src: url('/fonts/atkinson-hyperlegible-regular.woff2') format('woff2');
     font-display: swap;
-    src: url("/fonts/atkinson-hyperlegible-regular.woff2") format("woff2");
   }
 
-  /* Global minimum font size of 18px for better readability */
+  /* Modern Design System with WCAG AAA Compliance */
   :root {
     font-size: 112.5%; /* 18px = 1rem at standard browser settings */
 
-    /* Line height tokens for harmonious typography */
-    --leading-tight: 1.25;
-    --leading-normal: 1.5;
+    /* WCAG AAA Line heights for readability */
+    --leading-tight: 1.3;
+    --leading-normal: 1.55;
     --leading-relaxed: 1.75;
-    --leading-enhanced: 1.8;
+    --leading-enhanced: 1.85;
 
-    /* Typography scale tokens */
+    /* Modern Typography Scale - Mobile First */
+    --font-size-xs: 0.875rem;
+    --font-size-sm: 0.9375rem;
     --font-size-caption: 1rem;
     --font-size-ui: 1.0625rem;
     --font-size-body: 1.125rem;
-    --font-size-body-strong: 1.25rem;
-    --font-size-title-sm: 1.5rem;
-    --font-size-title-md: 1.75rem;
-    --font-size-title-lg: 2.25rem;
-    --font-size-hero: clamp(2.5rem, 4.4vw, 3.35rem);
+    --font-size-body-lg: 1.25rem;
+    --font-size-title-sm: 1.375rem;
+    --font-size-title-md: 1.625rem;
+    --font-size-title-lg: 2rem;
+    --font-size-hero: clamp(1.75rem, 5vi, 3rem);
+    --font-size-hero-lg: clamp(2rem, 6vi, 3.5rem);
+
+    /* Touch target sizes - WCAG minimum 44x44px */
+    --touch-min: 2.75rem;
+    --touch-sm: 2.5rem;
+    --touch-md: 3rem;
+    --touch-lg: 3.5rem;
+
+    /* Border Radius System */
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.25rem;
+    --radius-2xl: 1.5rem;
+    --radius-full: 9999px;
+
+    /* Spacing Scale - Mobile Optimized */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+
+    /* Transition Timing */
+    --transition-fast: 150ms ease;
+    --transition-base: 200ms ease;
+    --transition-slow: 300ms ease;
   }
 
   .podcast-layout {
-    --color-primary: #6fe1ff;
-    --color-primary-strong: #bff2ff;
-    --color-secondary: #3ad1ff;
-    --color-contrast: #b3efff;
-    --color-background: #0b1119;
-    --color-surface: #111a24;
-    --color-surface-2: #141f2b;
-    --color-layer-1: #141f2b;
-    --color-layer-2: #182535;
-    --color-layer-3: #1b2a3d;
-    --color-layer-4: #0f1621;
-    --color-text: #f7fbff;
-    --color-text-muted: #e2ecf8;
-    --color-error-soft: #ffb7c5;
-    --color-error-strong: #ffd3dc;
-    --brand-gradient: linear-gradient(110deg, #b3efff 0%, #6fe1ff 45%, #3ad1ff 90%);
-    --shadow-soft: 0 20px 50px rgb(2 6 13 / 45%);
-    --shadow-strong: 0 30px 80px rgb(2 6 13 / 70%);
-    --focus-ring: 0 0 0 3px #fff, 0 0 0 6px #6fe1ff;
-    --max-width: 72rem;
+    /* Modern OKLCH Color System - WCAG AAA Compliant (7:1+ contrast) */
+
+    /* Primary - Vibrant Cyan */
+    --color-primary: oklch(82% 0.14 200deg);
+    --color-primary-hover: oklch(88% 0.12 200deg);
+    --color-primary-strong: oklch(92% 0.08 200deg);
+
+    /* Background Layers - Deep Blues */
+    --color-background: oklch(13% 0.02 250deg);
+    --color-surface: oklch(18% 0.03 250deg);
+    --color-surface-2: oklch(22% 0.03 250deg);
+    --color-layer-1: oklch(20% 0.03 250deg);
+    --color-layer-2: oklch(25% 0.03 250deg);
+    --color-layer-3: oklch(28% 0.03 250deg);
+    --color-layer-4: oklch(15% 0.02 250deg);
+
+    /* Text - High Contrast for WCAG AAA (7:1+) */
+    --color-text: oklch(98% 0 0deg);
+    --color-text-muted: oklch(85% 0.01 250deg);
+    --color-text-subtle: oklch(70% 0.01 250deg);
+
+    /* Accent Colors */
+    --color-accent: oklch(75% 0.18 320deg);
+    --color-success: oklch(72% 0.19 145deg);
+    --color-warning: oklch(80% 0.18 85deg);
+    --color-error: oklch(70% 0.22 25deg);
+    --color-error-soft: oklch(85% 0.1 25deg);
+    --color-error-strong: oklch(90% 0.08 25deg);
+
+    /* Modern Gradients */
+    --brand-gradient: linear-gradient(
+      135deg,
+      oklch(92% 0.08 200deg) 0%,
+      oklch(82% 0.14 200deg) 50%,
+      oklch(72% 0.16 190deg) 100%
+    );
+    --brand-gradient-subtle: linear-gradient(
+      135deg,
+      oklch(25% 0.04 250deg) 0%,
+      oklch(20% 0.03 250deg) 100%
+    );
+
+    /* Glass Effect */
+    --glass-bg: oklch(20% 0.03 250deg / 0.7);
+    --glass-border: oklch(82% 0.14 200deg / 0.25);
+
+    /* Modern Shadow System */
+    --shadow-sm: 0 2px 8px oklch(10% 0.02 250deg / 0.4);
+    --shadow-md: 0 8px 24px oklch(10% 0.02 250deg / 0.5);
+    --shadow-lg: 0 16px 48px oklch(10% 0.02 250deg / 0.6);
+    --shadow-xl: 0 24px 64px oklch(10% 0.02 250deg / 0.7);
+    --shadow-glow: 0 0 32px oklch(82% 0.14 200deg / 0.3);
+
+    /* Focus Ring - High Visibility for WCAG AAA */
+    --focus-ring: 0 0 0 3px oklch(98% 0 0deg), 0 0 0 6px oklch(82% 0.14 200deg);
+    --focus-ring-offset: 0 0 0 4px oklch(82% 0.14 200deg / 0.5);
+
+    /* Layout */
+    --max-width: 80rem;
+    --content-width: 72rem;
 
     min-block-size: 100vb;
     margin: 0;
-    font-family: "Atkinson Hyperlegible", system-ui, sans-serif;
-    font-size: 1.25rem;
+    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    font-size: 1.125rem;
     line-height: var(--leading-relaxed);
     color: var(--color-text);
-    letter-spacing: 0.01em;
+    letter-spacing: 0.005em;
+    text-wrap: pretty;
     background-color: var(--color-background);
     background-image:
-      radial-gradient(circle at 15% 20%, rgb(79 211 255 / 8%), transparent 35%),
-      radial-gradient(circle at 85% 10%, rgb(44 198 255 / 8%), transparent 32%),
-      radial-gradient(circle at 70% 70%, rgb(138 217 255 / 6%), transparent 40%);
+      radial-gradient(ellipse at 10% 10%, oklch(82% 0.14 200deg / 0.08), transparent 40%),
+      radial-gradient(ellipse at 90% 20%, oklch(72% 0.16 190deg / 0.06), transparent 35%),
+      radial-gradient(ellipse at 50% 80%, oklch(75% 0.18 320deg / 0.04), transparent 45%);
     text-rendering: optimizelegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-wrap: pretty;
   }
 
   *,
@@ -359,10 +448,10 @@ function toIsoDuration(totalSeconds: number) {
 
   .podcast-layout__container {
     display: grid;
-    gap: 2.5rem;
+    gap: var(--space-6);
     max-inline-size: var(--max-width);
-    padding-block: clamp(2rem, 4vi, 3.5rem);
-    padding-inline: clamp(1.25rem, 3vi, 2.5rem);
+    padding-block: var(--space-4);
+    padding-inline: var(--space-3);
     margin: 0 auto;
   }
 
@@ -370,51 +459,115 @@ function toIsoDuration(totalSeconds: number) {
     outline: none;
   }
 
+  /* Skip Link - Enhanced Visibility */
+  @media screen and (prefers-reduced-motion: reduce) {
+    .podcast-layout__skip-link {
+      position: fixed;
+      inset-block-start: var(--space-3);
+      inset-inline-start: 50%;
+      z-index: 1000;
+      inline-size: auto;
+      block-size: auto;
+      padding: var(--space-3) var(--space-5);
+      font-weight: 600;
+      color: var(--color-background);
+      text-decoration: none;
+      background: var(--color-primary);
+      border-radius: var(--radius-full);
+      box-shadow: var(--shadow-lg), var(--shadow-glow);
+      transform: translateX(-50%) translateY(-200%);
+      transition: none;
+    }
+  }
+
   .podcast-layout__skip-link {
-    position: absolute;
-    inset-block-start: auto;
-    inset-inline-start: -9999px;
-    inline-size: 1px;
-    block-size: 1px;
-    overflow: hidden;
+    position: fixed;
+    inset-block-start: var(--space-3);
+    inset-inline-start: 50%;
+    z-index: 1000;
+    inline-size: auto;
+    block-size: auto;
+    padding: var(--space-3) var(--space-5);
+    font-weight: 600;
+    color: var(--color-background);
+    text-decoration: none;
+    background: var(--color-primary);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    transform: translateX(-50%) translateY(-200%);
+    transition: transform var(--transition-fast);
   }
 
   .podcast-layout__skip-link:focus,
   .podcast-layout__skip-link:focus-visible {
-    inset-block-start: 1rem;
-    inset-inline-start: 1rem;
-    z-index: 100;
-    inline-size: auto;
-    block-size: auto;
-    padding: 0.5rem 1rem;
-    color: var(--color-background);
-    outline: 2px solid #fff;
-    outline-offset: 2px;
-    background: var(--color-primary);
-    border-radius: 0.5rem;
-    box-shadow: var(--shadow-soft);
+    outline: 3px solid var(--color-text);
+    outline-offset: 3px;
+    transform: translateX(-50%) translateY(0);
   }
 
-  @media (width >= 640px) {
+  /* Mobile: Minimal padding, maximize space */
+  @media (width >= 480px) {
     .podcast-layout__container {
-      padding: 2.5rem 1.5rem 4rem;
+      gap: var(--space-8);
+      padding-block: var(--space-6);
+      padding-inline: var(--space-4);
     }
   }
 
+  /* Tablet */
+  @media (width >= 768px) {
+    .podcast-layout__container {
+      gap: var(--space-10);
+      padding-block: var(--space-8);
+      padding-inline: var(--space-6);
+    }
+  }
+
+  /* Desktop */
+  @media (width >= 1024px) {
+    .podcast-layout__container {
+      gap: var(--space-12);
+      padding-block: var(--space-10);
+      padding-inline: var(--space-8);
+    }
+  }
+
+  /* Large Desktop */
+  @media (width >= 1280px) {
+    .podcast-layout__container {
+      padding-inline: var(--space-10);
+    }
+  }
+
+  /* Small screens - absolute minimal padding */
   @media (width <= 380px) {
     .podcast-layout__container {
-      padding-inline: 0.85rem;
+      padding-inline: var(--space-2);
+    }
+
+    .podcast-layout {
+      font-size: 1rem;
     }
   }
 
+  /* Reduced Motion */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
     *::after {
+      scroll-behavior: auto !important;
       transition-duration: 0.01ms !important;
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
-      scroll-behavior: auto !important;
+    }
+  }
+
+  /* High Contrast Mode Support */
+  @media (prefers-contrast: more) {
+    .podcast-layout {
+      --color-text: oklch(100% 0 0deg);
+      --color-text-muted: oklch(95% 0 0deg);
+      --color-primary: oklch(85% 0.16 200deg);
     }
   }
 </style>

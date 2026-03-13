@@ -59,4 +59,9 @@ export default defineConfig({
       },
     },
   },
+  // Prefetch configuration for faster page navigation
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'viewport',
+  },
 });

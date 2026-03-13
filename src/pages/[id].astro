@@ -88,16 +88,21 @@ const t = {
 
     <section class="episode__hero" aria-labelledby="episode-title">
       <div class="episode__hero-media">
-        <img
-          src={`/images/${currentPodcast.imageUrl}.jpg`}
-          alt={`Cover artwork for ${currentPodcast.title} podcast episode`}
-          width="400"
-          height="267"
-          loading="eager"
-          class="episode__hero-image"
-          decoding="async"
-          sizes="(max-width: 960px) 100vw, 50vw"
-        />
+        <picture>
+          <source srcset={`/images/${currentPodcast.imageUrl}.avif`} type="image/avif" />
+          <source srcset={`/images/${currentPodcast.imageUrl}.webp`} type="image/webp" />
+          <img
+            src={`/images/${currentPodcast.imageUrl}.jpg`}
+            alt={`Cover artwork for ${currentPodcast.title} podcast episode`}
+            width="400"
+            height="267"
+            loading="eager"
+            class="episode__hero-image"
+            decoding="async"
+            fetchpriority="high"
+            sizes="(max-width: 960px) 100vw, 50vw"
+          />
+        </picture>
       </div>
 
       <div class="episode__hero-body">

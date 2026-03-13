@@ -26,16 +26,20 @@ const {
 
 <article data-episode data-search={searchText} class="episode-card" role="listitem">
   <div class="episode-card__media">
-    <img
-      src={`/images/${imageUrl}.jpg`}
-      alt={`Cover image for ${title} podcast episode`}
-      class="episode-card__image"
-      loading="lazy"
-      decoding="async"
-      width={600}
-      height={400}
-      sizes="(max-width: 760px) 100vw, (max-width: 1024px) 168px, 192px"
-    />
+    <picture>
+      <source srcset={`/images/${imageUrl}.avif`} type="image/avif" />
+      <source srcset={`/images/${imageUrl}.webp`} type="image/webp" />
+      <img
+        src={`/images/${imageUrl}.jpg`}
+        alt={`Cover image for ${title} podcast episode`}
+        class="episode-card__image"
+        loading="lazy"
+        decoding="async"
+        width={600}
+        height={400}
+        sizes="(max-width: 760px) 100vw, (max-width: 1024px) 168px, 192px"
+      />
+    </picture>
   </div>
   <div class="episode-card__body">
     <div class="episode-card__meta">

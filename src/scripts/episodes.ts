@@ -84,6 +84,19 @@ const initEpisodes = () => {
 
     const image = node.querySelector('.episode-card__image');
     if (image instanceof HTMLImageElement) {
+      // Update all sources (AVIF, WebP) and img fallback
+      const picture = image.closest('picture');
+      if (picture) {
+        const sources = picture.querySelectorAll('source');
+        sources.forEach((source) => {
+          const type = source.getAttribute('type');
+          if (type === 'image/avif') {
+            source.srcset = `/images/${episode.imageUrl}.avif`;
+          } else if (type === 'image/webp') {
+            source.srcset = `/images/${episode.imageUrl}.webp`;
+          }
+        });
+      }
       image.src = `/images/${episode.imageUrl}.jpg`;
       image.alt = `Cover image for ${episode.title} podcast episode`;
     }

@@ -3,6 +3,7 @@ module.exports = {
   extends: [
     "stylelint-config-standard",
     "stylelint-config-recess-order",
+    "stylelint-plugin-logical-css/configs/recommended",
   ],
   plugins: [
     "@double-great/stylelint-a11y",
@@ -48,8 +49,6 @@ module.exports = {
     "a11y/no-spread-text": true,
     "a11y/no-text-align-justify": true,
     "a11y/selector-pseudo-class-focus": true,
-    "plugin/use-logical-properties-and-values": true,
-    "plugin/use-logical-units": true,
     "declaration-block-no-duplicate-properties": [
       true,
       {
