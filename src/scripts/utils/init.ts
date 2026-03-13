@@ -1,3 +1,5 @@
+import { logError } from '../../utils/error-handler';
+
 /**
  * Script Initialization Utilities
  *
@@ -86,7 +88,7 @@ export function createAsyncInitializer(name: string, init: () => Promise<void>):
       try {
         await init();
       } catch (error) {
-        console.error(`[MelodyMind] Failed to initialize ${name}:`, error);
+        logError(error, `Failed to initialize ${name}`);
       }
     };
 

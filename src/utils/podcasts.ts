@@ -42,8 +42,12 @@ const markdownToHtml = (markdown: string): string => {
       .split('\n\n')
       .map((block) => {
         block = block.trim();
-        if (!block) return '';
-        if (block.startsWith('<h') || block.startsWith('<ul')) return block;
+        if (!block) {
+          return '';
+        }
+        if (block.startsWith('<h') || block.startsWith('<ul')) {
+          return block;
+        }
         return `<p>${block.replace(/\n/g, '<br>')}</p>`;
       })
       .join('\n')

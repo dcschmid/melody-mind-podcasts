@@ -36,12 +36,18 @@ export function logError(error: unknown, context?: string | Record<string, unkno
   const errorInfo = extractErrorInfo(error);
 
   const contextStr = typeof context === 'string' ? context : context ? JSON.stringify(context) : '';
+  const message = `${LOG_PREFIX} [${errorInfo.category}] ${errorInfo.message}${
+    contextStr ? ` (${contextStr})` : ''
+  }`;
+  const report = typeof reportError === 'function' ? reportError : undefined;
+  const errorToReport =
+    errorInfo.originalError instanceof Error
+      ? new Error(message, { cause: errorInfo.originalError })
+      : new Error(message);
 
-  console.error(
-    `${LOG_PREFIX} [${errorInfo.category}] ${errorInfo.message}`,
-    contextStr ? `(${contextStr})` : '',
-    errorInfo.originalError ?? '',
-  );
+  if (report) {
+    report(errorToReport);
+  }
 }
 
 /**
