@@ -3,38 +3,23 @@
  * Uses shared initialization utility for consistent setup.
  */
 import { createInitializer } from './utils/init';
-
-type EpisodeEntry = {
-  id: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  durationSeconds?: number;
-  publishedAt: string;
-  publishedLabel: string;
-  isLatest: boolean;
-  searchText?: string;
-};
+import { PAGINATION_CONFIG, SEARCH_CONFIG } from '../constants';
+import { EpisodeArraySchema, type EpisodeEntry } from '../schemas/episode';
+import { logError } from '../utils/error-handler';
 
 const initEpisodes = () => {
-  const pageSize = 30;
-  // Episodes are serialized in the HTML to avoid an extra fetch.
   const dataEl = document.querySelector('#episodes-data');
   const encoded = dataEl?.getAttribute('data-episodes') || '';
 
-  // Safe parsing with validation
   let episodes: EpisodeEntry[] = [];
   try {
     const decoded = encoded
       ? new TextDecoder().decode(Uint8Array.from(atob(encoded), (char) => char.charCodeAt(0)))
       : '[]';
-    const parsed = JSON.parse(decoded);
-    // Validate that parsed data is an array
-    if (Array.isArray(parsed)) {
-      episodes = parsed;
-    }
-  } catch {
-    // Silently fall back to empty array on parse errors
+    const parsed = EpisodeArraySchema.parse(JSON.parse(decoded));
+    episodes = parsed;
+  } catch (error) {
+    logError(error, 'parsing episode data');
     episodes = [];
   }
 
@@ -66,7 +51,7 @@ const initEpisodes = () => {
 
   let debounceId: number | undefined;
   let query = '';
-  let visibleCount = pageSize;
+  let visibleCount = PAGINATION_CONFIG.EPISODES_PER_PAGE;
 
   const normalize = (value: string) => value.trim().toLowerCase();
 
@@ -183,7 +168,7 @@ const initEpisodes = () => {
 
     const showing = Math.min(visibleCount, found);
     loadMoreStatus.textContent = `Showing ${showing} of ${found} matching episodes.`;
-    loadMore.hidden = found <= pageSize;
+    loadMore.hidden = found <= PAGINATION_CONFIG.EPISODES_PER_PAGE;
     loadMoreButton.disabled = showing >= found;
 
     if (empty instanceof HTMLElement) {
@@ -208,21 +193,21 @@ const initEpisodes = () => {
     window.clearTimeout(debounceId);
     debounceId = window.setTimeout(() => {
       query = value;
-      visibleCount = pageSize;
+      visibleCount = PAGINATION_CONFIG.EPISODES_PER_PAGE;
       render();
-    }, 180);
+    }, SEARCH_CONFIG.DEBOUNCE_MS);
   });
 
   clearButton?.addEventListener('click', () => {
     input.value = '';
     input.focus();
     query = '';
-    visibleCount = pageSize;
+    visibleCount = PAGINATION_CONFIG.EPISODES_PER_PAGE;
     render();
   });
 
   loadMoreButton.addEventListener('click', () => {
-    visibleCount += pageSize;
+    visibleCount += PAGINATION_CONFIG.EPISODES_PER_PAGE;
     render();
   });
 

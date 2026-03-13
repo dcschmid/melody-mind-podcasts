@@ -42,6 +42,15 @@ const playerId = subtitleUrl ?? audioUrl;
         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>
       </svg>
     </button>
+    <button
+      class="episode-player__retry"
+      type="button"
+      data-action="retry"
+      aria-label="Retry loading audio"
+      hidden
+    >
+      Retry
+    </button>
   </div>
 
   <div
@@ -162,7 +171,29 @@ const playerId = subtitleUrl ?? audioUrl;
   .episode-player__controls {
     display: flex;
     gap: 0.75rem;
+    align-items: center;
     justify-content: center;
+  }
+
+  .episode-player__retry {
+    padding: 0.5rem 1rem;
+    font-size: var(--font-size-ui);
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    background: var(--color-layer-2);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+    border-radius: 0.5rem;
+  }
+
+  .episode-player__retry:hover,
+  .episode-player__retry:focus {
+    background: var(--color-layer-3);
+    border-color: var(--color-primary);
+  }
+
+  .episode-player__retry[hidden] {
+    display: none;
   }
 
   @media screen and (prefers-reduced-motion: reduce) {

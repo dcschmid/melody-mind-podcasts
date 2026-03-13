@@ -3,55 +3,46 @@ import type { PodcastData } from '../types/podcast';
 
 type PodcastEntry = CollectionEntry<'podcasts'>;
 
-/**
- * Extended entry type that includes the raw body from glob loader.
- * The glob loader provides the raw Markdown content as `body`.
- */
+const markdownCache = new Map<string, string>();
+
 type PodcastEntryWithBody = PodcastEntry & {
   body?: string;
 };
 
-/**
- * Safely extracts the body content from a collection entry.
- * The glob loader includes the raw Markdown body, but it's not in the type.
- */
 function getEntryBody(entry: PodcastEntry): string {
   const entryWithBody = entry as PodcastEntryWithBody;
   return entryWithBody.body || '';
 }
 
-/**
- * Converts Markdown show notes to basic HTML.
- * Simple conversion for h2, h3, p, ul, li, strong, em tags.
- */
 const markdownToHtml = (markdown: string): string => {
-  return (
-    markdown
-      // Headers
-      .replace(/^## (.+)$/gm, '<h2>$1</h2>')
-      .replace(/^### (.+)$/gm, '<h3>$1</h3>')
-      .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
-      // Bold and italic
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      // Lists
-      .replace(/^- (.+)$/gm, '<li>$1</li>')
-      // Wrap consecutive li elements in ul
-      .replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul>${match}</ul>`)
-      // Paragraphs (lines that aren't already tags)
-      .split('\n\n')
-      .map((block) => {
-        block = block.trim();
-        if (!block) {
-          return '';
-        }
-        if (block.startsWith('<h') || block.startsWith('<ul')) {
-          return block;
-        }
-        return `<p>${block.replace(/\n/g, '<br>')}</p>`;
-      })
-      .join('\n')
-  );
+  const cached = markdownCache.get(markdown);
+  if (cached !== undefined) {
+    return cached;
+  }
+
+  const html = markdown
+    .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+    .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+    .replace(/^#### (.+)$/gm, '<h4>$1</h4>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/^- (.+)$/gm, '<li>$1</li>')
+    .replace(/(<li>.*<\/li>\n?)+/g, (match) => `<ul>${match}</ul>`)
+    .split('\n\n')
+    .map((block) => {
+      block = block.trim();
+      if (!block) {
+        return '';
+      }
+      if (block.startsWith('<h') || block.startsWith('<ul')) {
+        return block;
+      }
+      return `<p>${block.replace(/\n/g, '<br>')}</p>`;
+    })
+    .join('\n');
+
+  markdownCache.set(markdown, html);
+  return html;
 };
 
 /**

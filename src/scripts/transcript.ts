@@ -14,11 +14,16 @@ type TranscriptCue = {
 
 const initTranscripts = () => {
   const roots = document.querySelectorAll('.transcript');
+  const cleanupFunctions: (() => void)[] = [];
+
   roots.forEach((root) => {
     const subtitleUrl = root.getAttribute('data-subtitle-url');
     if (!subtitleUrl) {
       return;
     }
+
+    const controller = new AbortController();
+    const { signal } = controller;
 
     const playerId = root.getAttribute('data-player-id') || '';
     const details = root.querySelector('.transcript__details');
@@ -240,50 +245,65 @@ const initTranscripts = () => {
       }
     };
 
-    content.addEventListener('click', (event) => {
-      if (!(event.target instanceof Element)) {
-        return;
-      }
-      const cueButton = event.target.closest('.transcript__cue');
-      if (!(cueButton instanceof HTMLButtonElement)) {
-        return;
-      }
-      const startSeconds = Number(cueButton.dataset.start);
-      dispatchSeekEvent(startSeconds);
-    });
-
-    // Track audio time updates for active cue highlighting.
-    window.addEventListener('audio:time', (event) => {
-      if (!(event instanceof CustomEvent)) {
-        return;
-      }
-      const detail = event.detail;
-      if (!detail || detail.playerId !== playerId) {
-        return;
-      }
-      const currentTime = Number(detail.currentTime);
-      if (!Number.isFinite(currentTime)) {
-        return;
-      }
-      lastAudioTime = currentTime;
-      if (!loaded || content.hidden || !details.open) {
-        return;
-      }
-      setActiveCue(getActiveCueIndex(currentTime));
-    });
-
-    details.addEventListener('toggle', () => {
-      updateHint();
-      if (details.open) {
-        loadTranscript();
-        if (loaded && Number.isFinite(lastAudioTime)) {
-          setActiveCue(getActiveCueIndex(lastAudioTime ?? 0));
+    content.addEventListener(
+      'click',
+      (event) => {
+        if (!(event.target instanceof Element)) {
+          return;
         }
-      }
-    });
+        const cueButton = event.target.closest('.transcript__cue');
+        if (!(cueButton instanceof HTMLButtonElement)) {
+          return;
+        }
+        const startSeconds = Number(cueButton.dataset.start);
+        dispatchSeekEvent(startSeconds);
+      },
+      { signal },
+    );
+
+    window.addEventListener(
+      'audio:time',
+      (event) => {
+        if (!(event instanceof CustomEvent)) {
+          return;
+        }
+        const detail = event.detail;
+        if (!detail || detail.playerId !== playerId) {
+          return;
+        }
+        const currentTime = Number(detail.currentTime);
+        if (!Number.isFinite(currentTime)) {
+          return;
+        }
+        lastAudioTime = currentTime;
+        if (!loaded || content.hidden || !details.open) {
+          return;
+        }
+        setActiveCue(getActiveCueIndex(currentTime));
+      },
+      { signal },
+    );
+
+    details.addEventListener(
+      'toggle',
+      () => {
+        updateHint();
+        if (details.open) {
+          loadTranscript();
+          if (loaded && Number.isFinite(lastAudioTime)) {
+            setActiveCue(getActiveCueIndex(lastAudioTime ?? 0));
+          }
+        }
+      },
+      { signal },
+    );
 
     updateHint();
+
+    cleanupFunctions.push(() => controller.abort());
   });
+
+  return () => cleanupFunctions.forEach((fn) => fn());
 };
 
 // Initialize using shared utility
