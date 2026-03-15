@@ -20,6 +20,8 @@
  * formatTime(3661) // "1:01:01"
  * formatTime(65, { includeHours: true }) // "0:01:05"
  */
+import { safeNumber } from './number-helpers';
+
 export function formatTime(
   seconds: number,
   options?: {
@@ -29,8 +31,7 @@ export function formatTime(
 ): string {
   const { includeHours = false, padMinutes = true } = options ?? {};
 
-  // Handle invalid input gracefully
-  const safeSeconds = Number.isFinite(seconds) ? Math.max(0, seconds) : 0;
+  const safeSeconds = safeNumber(seconds, 0);
 
   const hours = Math.floor(safeSeconds / 3600);
   const minutes = Math.floor((safeSeconds % 3600) / 60);

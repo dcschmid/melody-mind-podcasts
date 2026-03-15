@@ -58,6 +58,18 @@ export default defineConfig({
         '@types': path.resolve('./src/types'),
       },
     },
+    server: {
+      headers: {
+        'Content-Security-Policy':
+          "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.usefathom.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; connect-src 'self' https://cdn.usefathom.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';",
+        'X-Content-Type-Options': 'nosniff',
+        'X-Frame-Options': 'DENY',
+        'X-XSS-Protection': '1; mode=block',
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'Permissions-Policy':
+          'accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=()',
+      },
+    },
   },
   // Prefetch configuration for faster page navigation
   prefetch: {

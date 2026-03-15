@@ -6,6 +6,7 @@ import { createInitializer } from './utils/init';
 import { PAGINATION_CONFIG, SEARCH_CONFIG } from '../constants';
 import { EpisodeArraySchema, type EpisodeEntry } from '../schemas/episode';
 import { logError } from '../utils/error-handler';
+import { isHTMLInputElement, isHTMLElement, isHTMLButtonElement } from '../utils/type-guards';
 
 const initEpisodes = () => {
   const dataEl = document.querySelector('#episodes-data');
@@ -39,15 +40,18 @@ const initEpisodes = () => {
   const loadMoreButton = document.querySelector('#episodes-load-more-button');
 
   if (
-    !(input instanceof HTMLInputElement) ||
-    !(list instanceof HTMLElement) ||
-    !(templateWrapper instanceof HTMLElement) ||
-    !(loadMore instanceof HTMLElement) ||
-    !(loadMoreStatus instanceof HTMLElement) ||
-    !(loadMoreButton instanceof HTMLButtonElement)
+    !isHTMLInputElement(input) ||
+    !isHTMLElement(list) ||
+    !isHTMLElement(templateWrapper) ||
+    !isHTMLElement(loadMore) ||
+    !isHTMLElement(loadMoreStatus) ||
+    !isHTMLButtonElement(loadMoreButton)
   ) {
     return;
   }
+
+  const controller = new AbortController();
+  const { signal } = controller;
 
   let debounceId: number | undefined;
   let query = '';
@@ -182,34 +186,46 @@ const initEpisodes = () => {
     input.value = query;
   };
 
-  form.addEventListener('submit', (event) => event.preventDefault());
+  form.addEventListener('submit', (event) => event.preventDefault(), { signal });
 
-  input.addEventListener('input', (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLInputElement)) {
-      return;
-    }
-    const value = target.value;
-    window.clearTimeout(debounceId);
-    debounceId = window.setTimeout(() => {
-      query = value;
+  input.addEventListener(
+    'input',
+    (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement)) {
+        return;
+      }
+      const value = target.value;
+      window.clearTimeout(debounceId);
+      debounceId = window.setTimeout(() => {
+        query = value;
+        visibleCount = PAGINATION_CONFIG.EPISODES_PER_PAGE;
+        render();
+      }, SEARCH_CONFIG.DEBOUNCE_MS);
+    },
+    { signal },
+  );
+
+  clearButton?.addEventListener(
+    'click',
+    () => {
+      input.value = '';
+      input.focus();
+      query = '';
       visibleCount = PAGINATION_CONFIG.EPISODES_PER_PAGE;
       render();
-    }, SEARCH_CONFIG.DEBOUNCE_MS);
-  });
+    },
+    { signal },
+  );
 
-  clearButton?.addEventListener('click', () => {
-    input.value = '';
-    input.focus();
-    query = '';
-    visibleCount = PAGINATION_CONFIG.EPISODES_PER_PAGE;
-    render();
-  });
-
-  loadMoreButton.addEventListener('click', () => {
-    visibleCount += PAGINATION_CONFIG.EPISODES_PER_PAGE;
-    render();
-  });
+  loadMoreButton.addEventListener(
+    'click',
+    () => {
+      visibleCount += PAGINATION_CONFIG.EPISODES_PER_PAGE;
+      render();
+    },
+    { signal },
+  );
 
   initFromUrl();
   render();

@@ -206,20 +206,15 @@ const initTranscripts = () => {
       try {
         const response = await fetch(subtitleUrl);
 
-        // Validate response status
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
 
-        // Validate content-type is VTT/text
         const contentType = response.headers.get('content-type') || '';
-        const isValidType =
-          contentType.includes('text/vtt') ||
-          contentType.includes('text/plain') ||
-          contentType.includes('application/octet-stream');
+        const isValidType = contentType.includes('text/vtt') || contentType.includes('text/plain');
 
         if (!isValidType) {
-          throw new Error(`Invalid content-type: ${contentType}`);
+          throw new Error(`Invalid content-type: ${contentType}. Expected text/vtt or text/plain.`);
         }
 
         const vttText = await response.text();

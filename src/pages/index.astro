@@ -105,6 +105,15 @@ const t = {
           ))
         }
       </div>
+      {
+        podcasts.length === 0 && (
+          <div class="home__empty" role="status">
+            <p class="home__empty-text">
+              No episodes available yet. Check back soon for new content!
+            </p>
+          </div>
+        )
+      }
       <div id="episodes-data" data-episodes={encodedEpisodes} hidden></div>
       {
         templateEpisode && (
@@ -261,5 +270,24 @@ const t = {
     box-shadow: none;
     opacity: 0.55;
     transform: none;
+  }
+
+  .home__empty {
+    display: grid;
+    gap: 1rem;
+    justify-items: center;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    background: var(--color-surface);
+    border: 1px solid color-mix(in srgb, var(--color-primary) 22%, transparent);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .home__empty-text {
+    margin: 0;
+    font-size: var(--font-size-body);
+    line-height: var(--leading-relaxed, 1.75);
+    color: var(--color-text-muted);
   }
 </style>
